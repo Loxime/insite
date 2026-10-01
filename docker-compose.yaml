@@ -1,3 +1,5 @@
+name: insite
+
 services:
 
   web:
@@ -12,9 +14,9 @@ services:
     image: postgres:latest
     container_name: insite_db
     environment:
-      POSTGRES_DB: insite_dev
-      POSTGRES_USER: insite
-      POSTGRES_PASSWORD: xxxxxx
+      POSTGRES_DB: ${POSTGRES_NAME}
+      POSTGRES_USER: ${POSTGRE_USER}
+      POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
