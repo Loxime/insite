@@ -1,0 +1,24 @@
+services:
+
+  web:
+    container_name: insite_app
+    build: .
+    ports:
+        - "8080:80"
+    volumes:
+        - .:/var/www/html
+
+  postgres:
+    image: postgres:latest
+    container_name: insite_db
+    environment:
+      POSTGRES_DB: insite_dev
+      POSTGRES_USER: insite
+      POSTGRES_PASSWORD: xxxxxx
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
