@@ -14,3 +14,5 @@
 /node_modules/
 /public/build/
 ###< symfony/reprise ###
+.env.*
+!.env.example
