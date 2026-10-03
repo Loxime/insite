@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Careers — INQUEST{% endblock %}
+{% block page_header %}{% endblock %}
+
+{% block body %}
+<main class="careers-page">
+    <h1 class="careers-page__title">Careers</h1>
+
+    <div class="careers-list">
+        {% for offer in offers %}
+            <article class="career-card">
+                <h2 class="career-card__title">
+                    {{ offer.title }}
+                </h2>
+
+                <div class="career-card__content">
+                    {{ offer.content|raw }}
+                </div>
+
+                <a class="career-card__contact"
+                   href="{{ path('contact') }}">
+                    Nous contacter
+                </a>
+            </article>
+        {% else %}
+            <p class="careers-page__empty">
+                Aucune offre actuellement.
+            </p>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

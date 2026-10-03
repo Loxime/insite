@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% include 'layout/_favicon.html.twig' %}
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Administration — INQUEST</title>
+
+    {{ reprise_entry_link_tags('app') }}
+    {{ reprise_entry_script_tags('app') }}
+</head>
+
+<body class="admin-auth">
+    {% include 'layout/_toasts.html.twig' %}
+    <main class="admin-auth__main">
+        <div class="admin-login">
+            <header class="admin-login__header">
+                <h1 class="admin-login__title">
+                    Administration
+                </h1>
+
+                <p class="admin-login__description">
+                    Connectez-vous pour accéder au back-office.
+                </p>
+            </header>
+
+            {% if error %}
+                <div class="admin-login__error">
+                    Email ou mot de passe incorrect.
+                </div>
+            {% endif %}
+
+            <form
+                action="{{ path('admin_login') }}"
+                method="post"
+                class="admin-login__form"
+            >
+                <div class="admin-login__field">
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ last_email }}"
+                        autocomplete="email"
+                        required
+                        autofocus
+                    >
+                </div>
+
+                <div class="admin-login__field">
+                    <label for="password">
+                        Mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="admin-login__submit"
+                >
+                    Se connecter
+                </button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

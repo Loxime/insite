@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Games — INQUEST
+{% endblock %}
+
+{% block meta_description %}
+    Découvrez les jeux et projets du studio INQUEST.
+{% endblock %}
+
+{% block page_header %}{% endblock %}
+
+{% block body %}
+    <main class="games-page">
+        {% if games is not empty %}
+            <div class="games-list">
+                {% for game in games %}
+                    <article
+                        class="game-list-item{% if loop.index is even %} game-list-item--reverse{% endif %}{% if not game.imageKey %} game-list-item--without-image{% endif %}"
+                    >
+                        {% if game.imageKey %}
+                            <a
+                                href="{{ path('games_show', {
+                                    slug: game.slug
+                                }) }}"
+                                class="game-list-item__visual"
+                            >
+                                <img
+                                    src="{{ path('media_show', {
+                                        key: game.imageKey
+                                    }) }}"
+                                    alt="{{ game.title }}"
+                                    {% if not loop.first %}
+                                        loading="lazy"
+                                    {% endif %}
+                                >
+                            </a>
+                        {% endif %}
+
+                        <div class="game-list-item__content">
+                            <h2 class="game-list-item__title">
+                                <a
+                                    href="{{ path('games_show', {
+                                        slug: game.slug
+                                    }) }}"
+                                >
+                                    {{ game.title }}
+                                </a>
+                            </h2>
+
+                            <p class="game-list-item__summary">
+                                {% if game.summary %}
+                                    {{ game.summary }}
+                                {% else %}
+                                    {% set excerpt = game.description|striptags|trim %}
+
+                                    {{ excerpt|slice(0, 220) }}
+
+                                    {% if excerpt|length > 220 %}
+                                        …
+                                    {% endif %}
+                                {% endif %}
+                            </p>
+
+                            {% if game.links|length > 0 %}
+                    <nav
+                        class="game-card__external-links"
+                        aria-label="Liens externes de {{ game.title }}"
+                    >
+                        {% for link in game.links %}
+                            <a
+                                href="{{ link.url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {{ link.name }}
+                            </a>
+                        {% endfor %}
+                    </nav>
+                {% endif %}
+
+                <a
+                                href="{{ path('games_show', {
+                                    slug: game.slug
+                                }) }}"
+                                class="game-list-item__link"
+                            >
+                                Découvrir le jeu
+
+                                <i
+                                    class="fa-solid fa-arrow-right"
+                                    aria-hidden="true"
+                                ></i>
+                            </a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="games-page__empty">
+                Aucun jeu publié pour le moment.
+            </div>
+        {% endif %}
+    </main>
+{% endblock %}

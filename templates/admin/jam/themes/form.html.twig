@@ -1,0 +1,37 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+<div class="admin-page">
+    <h1 class="admin-page__title">
+        {{ title }}
+    </h1>
+
+    {{ form_start(form, {
+        attr: {
+            class: 'admin-simple-form'
+        }
+    }) }}
+
+        {{ form_widget(form) }}
+
+        <div class="admin-form-actions">
+            <button
+                class="admin-button admin-button--primary"
+                type="submit"
+            >
+                Enregistrer
+            </button>
+
+            <a
+                href="{{ path('admin_jam_themes_index') }}"
+                class="admin-button admin-button--secondary"
+            >
+                Annuler
+            </a>
+        </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

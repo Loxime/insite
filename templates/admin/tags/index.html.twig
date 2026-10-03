@@ -1,0 +1,118 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    Tags — Administration
+{% endblock %}
+
+{% block body %}
+    <div class="admin-page">
+        <header class="admin-page__header admin-page__header--actions">
+            <h1 class="admin-page__title">
+                Tags
+            </h1>
+
+            <a
+                href="{{ path('admin_tags_new') }}"
+                class="admin-button admin-button--primary"
+            >
+                <i
+                    class="fa-solid fa-plus"
+                    aria-hidden="true"
+                ></i>
+
+                Créer
+            </a>
+        </header>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="admin-flash admin-flash--{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="admin-table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Articles</th>
+                        <th class="admin-table__actions-heading">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for tag in tags %}
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{ tag.libelle }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ tag.posts|length }}
+                            </td>
+
+                            <td>
+                                <div class="admin-table__actions">
+                                    <a
+                                        href="{{ path('admin_tags_edit', {id: tag.id}) }}"
+                                        class="admin-action"
+                                    >
+                                        <i
+                                            class="fa-solid fa-pen"
+                                            aria-hidden="true"
+                                        ></i>
+
+                                        <span>Modifier</span>
+                                    </a>
+
+                                    <form
+                                        method="post"
+                                        action="{{ path('admin_tags_delete', {id: tag.id}) }}"
+                                        onsubmit="return confirm('Supprimer définitivement ce tag ?');"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="_token"
+                                            value="{{ csrf_token('delete-tag-' ~ tag.id) }}"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="admin-action admin-action--danger"
+                                            {% if tag.posts|length > 0 %}
+                                                disabled
+                                                title="Ce tag est utilisé par un article"
+                                            {% endif %}
+                                        >
+                                            <i
+                                                class="fa-solid fa-trash"
+                                                aria-hidden="true"
+                                            ></i>
+
+                                            <span>Supprimer</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td
+                                colspan="3"
+                                class="admin-table__empty"
+                            >
+                                Aucun tag.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,150 @@
+.admin-auth {
+    min-height: 100vh;
+    background: var(--color-background);
+    color: var(--color-text);
+}
+
+.admin-auth__main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 100vh;
+    padding: 64px 24px;
+}
+
+.admin-login {
+    width: min(100%, 560px);
+}
+
+.admin-login__header {
+    margin-bottom: 40px;
+}
+
+.admin-login__title {
+    margin: 0 0 12px;
+
+    color: var(--color-text);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+}
+
+.admin-login__description {
+    margin: 0;
+
+    color: var(--color-text-muted);
+    font-size: 1rem;
+}
+
+.admin-login__error {
+    margin-bottom: 24px;
+    padding: 14px 16px;
+
+    color: var(--color-danger);
+    background: rgba(180, 35, 24, 0.08);
+    border-left: 4px solid var(--color-danger);
+}
+
+.admin-login__form {
+    display: grid;
+    gap: 24px;
+}
+
+.admin-login__field {
+    display: grid;
+    gap: 8px;
+}
+
+.admin-login__field label {
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+.admin-auth .admin-login__field input {
+    width: 100%;
+    min-height: 52px;
+    padding: 0 16px;
+
+    color: var(--color-text);
+    caret-color: var(--color-text);
+
+    background: #ffffff;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+
+    outline: none;
+
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+.admin-auth .admin-login__field input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.14);
+}
+
+.admin-auth .admin-login__field input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.admin-login__submit {
+    min-height: 52px;
+    padding: 0 24px;
+
+    color: var(--color-on-primary);
+    background: var(--color-primary);
+
+    border: 0;
+    border-radius: var(--radius-sm);
+
+    font-weight: 700;
+
+    transition: background var(--transition-fast);
+}
+
+.admin-login__submit:hover {
+    background: var(--color-primary-hover);
+}
+
+@media (max-width: 640px) {
+    .admin-auth__main {
+        align-items: flex-start;
+        padding: 48px 20px;
+    }
+
+    .admin-login {
+        width: 100%;
+    }
+
+    .admin-login__header {
+        margin-bottom: 32px;
+    }
+}
+
+/* Force admin login inputs to stay light */
+.admin-auth {
+    color-scheme: light;
+}
+
+.admin-auth .admin-login__field input {
+    appearance: none;
+
+    background-color: #ffffff !important;
+    color: #0f0a0a !important;
+    -webkit-text-fill-color: #0f0a0a !important;
+
+    caret-color: #0f0a0a;
+}
+
+.admin-auth .admin-login__field input:-webkit-autofill,
+.admin-auth .admin-login__field input:-webkit-autofill:hover,
+.admin-auth .admin-login__field input:-webkit-autofill:focus,
+.admin-auth .admin-login__field input:-webkit-autofill:active {
+    -webkit-text-fill-color: #0f0a0a !important;
+    box-shadow: 0 0 0 1000px #ffffff inset !important;
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    caret-color: #0f0a0a;
+}
+

@@ -1,0 +1,31 @@
+{% macro errors(field, path = '') %}
+    {% set currentPath = path ?: (field.vars.label ?: field.vars.name) %}
+
+    {% for error in field.vars.errors %}
+        <li>
+            <strong>{{ currentPath }} :</strong>
+            {{ error.message }}
+        </li>
+    {% endfor %}
+
+    {% for child in field.children %}
+        {% set childLabel = child.vars.label ?: child.vars.name %}
+
+        {{ _self.errors(
+            child,
+            currentPath ~ ' → ' ~ childLabel
+        ) }}
+    {% endfor %}
+{% endmacro %}
+
+{% import _self as formErrors %}
+
+{% if not form.vars.valid %}
+    <div class="admin-form-errors" role="alert">
+        <strong>Le formulaire contient une erreur.</strong>
+
+        <ul>
+            {{ formErrors.errors(form) }}
+        </ul>
+    </div>
+{% endif %}

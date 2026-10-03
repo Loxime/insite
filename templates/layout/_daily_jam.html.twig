@@ -1,0 +1,43 @@
+{% set currentJam = daily_jam() %}
+
+{% if currentJam %}
+    <div class="site-daily-jam">
+        <div class="site-daily-jam__text">
+            <span class="site-daily-jam__label">
+                Daily Jam
+            </span>
+
+            <strong class="site-daily-jam__theme">
+                {{ currentJam.theme }}
+            </strong>
+
+            {% if currentJam.jam.sourceUrl %}
+                <a
+                    class="site-daily-jam__source"
+                    href="{{ currentJam.jam.sourceUrl }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    {{ currentJam.jam.sourceName }}
+                </a>
+            {% else %}
+                <span class="site-daily-jam__source">
+                    {{ currentJam.jam.sourceName }}
+                </span>
+            {% endif %}
+        </div>
+
+        <div
+            class="site-daily-jam__colors"
+            aria-label="Palette de la Daily Jam"
+        >
+            {% for color in currentJam.colors %}
+                <span
+                    class="site-daily-jam__color"
+                    style="--daily-jam-color: {{ color }}"
+                    title="{{ color }}"
+                ></span>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

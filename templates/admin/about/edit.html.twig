@@ -1,0 +1,133 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    About — Administration
+{% endblock %}
+
+{% block body %}
+    <div class="admin-page">
+        <h1 class="admin-page__title">
+            About
+        </h1>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="admin-flash admin-flash--{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {{ form_start(form, {
+            attr: {
+                class: 'admin-about-form'
+            }
+        }) }}
+
+            <div class="admin-form-field">
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div class="admin-form-field">
+                {{ form_label(form.image) }}
+                {{ form_widget(form.image) }}
+                {{ form_help(form.image) }}
+                {{ form_errors(form.image) }}
+
+                {% if about.imageKey %}
+                    <div class="admin-about-image">
+                        <img
+                            src="{{ path('media_show', {
+                                key: about.imageKey
+                            }) }}"
+                            alt="{{ about.title }}"
+                        >
+                    </div>
+                {% endif %}
+
+                {% if form.removeImage is defined %}
+                    <div class="admin-about-remove-image">
+                        {{ form_widget(form.removeImage) }}
+                        {{ form_label(form.removeImage) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="admin-form-field">
+                {{ form_label(form.content) }}
+                {{ form_widget(form.content) }}
+                {{ form_errors(form.content) }}
+            </div>
+
+            <section
+                class="admin-about-socials js-about-socials"
+                data-index="{{ form.socialLinks|length }}"
+                data-prototype="{{ form_widget(form.socialLinks.vars.prototype)|e('html_attr') }}"
+            >
+                <header class="admin-about-socials__header">
+                    <h2>
+                        Réseaux sociaux
+                    </h2>
+
+                    <button
+                        type="button"
+                        class="admin-button admin-button--primary js-social-link-add"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        Ajouter
+                    </button>
+                </header>
+
+                <div class="admin-about-socials__list js-about-socials-list">
+                    {% for socialForm in form.socialLinks %}
+                        <article class="admin-social-link js-social-link">
+                            <div class="admin-social-link__fields">
+                                {{ form_row(socialForm.platform) }}
+                                {{ form_row(socialForm.label) }}
+                                {{ form_row(socialForm.url) }}
+                                {{ form_row(socialForm.enabled) }}
+                                {{ form_widget(socialForm.displayOrder) }}
+                            </div>
+
+                            <div class="admin-social-link__actions">
+                                <button
+                                    type="button"
+                                    class="admin-action js-social-link-up"
+                                >
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="admin-action js-social-link-down"
+                                >
+                                    <i class="fa-solid fa-arrow-down"></i>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="admin-action admin-action--danger js-social-link-remove"
+                                >
+                                    <i class="fa-solid fa-trash"></i>
+                                    Supprimer
+                                </button>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <div class="admin-form-actions">
+                <button
+                    type="submit"
+                    class="admin-button admin-button--primary"
+                >
+                    Enregistrer
+                </button>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

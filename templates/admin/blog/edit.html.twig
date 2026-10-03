@@ -1,0 +1,17 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    Modifier {{ post.title }} — Administration
+{% endblock %}
+
+{% block body %}
+    <div class="admin-page">
+        <header class="admin-page__header">
+            <h1 class="admin-page__title">
+                Modifier l'article
+            </h1>
+        </header>
+
+        {% include 'admin/blog/_form.html.twig' %}
+    </div>
+{% endblock %}

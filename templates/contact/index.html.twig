@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact — INQUEST{% endblock %}
+{% block page_header %}{% endblock %}
+
+{% block body %}
+<main class="contact-page">
+    <h1 class="contact-page__title">Contact</h1>
+
+    {{ form_start(form, {
+        attr: {
+            class: 'contact-form'
+        }
+    }) }}
+
+        {% if not form.vars.valid %}
+            <div class="contact-form__errors">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+
+        {{ form_row(form.email) }}
+        {{ form_row(form.subject) }}
+        {{ form_row(form.body) }}
+
+        <button
+            class="contact-form__submit"
+            type="submit"
+        >
+            Envoyer
+        </button>
+
+    {{ form_end(form) }}
+</main>
+{% endblock %}

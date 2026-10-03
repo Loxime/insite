@@ -1,0 +1,48 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+<div class="admin-page admin-account">
+    <h1 class="admin-page__title">
+        Administration
+    </h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="admin-flash admin-flash--success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <section class="admin-account__section">
+        <h2>Compte</h2>
+
+        <p>
+            <strong>Email :</strong>
+            {{ app.user.email }}
+        </p>
+
+        {{ form_start(profile_form) }}
+            {{ form_row(profile_form.username) }}
+
+            <button class="admin-button admin-button--primary">
+                Enregistrer
+            </button>
+        {{ form_end(profile_form) }}
+    </section>
+
+    <section class="admin-account__section">
+        <h2>Changer le mot de passe</h2>
+
+        {{ form_start(password_form) }}
+            {{ form_row(password_form.currentPassword) }}
+            {{ form_row(password_form.newPassword) }}
+            {{ form_row(password_form.confirmPassword) }}
+
+            <button class="admin-button admin-button--primary">
+                Modifier le mot de passe
+            </button>
+        {{ form_end(password_form) }}
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    Nouveau jeu — Administration
+{% endblock %}
+
+{% block body %}
+    <div class="admin-page">
+        <h1 class="admin-page__title">
+            Nouveau jeu
+        </h1>
+
+        {% include 'admin/games/_form.html.twig' %}
+    </div>
+{% endblock %}

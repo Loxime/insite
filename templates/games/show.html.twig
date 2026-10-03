@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ game.title }} — INQUEST
+{% endblock %}
+
+{% block meta_description %}
+    {{ game.summary ?: game.title }}
+{% endblock %}
+
+{% block page_header %}{% endblock %}
+
+{% block body %}
+    <article class="game-page">
+        <header class="game-page__header">
+            <h1 class="game-page__title">
+                {{ game.title }}
+            </h1>
+
+            {% if game.summary %}
+                <p class="game-page__summary">
+                    {{ game.summary }}
+                </p>
+            {% endif %}
+
+
+
+
+            {% if game.links|length > 0 %}
+                <nav
+                    class="game-page__platforms"
+                    aria-label="Liens externes"
+                >
+                    {% for link in game.links %}
+                        <a
+                            href="{{ link.url }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {{ link.name }}
+                        </a>
+                    {% endfor %}
+                </nav>
+            {% endif %}
+        </header>
+
+        {% if game.imageKey %}
+            <figure class="game-page__image">
+                <img
+                    src="{{ path('media_show', {
+                        key: game.imageKey
+                    }) }}"
+                    alt="{{ game.title }}"
+                >
+            </figure>
+        {% endif %}
+
+        <div class="game-page__content">
+            {{ game.description|raw }}
+        </div>
+
+        {% if game.sections is not empty %}
+            <div class="game-page__sections">
+                {% for section in game.sections %}
+                    <section class="game-section">
+                        {% if section.imageKey %}
+                            <figure class="game-section__image">
+                                <img
+                                    src="{{ path('media_show', {
+                                        key: section.imageKey
+                                    }) }}"
+                                    alt="{{ section.title ?: game.title }}"
+                                    loading="lazy"
+                                >
+                            </figure>
+                        {% endif %}
+
+                        {% if section.title or section.content %}
+                            <div class="game-section__text">
+                                {% if section.title %}
+                                    <h2 class="game-section__title">
+                                        {{ section.title }}
+                                    </h2>
+                                {% endif %}
+
+                                {% if section.content %}
+                                    <div class="game-section__content">
+                                        {{ section.content|raw }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </section>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </article>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    Créer un tag — Administration
+{% endblock %}
+
+{% block body %}
+    <div class="admin-page">
+        <header class="admin-page__header">
+            <h1 class="admin-page__title">
+                Créer un tag
+            </h1>
+        </header>
+
+        {% include 'admin/tags/_form.html.twig' %}
+    </div>
+{% endblock %}

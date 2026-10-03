@@ -1,0 +1,120 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Jam — Administration{% endblock %}
+
+{% block body %}
+<div class="admin-page">
+    <header class="admin-page__header admin-page__header--actions">
+        <h1 class="admin-page__title">Jam</h1>
+
+        <div class="admin-form-actions">
+            <a
+                href="{{ path('admin_jam_themes_index') }}"
+                class="admin-button admin-button--secondary"
+            >
+                Gérer les thèmes
+            </a>
+
+            <a
+                href="{{ path('admin_jam_new') }}"
+                class="admin-button admin-button--primary"
+            >
+                Nouvelle Jam
+            </a>
+        </div>
+    </header>
+
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Mode</th>
+                    <th>Période</th>
+                    <th>Source</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for jam in jams %}
+                    <tr>
+                        <td>
+                            {{ jam.name }}
+
+                            {% if jam.permanent %}
+                                <strong>— Permanente</strong>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ jam.mode == 'random'
+                                ? 'Aléatoire'
+                                : 'Fixe'
+                            }}
+                        </td>
+
+                        <td>
+                            {% if jam.permanent %}
+                                Permanente
+                            {% else %}
+                                {{ jam.startDate|date('d/m/Y') }}
+                                →
+                                {{ jam.endDate|date('d/m/Y') }}
+                            {% endif %}
+                        </td>
+
+                        <td>{{ jam.sourceName }}</td>
+
+                        <td>
+                            {{ jam.enabled ? 'Oui' : 'Non' }}
+                        </td>
+
+                        <td>
+                            <div class="admin-table__actions">
+                                <a
+                                    href="{{ path('admin_jam_edit', {
+                                        id: jam.id
+                                    }) }}"
+                                    class="admin-action"
+                                >
+                                    Modifier
+                                </a>
+
+                                <form
+                                    method="post"
+                                    action="{{ path('admin_jam_delete', {
+                                        id: jam.id
+                                    }) }}"
+                                >
+                                    <input
+                                        type="hidden"
+                                        name="_token"
+                                        value="{{ csrf_token(
+                                            'delete-jam-' ~ jam.id
+                                        ) }}"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="admin-action admin-action--danger"
+                                    >
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6">
+                            Aucune Jam configurée.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

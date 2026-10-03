@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% include 'layout/_favicon.html.twig' %}
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="{% block meta_description %}INQUEST{% endblock %}"
+    >
+
+    <title>{% block title %}INQUEST{% endblock %}</title>
+
+    {% block stylesheets %}
+        {{ reprise_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ reprise_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+
+<body>
+    {% include 'layout/_toasts.html.twig' %}
+    {% include 'layout/_header.html.twig' %}
+
+    <main class="page">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% block page_header %}
+            <header class="page-header">
+                <p class="page-eyebrow">
+                    {% block eyebrow %}INQUEST{% endblock %}
+                </p>
+
+                <h1 class="page-title">
+                    {% block page_title %}Administration{% endblock %}
+                </h1>
+
+                {% block page_description %}{% endblock %}
+            </header>
+        {% endblock %}
+
+        {% block body %}{% endblock %}
+    </main>
+
+    {% include 'layout/_footer.html.twig' %}
+</body>
+</html>

@@ -1,0 +1,110 @@
+{{ form_start(form, {
+    attr: {
+        class: 'admin-post-form'
+    }
+}) }}
+
+    <div class="admin-form-field">
+        {{ form_label(form.title) }}
+        {{ form_widget(form.title) }}
+        {{ form_errors(form.title) }}
+    </div>
+
+    <div class="admin-form-row">
+        <div class="admin-form-field">
+            {{ form_label(form.tags) }}
+            {{ form_widget(form.tags) }}
+            {{ form_errors(form.tags) }}
+        </div>
+
+        <div class="admin-form-field">
+            {{ form_label(form.status) }}
+            {{ form_widget(form.status) }}
+            {{ form_errors(form.status) }}
+        </div>
+    </div>
+
+    <div class="admin-form-field">
+        {{ form_label(form.image) }}
+        {{ form_widget(form.image) }}
+        {{ form_help(form.image) }}
+        {{ form_errors(form.image) }}
+
+        {% if post.imageKey %}
+            <div class="admin-post-image-preview">
+                <img
+                    src="{{ path('media_show', {key: post.imageKey}) }}"
+                    alt="{{ post.title }}"
+                >
+            </div>
+        {% endif %}
+
+        {% if form.removeImage is defined %}
+            <div class="admin-post-image-remove">
+                {{ form_widget(form.removeImage) }}
+                {{ form_label(form.removeImage) }}
+                {{ form_errors(form.removeImage) }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="admin-form-field">
+        {{ form_label(form.content) }}
+        {{ form_widget(form.content) }}
+        {{ form_errors(form.content) }}
+    </div>
+
+    <section class="admin-seo">
+        <h2 class="admin-seo__title">
+            Référencement
+        </h2>
+
+        <p class="admin-seo__description">
+            Tous les champs ci-dessous sont optionnels.
+        </p>
+
+        <div class="admin-form-field">
+            {{ form_label(form.metaTitle) }}
+            {{ form_widget(form.metaTitle) }}
+            {{ form_errors(form.metaTitle) }}
+        </div>
+
+        <div class="admin-form-field">
+            {{ form_label(form.metaDescription) }}
+            {{ form_widget(form.metaDescription) }}
+            {{ form_errors(form.metaDescription) }}
+        </div>
+
+        <div class="admin-form-row">
+            <div class="admin-form-field">
+                {{ form_label(form.primaryKeyword) }}
+                {{ form_widget(form.primaryKeyword) }}
+                {{ form_errors(form.primaryKeyword) }}
+            </div>
+
+            <div class="admin-form-field">
+                {{ form_label(form.secondaryKeywords) }}
+                {{ form_widget(form.secondaryKeywords) }}
+                {{ form_help(form.secondaryKeywords) }}
+                {{ form_errors(form.secondaryKeywords) }}
+            </div>
+        </div>
+    </section>
+
+    <div class="admin-form-actions">
+        <button
+            type="submit"
+            class="admin-button admin-button--primary"
+        >
+            Enregistrer
+        </button>
+
+        <a
+            href="{{ path('admin_blog_index') }}"
+            class="admin-button admin-button--secondary"
+        >
+            Annuler
+        </a>
+    </div>
+
+{{ form_end(form) }}

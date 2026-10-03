@@ -1,0 +1,326 @@
+.site-header {
+    width: 100%;
+
+    background: #2292a4;
+}
+
+.site-header__inner {
+    display: grid;
+    grid-template-columns:
+        minmax(180px, 1fr)
+        auto
+        minmax(180px, 1fr);
+
+    align-items: center;
+
+    width: min(
+        calc(100% - 64px),
+        1320px
+    );
+
+    min-height: 100px;
+
+    margin-inline: auto;
+}
+
+.site-brand {
+    display: flex;
+    align-items: center;
+
+    justify-self: start;
+
+    width: fit-content;
+
+    text-decoration: none;
+}
+
+.site-brand__logo {
+    display: block;
+
+    width: auto;
+    height: 68px;
+    max-width: 180px;
+
+    object-fit: contain;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 42px;
+}
+
+.site-nav__link {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 44px;
+
+    color: #ffffff;
+
+    font-size: 1rem;
+    font-weight: 500;
+
+    text-decoration: none;
+}
+
+.site-nav__link::after {
+    position: absolute;
+
+    right: 0;
+    bottom: 3px;
+    left: 0;
+
+    height: 2px;
+
+    background: #ffffff;
+
+    content: "";
+
+    opacity: 0;
+
+    transform: scaleX(0);
+
+    transition:
+        opacity 160ms ease,
+        transform 160ms ease;
+}
+
+.site-nav__link:hover::after,
+.site-nav__link.is-active::after {
+    opacity: 1;
+
+    transform: scaleX(1);
+}
+
+.site-header__spacer {
+    width: 100%;
+}
+
+@media (max-width: 760px) {
+    .site-header__inner {
+        grid-template-columns: 1fr;
+
+        width: calc(100% - 32px);
+
+        padding-block: 16px;
+    }
+
+    .site-brand {
+        justify-self: center;
+
+        margin-bottom: 10px;
+    }
+
+    .site-brand__logo {
+        height: 56px;
+        max-width: 160px;
+    }
+
+    .site-nav {
+        gap: 28px;
+    }
+
+    .site-header__spacer {
+        display: none;
+    }
+}
+
+.site-header__socials {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 16px;
+}
+
+.site-header__socials a {
+    color: #ffffff;
+
+    font-size: 1.1rem;
+}
+
+.site-header__socials a:hover {
+    color: #ffffff;
+    opacity: .72;
+}
+
+@media (max-width: 760px) {
+    .site-header__socials {
+        justify-content: center;
+
+        margin-top: 12px;
+    }
+}
+
+/* =========================================================
+   HEADER — DAILY JAM
+   ========================================================= */
+
+.site-header__right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 20px;
+
+    min-width: 0;
+}
+
+.site-daily-jam {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+
+    color: #ffffff;
+}
+
+.site-daily-jam__text {
+    display: grid;
+
+    line-height: 1.15;
+}
+
+.site-daily-jam__label {
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    opacity: 0.8;
+}
+
+.site-daily-jam__theme {
+    max-width: 170px;
+
+    overflow: hidden;
+
+    font-size: 0.9rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-daily-jam__source {
+    width: fit-content;
+
+    margin-top: 3px;
+
+    color: #ffffff;
+
+    font-size: 0.68rem;
+
+    opacity: 0.72;
+
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.site-daily-jam__colors {
+    display: flex;
+
+    gap: 5px;
+}
+
+.site-daily-jam__color {
+    display: block;
+
+    width: 18px;
+    height: 18px;
+
+    background: var(--daily-jam-color);
+
+    border: 1px solid rgb(255 255 255 / 70%);
+    border-radius: 50%;
+}
+
+@media (max-width: 1000px) {
+    .site-daily-jam__source {
+        display: none;
+    }
+
+    .site-daily-jam__theme {
+        max-width: 120px;
+    }
+}
+
+@media (max-width: 760px) {
+    .site-header__right {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .site-daily-jam {
+        justify-content: center;
+    }
+}
+
+/* =========================================================
+   HEADER — NAVIGATION
+   Texte blanc + soulignement uniquement au survol
+   ========================================================= */
+
+.site-header .site-nav a,
+.site-header .site-nav a:visited,
+.site-header .site-nav a.is-active {
+    position: relative;
+
+    color: #ffffff !important;
+    background: transparent !important;
+
+    border: 0 !important;
+
+    text-decoration: none !important;
+
+    transition: none;
+}
+
+.site-header .site-nav a::after {
+    content: "";
+
+    position: absolute;
+    right: 0;
+    bottom: -8px;
+    left: 0;
+
+    height: 2px;
+
+    background: #ffffff;
+
+    transform: scaleX(0);
+    transform-origin: center;
+
+    transition: transform 160ms ease;
+}
+
+.site-header .site-nav a:hover,
+.site-header .site-nav a:focus-visible,
+.site-header .site-nav a.is-active:hover {
+    color: #ffffff !important;
+    background: transparent !important;
+
+    text-decoration: none !important;
+}
+
+.site-header .site-nav a:hover::after,
+.site-header .site-nav a:focus-visible::after {
+    transform: scaleX(1);
+}
+
+/* La page active reste blanche mais n'est pas soulignée
+   tant que la souris n'est pas dessus. */
+.site-header .site-nav a.is-active::after {
+    transform: scaleX(0);
+}
+
+.site-header .site-nav a.is-active:hover::after {
+    transform: scaleX(1);
+}

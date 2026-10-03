@@ -1,0 +1,54 @@
+:root {
+    /* Brand */
+    --color-dark: #0f0a0a;
+    --color-light: #f5efed;
+    --color-primary: #2292a4;
+
+    /* Semantic */
+    --color-background: var(--color-light);
+    --color-surface: #ffffff;
+    --color-surface-hover: rgba(34, 146, 164, 0.08);
+
+    --color-text: var(--color-dark);
+    --color-text-muted: rgba(15, 10, 10, 0.62);
+
+    --color-on-primary: var(--color-light);
+
+    --color-border: rgba(15, 10, 10, 0.14);
+
+    --color-primary-hover: #1c7b8a;
+    --color-danger: #b42318;
+
+    --color-primary-rgb: 34, 146, 164;
+
+    /* Layout */
+    --container-width: 1200px;
+    --container-padding: 24px;
+
+    /* Spacing */
+    --space-2xs: 4px;
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+
+    /* Radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+
+    /* Typography */
+    --font-family-base: Arial, Helvetica, sans-serif;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.5rem;
+
+    /* Effects */
+    --shadow-soft: 0 10px 30px rgba(15, 10, 10, 0.08);
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+}

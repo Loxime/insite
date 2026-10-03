@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% include 'layout/_favicon.html.twig' %}
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{% block title %}Administration — INQUEST{% endblock %}</title>
+
+    {{ reprise_entry_link_tags('app') }}
+    {{ reprise_entry_script_tags('app') }}
+</head>
+
+<body class="admin">
+    {% include 'layout/_toasts.html.twig' %}
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar__top">
+                <a
+                    href="{{ path('admin') }}"
+                    class="admin-sidebar__brand"
+                >
+                    INQUEST
+                </a>
+
+                <nav
+                    class="admin-sidebar__navigation"
+                    aria-label="Navigation administration"
+                >
+                    <a
+                        href="{{ path('admin_blog_index') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_blog' %} is-active{% endif %}"
+                    >
+                        Blog
+                    </a>
+
+                    <a
+                        href="{{ path('admin_games_index') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_games' %} is-active{% endif %}"
+                    >
+                        Games
+                    </a>
+<a
+                        href="{{ path('admin_about_edit') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_about' %} is-active{% endif %}"
+                    >
+                        About
+                    </a>
+<a
+                        href="{{ path('admin_jam_index') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_jam' %} is-active{% endif %}"
+                    >
+                        Jam
+                    </a>
+<a
+                        href="{{ path('admin_site_edit') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_site' %} is-active{% endif %}"
+                    >
+                        Site
+                    </a>
+{% if is_granted('ROLE_SUPER_ADMIN') %}
+<a
+                        href="{{ path('admin_users_index') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_users' %} is-active{% endif %}"
+                    >
+                        Administrateurs
+                    </a>
+{% endif %}
+<a
+                        href="{{ path('admin_tags_index') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_tags' %} is-active{% endif %}"
+                    >
+                        Tags
+                    </a>
+<a
+                        href="{{ path('admin_careers_index') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_careers' %} is-active{% endif %}"
+                    >
+                        Careers
+                    </a>
+<a
+                        href="{{ path('admin_faq_index') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_faq' %} is-active{% endif %}"
+                    >
+                        FAQ
+                    </a>
+                </nav>
+            </div>
+
+            <div class="admin-sidebar__bottom">
+                <div class="admin-sidebar__user">
+                    {{ app.user.userIdentifier }}
+                </div>
+
+                <a
+                href="{{ path('app_frontoffice_home_show') }}"
+                class="admin-sidebar__logout"
+            >
+                Retour au site
+            </a>
+
+            <a
+                    href="{{ path('admin_logout') }}"
+                    class="admin-sidebar__logout"
+                >
+                    Déconnexion
+                </a>
+            </div>
+        </aside>
+
+        <main class="admin-content">
+            {% block body %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

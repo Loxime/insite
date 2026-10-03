@@ -1,0 +1,113 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ title }} — Administration{% endblock %}
+
+{% block body %}
+<div class="admin-page">
+    <h1 class="admin-page__title">
+        {{ title }}
+    </h1>
+
+    {{ form_start(form, {
+        attr: {
+            class: 'admin-simple-form js-jam-form'
+        }
+    }) }}
+
+        {{ form_errors(form) }}
+
+        {{ form_row(form.name) }}
+
+        <div class="admin-form-row">
+            {{ form_row(form.sourceName) }}
+            {{ form_row(form.sourceUrl) }}
+        </div>
+
+        <div class="admin-form-row">
+            {{ form_row(form.mode) }}
+            {{ form_row(form.permanent) }}
+            {{ form_row(form.enabled) }}
+        </div>
+
+        <div class="admin-form-row js-jam-dates">
+            {{ form_row(form.startDate) }}
+            {{ form_row(form.endDate) }}
+        </div>
+
+        <section
+            class="admin-jam-schedule js-jam-schedule"
+            data-index="{{ form.scheduleDays|length }}"
+            data-prototype="{{ form_widget(
+                form.scheduleDays.vars.prototype
+            )|e('html_attr') }}"
+        >
+            <header class="admin-jam-schedule__header">
+                <div>
+                    <h2>Programmation quotidienne</h2>
+
+                    <p>
+                        Une ligne correspond à une journée :
+                        un thème et trois couleurs.
+                    </p>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button
+                        type="button"
+                        class="admin-button admin-button--secondary js-jam-day-add"
+                    >
+                        Ajouter un jour
+                    </button>
+
+                    <button
+                        type="button"
+                        class="admin-button admin-button--primary js-jam-generate"
+                    >
+                        Générer la période
+                    </button>
+                </div>
+            </header>
+
+            {{ form_errors(form.scheduleDays) }}
+
+            <div class="admin-jam-days js-jam-days">
+                {% for dayForm in form.scheduleDays %}
+                    <article class="admin-jam-day js-jam-day">
+                        <div class="admin-jam-day__fields">
+                            {{ form_row(dayForm.date) }}
+                            {{ form_row(dayForm.theme) }}
+                            {{ form_row(dayForm.color1) }}
+                            {{ form_row(dayForm.color2) }}
+                            {{ form_row(dayForm.color3) }}
+                        </div>
+
+                        <button
+                            type="button"
+                            class="admin-action admin-action--danger js-jam-day-remove"
+                        >
+                            Supprimer
+                        </button>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <div class="admin-form-actions">
+            <button
+                type="submit"
+                class="admin-button admin-button--primary"
+            >
+                Enregistrer
+            </button>
+
+            <a
+                href="{{ path('admin_jam_index') }}"
+                class="admin-button admin-button--secondary"
+            >
+                Annuler
+            </a>
+        </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

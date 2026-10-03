@@ -1,0 +1,85 @@
+.admin-jam-schedule {
+    display: grid;
+
+    gap: 24px;
+
+    margin-top: 28px;
+    padding-top: 28px;
+
+    border-top: 1px solid var(--color-border);
+}
+
+.admin-jam-schedule[hidden],
+.js-jam-dates[hidden] {
+    display: none !important;
+}
+
+.admin-jam-schedule__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    gap: 24px;
+}
+
+.admin-jam-schedule__header h2 {
+    margin: 0 0 8px;
+}
+
+.admin-jam-schedule__header p {
+    margin: 0;
+}
+
+.admin-jam-days {
+    display: grid;
+
+    gap: 18px;
+}
+
+.admin-jam-day {
+    display: grid;
+
+    gap: 18px;
+
+    padding: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.admin-jam-day__fields {
+    display: grid;
+    grid-template-columns:
+        minmax(150px, 1fr)
+        minmax(200px, 1.5fr)
+        minmax(100px, .5fr)
+        minmax(100px, .5fr)
+        minmax(100px, .5fr);
+
+    gap: 16px;
+    align-items: end;
+}
+
+.admin-jam-day input[type="color"] {
+    width: 100%;
+    min-height: 46px;
+
+    padding: 4px;
+
+    background: #ffffff;
+}
+
+@media (max-width: 1000px) {
+    .admin-jam-day__fields {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+    .admin-jam-day__fields {
+        grid-template-columns: 1fr;
+    }
+}

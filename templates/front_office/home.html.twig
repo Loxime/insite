@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog — INQUEST{% endblock %}
+
+{% block page_header %}{% endblock %}
+
+{% block body %}
+<main class="home">
+    <section class="home-section">
+        <div class="home-blog__list">
+            {% for post in posts %}
+                <article
+                    class="
+                        home-feature
+                        {{ loop.index is even
+                            ? 'home-feature--reverse'
+                            : ''
+                        }}
+                        {{ post.imageKey
+                            ? 'home-feature--with-image'
+                            : 'home-feature--without-image'
+                        }}
+                    "
+                >
+                    {% if post.imageKey %}
+                        <div class="home-feature__visual">
+                            <img
+                                src="{{ path('media_show', {
+                                    key: post.imageKey
+                                }) }}"
+                                alt="{{ post.title }}"
+                                loading="lazy"
+                            >
+                        </div>
+                    {% endif %}
+
+                    <div class="home-feature__content">
+                        <h2 class="home-feature__title">
+                            {{ post.title }}
+                        </h2>
+
+                        <p class="home-feature__summary">
+                            {% if post.metaDescription %}
+                                {{ post.metaDescription }}
+                            {% else %}
+                                {{ post.content
+                                    |striptags
+                                    |slice(0, 180)
+                                }}
+                                {% if post.content|striptags|length > 180 %}
+                                    …
+                                {% endif %}
+                            {% endif %}
+                        </p>
+
+                        <div class="home-feature__meta">
+                            {% for tag in post.tags %}
+                                <span class="home-feature__tag">
+                                    {{ tag.libelle }}
+                                </span>
+                            {% endfor %}
+
+                            <time datetime="{{ post.createdAt|date('Y-m-d') }}">
+                                {{ post.createdAt|date('d/m/Y') }}
+                            </time>
+                        </div>
+
+                        <a
+                            href="{{ path('blog_show', {
+                                slug: post.slug
+                            }) }}"
+                            class="home-feature__link"
+                        >
+                            Lire l'article
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+                </article>
+            {% else %}
+                <p class="home-blog__empty">
+                    Aucun article publié pour le moment.
+                </p>
+            {% endfor %}
+        </div>
+
+        {% if totalPages > 1 %}
+            <nav
+                class="blog-pagination"
+                aria-label="Pagination du blog"
+            >
+                {% if page > 1 %}
+                    <a
+                        class="blog-pagination__link"
+                        href="{{ path(
+                            'app_frontoffice_home_show',
+                            {page: page - 1}
+                        ) }}"
+                    >
+                        ← Précédent
+                    </a>
+                {% endif %}
+
+                <div class="blog-pagination__pages">
+                    {% for currentPage in 1..totalPages %}
+                        {% if currentPage == page %}
+                            <span
+                                class="
+                                    blog-pagination__page
+                                    blog-pagination__page--active
+                                "
+                                aria-current="page"
+                            >
+                                {{ currentPage }}
+                            </span>
+                        {% else %}
+                            <a
+                                class="blog-pagination__page"
+                                href="{{ path(
+                                    'app_frontoffice_home_show',
+                                    {page: currentPage}
+                                ) }}"
+                            >
+                                {{ currentPage }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% if page < totalPages %}
+                    <a
+                        class="blog-pagination__link"
+                        href="{{ path(
+                            'app_frontoffice_home_show',
+                            {page: page + 1}
+                        ) }}"
+                    >
+                        Suivant →
+                    </a>
+                {% endif %}
+            </nav>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

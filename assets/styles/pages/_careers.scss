@@ -1,0 +1,54 @@
+.careers-list {
+    display: grid;
+    gap: 24px;
+}
+
+.career-card {
+    padding: 32px;
+
+    color: #0f0a0a;
+    background: #ffffff;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.career-card__title {
+    margin: 0 0 22px;
+
+    font-size: 1.8rem;
+}
+
+.career-card__content {
+    line-height: 1.75;
+}
+
+.career-card__contact {
+    display: inline-flex;
+
+    margin-top: 28px;
+
+    color: var(--color-primary);
+
+    font-weight: 700;
+}
+
+.game-page__platforms {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top: 28px;
+}
+
+.game-page__platforms a {
+    padding: 10px 16px;
+
+    color: #ffffff;
+    background: var(--color-primary);
+
+    border-radius: 999px;
+
+    font-weight: 700;
+}

@@ -1,0 +1,230 @@
+{{ form_start(form, {
+    attr: {
+        class: 'admin-game-form'
+    }
+}) }}
+
+    {% include 'admin/components/_form_errors.html.twig' with {
+        form: form
+    } only %}
+
+
+    <div class="admin-form-field">
+        {{ form_label(form.title) }}
+        {{ form_widget(form.title) }}
+        {{ form_errors(form.title) }}
+    </div>
+
+    <div class="admin-form-field">
+        {{ form_label(form.summary) }}
+        {{ form_widget(form.summary) }}
+        {{ form_errors(form.summary) }}
+    </div>
+
+    <div class="admin-form-row">
+        <div class="admin-form-field">
+            {{ form_label(form.displayOrder) }}
+            {{ form_widget(form.displayOrder) }}
+            {{ form_errors(form.displayOrder) }}
+        </div>
+
+        <div class="admin-form-field">
+            {{ form_label(form.status) }}
+            {{ form_widget(form.status) }}
+            {{ form_errors(form.status) }}
+        </div>
+    </div>
+
+    <div class="admin-form-field">
+        {{ form_label(form.image) }}
+        {{ form_widget(form.image) }}
+        {{ form_help(form.image) }}
+        {{ form_errors(form.image) }}
+
+        {% if game.imageKey %}
+            <div class="admin-game-image-preview">
+                <img
+                    src="{{ path('media_show', {
+                        key: game.imageKey
+                    }) }}"
+                    alt="{{ game.title }}"
+                >
+            </div>
+        {% endif %}
+
+        {% if form.removeImage is defined %}
+            <div class="admin-game-image-remove">
+                {{ form_widget(form.removeImage) }}
+                {{ form_label(form.removeImage) }}
+                {{ form_errors(form.removeImage) }}
+            </div>
+        {% endif %}
+    </div>
+
+    
+
+    <section
+        class="admin-game-links js-game-links"
+        data-index="{{ form.links|length }}"
+        data-prototype="{{ form_widget(form.links.vars.prototype)|e('html_attr') }}"
+    >
+        <header class="admin-game-links__header">
+            <div>
+                <h2>Liens externes</h2>
+
+                <p>
+                    Ajoutez librement les plateformes ou sites
+                    sur lesquels le jeu est disponible.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="admin-button admin-button--primary js-game-link-add"
+            >
+                Ajouter un lien
+            </button>
+        </header>
+
+        <div class="admin-game-links__list js-game-links-list">
+            {% for linkForm in form.links %}
+                <article class="admin-game-link js-game-link">
+                    <div class="admin-game-link__fields">
+                        {{ form_row(linkForm.name) }}
+                        {{ form_row(linkForm.url) }}
+                        {{ form_widget(linkForm.displayOrder) }}
+                    </div>
+
+                    <button
+                        type="button"
+                        class="admin-action admin-action--danger js-game-link-remove"
+                    >
+                        Supprimer
+                    </button>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="admin-form-field">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description) }}
+        {{ form_errors(form.description) }}
+    </div>
+
+    <section
+        class="admin-game-sections js-game-sections"
+        data-index="{{ form.sections|length }}"
+        data-prototype="{{ form_widget(form.sections.vars.prototype)|e('html_attr') }}"
+    >
+        <header class="admin-game-sections__header">
+            <div>
+                <h2>
+                    Sections supplémentaires
+                </h2>
+
+                <p>
+                    Chaque section est affichée verticalement :
+                    image puis texte.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="admin-button admin-button--primary js-game-section-add"
+            >
+                <i
+                    class="fa-solid fa-plus"
+                    aria-hidden="true"
+                ></i>
+
+                Ajouter une section
+            </button>
+        </header>
+
+        <div class="admin-game-sections__list js-game-sections-list">
+            {% for sectionForm in form.sections %}
+                {% set section = sectionForm.vars.data %}
+
+                <article
+                    class="admin-game-section js-game-section{% if not section.imageKey %} admin-game-section--without-image{% endif %}"
+                >
+                    <header class="admin-game-section__header">
+                        <h3>
+                            Section
+                            <span class="js-game-section-number">
+                                {{ loop.index }}
+                            </span>
+                        </h3>
+
+                        <div class="admin-game-section__controls">
+                            <button
+                                type="button"
+                                class="admin-action js-game-section-up"
+                                title="Monter"
+                            >
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="admin-action js-game-section-down"
+                                title="Descendre"
+                            >
+                                <i class="fa-solid fa-arrow-down"></i>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="admin-action admin-action--danger js-game-section-remove"
+                            >
+                                <i class="fa-solid fa-trash"></i>
+                                Supprimer
+                            </button>
+                        </div>
+                    </header>
+
+                    <div class="admin-game-section__fields">
+                        {{ form_row(sectionForm.title) }}
+
+                        {{ form_row(sectionForm.image) }}
+
+                        {% if section.imageKey %}
+                            <div class="admin-game-section__preview">
+                                <img
+                                    src="{{ path('media_show', {
+                                        key: section.imageKey
+                                    }) }}"
+                                    alt="{{ section.title ?: game.title }}"
+                                >
+                            </div>
+                        {% endif %}
+
+                        {{ form_row(sectionForm.removeImage) }}
+
+                        {{ form_row(sectionForm.content) }}
+
+                        {{ form_widget(sectionForm.displayOrder) }}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="admin-form-actions">
+        <button
+            type="submit"
+            class="admin-button admin-button--primary"
+        >
+            Enregistrer
+        </button>
+
+        <a
+            href="{{ path('admin_games_index') }}"
+            class="admin-button admin-button--secondary"
+        >
+            Annuler
+        </a>
+    </div>
+
+{{ form_end(form) }}

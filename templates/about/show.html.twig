@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    About — INQUEST
+{% endblock %}
+
+{% block meta_description %}
+    Découvrez le studio INQUEST.
+{% endblock %}
+
+{% block page_header %}{% endblock %}
+
+{% block body %}
+    <main class="about-page">
+        {% if about %}
+            <header class="about-page__header">
+                <h1 class="about-page__title">
+                    {{ about.title }}
+                </h1>
+            </header>
+
+            {% if about.imageKey %}
+                <figure class="about-page__image">
+                    <img
+                        src="{{ path('media_show', {
+                            key: about.imageKey
+                        }) }}"
+                        alt="{{ about.title }}"
+                    >
+                </figure>
+            {% endif %}
+
+            {% if about.content %}
+                <div class="about-page__content">
+                    {{ about.content|raw }}
+                </div>
+            {% endif %}
+
+            {% if about.socialLinks is not empty %}
+                <nav
+                    class="about-page__socials"
+                    aria-label="Réseaux sociaux"
+                >
+                    {% for social in about.socialLinks %}
+                        {% if social.enabled %}
+                            <a
+                                href="{{ social.url }}"
+                                class="about-page__social"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {% if social.platform == 'discord' %}
+                                    <i class="fa-brands fa-discord"></i>
+                                {% elseif social.platform == 'github' %}
+                                    <i class="fa-brands fa-github"></i>
+                                {% elseif social.platform == 'instagram' %}
+                                    <i class="fa-brands fa-instagram"></i>
+                                {% elseif social.platform == 'linkedin' %}
+                                    <i class="fa-brands fa-linkedin-in"></i>
+                                {% elseif social.platform == 'tiktok' %}
+                                    <i class="fa-brands fa-tiktok"></i>
+                                {% elseif social.platform == 'twitch' %}
+                                    <i class="fa-brands fa-twitch"></i>
+                                {% elseif social.platform == 'x-twitter' %}
+                                    <i class="fa-brands fa-x-twitter"></i>
+                                {% elseif social.platform == 'youtube' %}
+                                    <i class="fa-brands fa-youtube"></i>
+                                {% elseif social.platform == 'bluesky' %}
+                                    <i class="fa-brands fa-bluesky"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-link"></i>
+                                {% endif %}
+
+                                <span>
+                                    {{ social.label ?: social.platform }}
+                                </span>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </nav>
+            {% endif %}
+        {% else %}
+            <h1 class="about-page__title">
+                About
+            </h1>
+        {% endif %}
+    </main>
+{% endblock %}

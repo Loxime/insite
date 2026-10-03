@@ -1,0 +1,301 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    Blog — Administration
+{% endblock %}
+
+{% block body %}
+    <div class="admin-page">
+        <header class="admin-page__header admin-page__header--actions">
+            <h1 class="admin-page__title">
+                Blog
+            </h1>
+
+            <a
+                href="{{ path('admin_blog_new') }}"
+                class="admin-button admin-button--primary"
+            >
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                Créer
+            </a>
+        </header>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="admin-flash admin-flash--{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <form
+            method="get"
+            action="{{ path('admin_blog_index') }}"
+            class="admin-search"
+        >
+            <label
+                for="blog-search"
+                class="admin-search__label"
+            >
+                Rechercher
+            </label>
+
+            <div class="admin-search__row">
+                <input
+                    type="search"
+                    id="blog-search"
+                    name="q"
+                    value="{{ search }}"
+                    placeholder="Rechercher par titre..."
+                    class="admin-search__input"
+                >
+
+                <button
+                    type="submit"
+                    class="admin-button admin-button--primary"
+                >
+                    Rechercher
+                </button>
+
+                {% if search %}
+                    <a
+                        href="{{ path('admin_blog_index') }}"
+                        class="admin-button admin-button--secondary"
+                    >
+                        Réinitialiser
+                    </a>
+                {% endif %}
+            </div>
+        </form>
+
+        <div class="admin-table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Tags</th>
+                        <th>Statut</th>
+                        <th class="admin-table__actions-heading">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for post in posts %}
+                        <tr>
+                            <td>
+                                <strong>{{ post.title }}</strong>
+                            </td>
+
+                            <td>
+                                {% for tag in post.tags %}
+                                    {{ tag.libelle }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+
+                            <td>
+                                <span
+                                    class="admin-status admin-status--{{ post.status }}"
+                                >
+                                    {% if post.status == 'published' %}
+                                        Publié
+                                    {% elseif post.status == 'archived' %}
+                                        Archivé
+                                    {% else %}
+                                        Brouillon
+                                    {% endif %}
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="admin-table__actions">
+                                    {% if post.status == 'published' %}
+                                        <a
+                                            href="{{ path('blog_show', {slug: post.slug}) }}"
+                                            class="admin-action"
+                                            target="_blank"
+                                            rel="noopener"
+                                        >
+                                            <i
+                                                class="fa-solid fa-arrow-up-right-from-square"
+                                                aria-hidden="true"
+                                            ></i>
+                                            Voir
+                                        </a>
+                                    {% endif %}
+
+                                    <a
+                                        href="{{ path('admin_blog_edit', {id: post.id}) }}"
+                                        class="admin-action"
+                                    >
+                                        <i
+                                            class="fa-solid fa-pen"
+                                            aria-hidden="true"
+                                        ></i>
+                                        Modifier
+                                    </a>
+
+                                    {% if post.status != 'published' %}
+                                        <form
+                                            method="post"
+                                            action="{{ path('admin_blog_status', {
+                                                id: post.id,
+                                                status: 'published'
+                                            }) }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token(
+                                                    'post-status-' ~ post.id ~ '-published'
+                                                ) }}"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="admin-action"
+                                            >
+                                                <i
+                                                    class="fa-solid fa-globe"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                Publier
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    {% if post.status == 'published' %}
+                                        <form
+                                            method="post"
+                                            action="{{ path('admin_blog_status', {
+                                                id: post.id,
+                                                status: 'draft'
+                                            }) }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token(
+                                                    'post-status-' ~ post.id ~ '-draft'
+                                                ) }}"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="admin-action"
+                                            >
+                                                <i
+                                                    class="fa-solid fa-file"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                Brouillon
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    {% if post.status != 'archived' %}
+                                        <form
+                                            method="post"
+                                            action="{{ path('admin_blog_status', {
+                                                id: post.id,
+                                                status: 'archived'
+                                            }) }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token(
+                                                    'post-status-' ~ post.id ~ '-archived'
+                                                ) }}"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="admin-action"
+                                            >
+                                                <i
+                                                    class="fa-solid fa-box-archive"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                Archiver
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form
+                                            method="post"
+                                            action="{{ path('admin_blog_status', {
+                                                id: post.id,
+                                                status: 'draft'
+                                            }) }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token(
+                                                    'post-status-' ~ post.id ~ '-draft'
+                                                ) }}"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="admin-action"
+                                            >
+                                                <i
+                                                    class="fa-solid fa-rotate-left"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                Restaurer
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    <form
+                                        method="post"
+                                        action="{{ path('admin_blog_delete', {id: post.id}) }}"
+                                        onsubmit="return confirm('Supprimer définitivement cet article ?');"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="_token"
+                                            value="{{ csrf_token('delete-post-' ~ post.id) }}"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="admin-action admin-action--danger"
+                                        >
+                                            <i
+                                                class="fa-solid fa-trash"
+                                                aria-hidden="true"
+                                            ></i>
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td
+                                colspan="4"
+                                class="admin-table__empty"
+                            >
+                                Aucun article trouvé.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if posts.pageCount > 1 %}
+            <nav
+                class="admin-pagination"
+                aria-label="Pagination des articles"
+            >
+                {{ knp_pagination_render(posts) }}
+            </nav>
+        {% endif %}
+    </div>
+{% endblock %}

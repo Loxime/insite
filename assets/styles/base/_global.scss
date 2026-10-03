@@ -1,0 +1,61 @@
+html {
+    font-family: var(--font-family-base);
+    color: var(--color-text);
+    background: var(--color-background);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    background: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+main {
+    flex: 1;
+    width: 100%;
+}
+
+.container {
+    width: min(calc(100% - (var(--container-padding) * 2)), var(--container-width));
+    margin-inline: auto;
+}
+
+a {
+    transition:
+        color var(--transition-fast),
+        border-color var(--transition-fast),
+        opacity var(--transition-fast);
+}
+
+a:hover {
+    color: var(--color-link-hover);
+}
+
+.site-section {
+    padding-block: var(--space-3xl);
+}
+
+html,
+body {
+    background: #ffffff !important;
+}
+
+body,
+.page,
+.home,
+.home-section,
+.blog-article,
+.games-page,
+.game-page,
+.about-page {
+    background-color: #ffffff !important;
+}
+
+.page {
+    width: 100%;
+}
+

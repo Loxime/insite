@@ -1,0 +1,282 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    Games — Administration
+{% endblock %}
+
+{% block body %}
+    <div class="admin-page">
+        <header class="admin-page__header admin-page__header--actions">
+            <h1 class="admin-page__title">
+                Games
+            </h1>
+
+            <a
+                href="{{ path('admin_games_new') }}"
+                class="admin-button admin-button--primary"
+            >
+                <i
+                    class="fa-solid fa-plus"
+                    aria-hidden="true"
+                ></i>
+                Créer
+            </a>
+        </header>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="admin-flash admin-flash--{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <form
+            method="get"
+            action="{{ path('admin_games_index') }}"
+            class="admin-search"
+        >
+            <label
+                for="games-search"
+                class="admin-search__label"
+            >
+                Rechercher
+            </label>
+
+            <div class="admin-search__row">
+                <input
+                    type="search"
+                    id="games-search"
+                    name="q"
+                    value="{{ search }}"
+                    placeholder="Rechercher un jeu..."
+                    class="admin-search__input"
+                >
+
+                <button
+                    type="submit"
+                    class="admin-button admin-button--primary"
+                >
+                    Rechercher
+                </button>
+
+                {% if search %}
+                    <a
+                        href="{{ path('admin_games_index') }}"
+                        class="admin-button admin-button--secondary"
+                    >
+                        Réinitialiser
+                    </a>
+                {% endif %}
+            </div>
+        </form>
+
+        <div class="admin-table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Ordre</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for game in games %}
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{ game.title }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ game.displayOrder }}
+                            </td>
+
+                            <td>
+                                <span class="admin-status admin-status--{{ game.status }}">
+                                    {% if game.status == 'published' %}
+                                        Publié
+                                    {% elseif game.status == 'archived' %}
+                                        Archivé
+                                    {% else %}
+                                        Brouillon
+                                    {% endif %}
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="admin-table__actions">
+                                    {% if game.status == 'published' %}
+                                        <a
+                                            href="{{ path('games_show', {
+                                                slug: game.slug
+                                            }) }}"
+                                            class="admin-action"
+                                            target="_blank"
+                                            rel="noopener"
+                                        >
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                            Voir
+                                        </a>
+                                    {% endif %}
+
+                                    <a
+                                        href="{{ path('admin_games_edit', {
+                                            id: game.id
+                                        }) }}"
+                                        class="admin-action"
+                                    >
+                                        <i class="fa-solid fa-pen"></i>
+                                        Modifier
+                                    </a>
+
+                                    {% if game.status != 'published' %}
+                                        <form
+                                            method="post"
+                                            action="{{ path('admin_games_status', {
+                                                id: game.id,
+                                                status: 'published'
+                                            }) }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token(
+                                                    'game-status-' ~ game.id ~ '-published'
+                                                ) }}"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="admin-action"
+                                            >
+                                                <i class="fa-solid fa-globe"></i>
+                                                Publier
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form
+                                            method="post"
+                                            action="{{ path('admin_games_status', {
+                                                id: game.id,
+                                                status: 'draft'
+                                            }) }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token(
+                                                    'game-status-' ~ game.id ~ '-draft'
+                                                ) }}"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="admin-action"
+                                            >
+                                                <i class="fa-solid fa-file"></i>
+                                                Brouillon
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    {% if game.status != 'archived' %}
+                                        <form
+                                            method="post"
+                                            action="{{ path('admin_games_status', {
+                                                id: game.id,
+                                                status: 'archived'
+                                            }) }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token(
+                                                    'game-status-' ~ game.id ~ '-archived'
+                                                ) }}"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="admin-action"
+                                            >
+                                                <i class="fa-solid fa-box-archive"></i>
+                                                Archiver
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form
+                                            method="post"
+                                            action="{{ path('admin_games_status', {
+                                                id: game.id,
+                                                status: 'draft'
+                                            }) }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token(
+                                                    'game-status-' ~ game.id ~ '-draft'
+                                                ) }}"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="admin-action"
+                                            >
+                                                <i class="fa-solid fa-rotate-left"></i>
+                                                Restaurer
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    <form
+                                        method="post"
+                                        action="{{ path('admin_games_delete', {
+                                            id: game.id
+                                        }) }}"
+                                        onsubmit="return confirm('Supprimer définitivement ce jeu ?');"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="_token"
+                                            value="{{ csrf_token(
+                                                'delete-game-' ~ game.id
+                                            ) }}"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="admin-action admin-action--danger"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td
+                                colspan="4"
+                                class="admin-table__empty"
+                            >
+                                Aucun jeu.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if games.pageCount > 1 %}
+            <nav class="admin-pagination">
+                {{ knp_pagination_render(games) }}
+            </nav>
+        {% endif %}
+    </div>
+{% endblock %}

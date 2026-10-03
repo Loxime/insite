@@ -1,0 +1,63 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}FAQ — Administration{% endblock %}
+
+{% block body %}
+<div class="admin-page">
+    <header class="admin-page__header admin-page__header--actions">
+        <h1 class="admin-page__title">FAQ</h1>
+
+        <a href="{{ path('admin_faq_new') }}"
+           class="admin-button admin-button--primary">
+            Ajouter une question
+        </a>
+    </header>
+
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Ordre</th>
+                    <th>Visible</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for question in questions %}
+                    <tr>
+                        <td>{{ question.title }}</td>
+                        <td>{{ question.displayOrder }}</td>
+                        <td>{{ question.enabled ? 'Oui' : 'Non' }}</td>
+                        <td>
+                            <div class="admin-table__actions">
+                                <a class="admin-action"
+                                   href="{{ path('admin_faq_edit', {id: question.id}) }}">
+                                    Modifier
+                                </a>
+
+                                <form method="post"
+                                      action="{{ path('admin_faq_delete', {id: question.id}) }}">
+                                    <input type="hidden"
+                                           name="_token"
+                                           value="{{ csrf_token('delete-faq-' ~ question.id) }}">
+
+                                    <button class="admin-action admin-action--danger"
+                                            type="submit">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">Aucune question.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

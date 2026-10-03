@@ -1,0 +1,47 @@
+@use '../abstracts/variables' as *;
+
+form > div {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+
+    margin-bottom: 0.45rem;
+
+    color: #d8d8d8;
+
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+input:not([type='checkbox']):not([type='radio']):not([type='submit']),
+textarea,
+select {
+    width: 100%;
+
+    padding: 0.7rem 0.8rem;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+
+    outline: none;
+
+    background: #101010;
+    color: var(--color-text);
+
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
+
+    &:focus {
+        border-color: var(--color-primary);
+
+        box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+    }
+}
+
+textarea {
+    min-height: 140px;
+    resize: vertical;
+}

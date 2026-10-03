@@ -1,0 +1,15 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    Modifier {{ game.title }} — Administration
+{% endblock %}
+
+{% block body %}
+    <div class="admin-page">
+        <h1 class="admin-page__title">
+            Modifier {{ game.title }}
+        </h1>
+
+        {% include 'admin/games/_form.html.twig' %}
+    </div>
+{% endblock %}

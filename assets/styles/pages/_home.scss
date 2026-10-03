@@ -1,0 +1,471 @@
+.home {
+    width: 100%;
+
+    color: #0f0a0a;
+    background: #ffffff;
+}
+
+.home-section {
+    width: min(
+        calc(100% - 48px),
+        1400px
+    );
+
+    margin-inline: auto;
+    padding-block: 64px;
+}
+
+.home-section + .home-section {
+    padding-top: 96px;
+}
+
+.home-feature-list {
+    display: grid;
+    gap: 80px;
+}
+
+.home-feature {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.05fr)
+        minmax(0, 0.95fr);
+
+    gap: clamp(40px, 6vw, 96px);
+
+    background: #ffffff;
+}
+
+.home-feature--reverse {
+    grid-template-columns:
+        minmax(0, 0.95fr)
+        minmax(0, 1.05fr);
+}
+
+.home-feature--reverse .home-feature__visual {
+    order: 2;
+}
+
+.home-feature--reverse .home-feature__content {
+    order: 1;
+}
+
+.home-feature--without-image {
+    grid-template-columns: 1fr;
+}
+
+.home-feature--without-image .home-feature__content {
+    width: min(100%, 900px);
+}
+
+.home-feature__visual {
+    display: block;
+
+    overflow: hidden;
+
+    min-height: 0;
+    aspect-ratio: 6 / 5;
+}
+
+.home-feature__visual img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+}
+
+.home-feature__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-width: 0;
+
+    padding-block: 32px;
+}
+
+.home-feature__title {
+    margin: 0 0 22px;
+
+    color: #0f0a0a;
+
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+
+    overflow-wrap: anywhere;
+}
+
+.home-feature__title a {
+    color: inherit;
+}
+
+.home-feature__title a:hover {
+    color: var(--color-primary);
+}
+
+.home-feature__summary {
+    max-width: 640px;
+
+    margin: 0 0 24px;
+
+    color: rgba(15, 10, 10, 0.72);
+
+    font-size: 1.05rem;
+    line-height: 1.7;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.home-feature__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 16px;
+
+    margin-bottom: 32px;
+}
+
+.home-feature__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.home-feature__tag {
+    color: var(--color-primary);
+
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.home-feature__date {
+    color: rgba(15, 10, 10, 0.5);
+
+    font-size: 0.875rem;
+}
+
+.home-feature__link {
+    display: inline-flex;
+    align-items: center;
+
+    width: fit-content;
+
+    gap: 10px;
+
+    color: var(--color-primary);
+
+    font-weight: 700;
+}
+
+.home-feature__link:hover {
+    color: #0f0a0a;
+}
+
+@media (max-width: 900px) {
+    .home-section {
+        width: min(
+            calc(100% - 40px),
+            1400px
+        );
+
+        padding-block: 48px;
+    }
+
+    .home-feature-list {
+        gap: 56px;
+    }
+
+    .home-feature,
+    .home-feature--reverse {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .home-feature--reverse .home-feature__visual,
+    .home-feature--reverse .home-feature__content {
+        order: initial;
+    }
+
+    .home-feature__visual {
+        aspect-ratio: 16 / 10;
+    }
+
+    .home-feature__content {
+        padding-block: 16px;
+    }
+}
+
+@media (max-width: 560px) {
+    .home-section {
+        width: calc(100% - 32px);
+
+        padding-block: 40px;
+    }
+
+    .home-section + .home-section {
+        padding-top: 64px;
+    }
+
+    .home-feature-list {
+        gap: 48px;
+    }
+}
+
+
+@media (max-width: 850px) {
+
+
+
+}
+
+.home-feature__tag {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 30px;
+    padding-inline: 12px;
+
+    color: #ffffff;
+    background: #2292a4;
+
+    border-radius: 999px;
+
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+/* =========================================================
+   BLOG — ALTERNANCE GAUCHE / DROITE
+   ========================================================= */
+
+.home-feature {
+    display: flex;
+    align-items: stretch;
+}
+
+/* Article 1 : image gauche / texte droite */
+
+
+/* Article 2 : texte gauche / image droite */
+
+
+.home-feature__media,
+.home-feature__content {
+    flex: 1 1 50%;
+    min-width: 0;
+}
+
+@media (max-width: 800px) {
+    .home-feature,
+    .home-feature:nth-child(odd),
+    .home-feature:nth-child(even) {
+        flex-direction: column;
+    }
+
+    .home-feature__media,
+    .home-feature__content {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   BLOG — ALTERNANCE RÉELLE GAUCHE / DROITE
+   Fonctionne aussi sans image.
+   ========================================================= */
+
+.home-blog__list {
+    display: grid;
+
+    gap: clamp(72px, 9vw, 130px);
+}
+
+.home-feature {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: clamp(40px, 7vw, 100px);
+
+    width: 100%;
+}
+
+/*
+ * Avec image :
+ * Article impair = image gauche / texte droite
+ */
+.home-feature--with-image .home-feature__visual {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.home-feature--with-image .home-feature__content {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+/*
+ * Article pair = texte gauche / image droite
+ */
+.home-feature--with-image.home-feature--reverse
+.home-feature__visual {
+    grid-column: 2;
+}
+
+.home-feature--with-image.home-feature--reverse
+.home-feature__content {
+    grid-column: 1;
+}
+
+/*
+ * Sans image :
+ * on conserve quand même l'alternance visuelle.
+ */
+.home-feature--without-image .home-feature__content {
+    grid-column: 1;
+
+    width: 100%;
+    max-width: 580px;
+
+    justify-self: start;
+}
+
+.home-feature--without-image.home-feature--reverse
+.home-feature__content {
+    grid-column: 2;
+
+    justify-self: end;
+}
+
+.home-feature__visual {
+    min-width: 0;
+}
+
+.home-feature__visual img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    object-fit: cover;
+}
+
+.home-feature__content {
+    min-width: 0;
+}
+
+.home-feature__title,
+.home-feature__summary {
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   BLOG — PAGINATION
+   ========================================================= */
+
+.blog-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 24px;
+
+    margin-top: 96px;
+    padding-top: 32px;
+
+    border-top: 1px solid rgb(15 10 10 / 12%);
+}
+
+.blog-pagination__pages {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.blog-pagination__link,
+.blog-pagination__page {
+    color: #2292a4;
+
+    font-weight: 700;
+
+    text-decoration: underline;
+    text-decoration-color: #2292a4;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+}
+
+.blog-pagination__page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 32px;
+    min-height: 32px;
+}
+
+.blog-pagination__page--active {
+    color: #0f0a0a;
+
+    text-decoration: none;
+}
+
+.blog-pagination a:hover,
+.blog-pagination a:focus {
+    color: #2292a4;
+}
+
+/* Mobile : plus d'alternance artificielle */
+@media (max-width: 800px) {
+    .home-feature,
+    .home-feature--with-image,
+    .home-feature--without-image {
+        grid-template-columns: 1fr;
+    }
+
+    .home-feature--with-image .home-feature__visual,
+    .home-feature--with-image .home-feature__content,
+    .home-feature--with-image.home-feature--reverse
+    .home-feature__visual,
+    .home-feature--with-image.home-feature--reverse
+    .home-feature__content,
+    .home-feature--without-image .home-feature__content,
+    .home-feature--without-image.home-feature--reverse
+    .home-feature__content {
+        grid-column: 1;
+    }
+
+    .home-feature--with-image .home-feature__visual,
+    .home-feature--with-image.home-feature--reverse
+    .home-feature__visual {
+        grid-row: 1;
+    }
+
+    .home-feature--with-image .home-feature__content,
+    .home-feature--with-image.home-feature--reverse
+    .home-feature__content {
+        grid-row: 2;
+    }
+
+    .home-feature--without-image .home-feature__content,
+    .home-feature--without-image.home-feature--reverse
+    .home-feature__content {
+        max-width: none;
+
+        justify-self: stretch;
+    }
+
+    .blog-pagination {
+        gap: 16px;
+
+        margin-top: 64px;
+    }
+}

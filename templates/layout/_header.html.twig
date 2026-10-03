@@ -1,0 +1,82 @@
+{% set site = site_settings() %}
+{% set route = app.request.attributes.get('_route') %}
+
+<header class="site-header">
+    <div class="site-header__inner">
+        <a
+            href="{{ path('app_frontoffice_home_show') }}"
+            class="site-brand"
+            aria-label="{{ site ? site.brandText : 'INQUEST' }}"
+        >
+            <img
+                src="{{ asset('images/crown-removebg-preview.png') }}"
+                alt="{{ site ? site.brandText : 'INQUEST' }}"
+                class="site-brand__logo"
+            >
+        </a>
+
+        <nav
+            class="site-nav"
+            aria-label="Navigation principale"
+        >
+            {% if not site or site.blogEnabled %}
+                <a
+                    href="{{ path('app_frontoffice_home_show') }}"
+                    class="{{ route in [
+                        'app_frontoffice_home_show',
+                        'blog_show'
+                    ] ? 'is-active' : '' }}"
+                >
+                    {{ site ? site.blogLabel : 'Blog' }}
+                </a>
+            {% endif %}
+
+            {% if not site or site.gamesEnabled %}
+                <a
+                    href="{{ path('games_index') }}"
+                    class="{{ route starts with 'games_'
+                        ? 'is-active'
+                        : ''
+                    }}"
+                >
+                    {{ site ? site.gamesLabel : 'Games' }}
+                </a>
+            {% endif %}
+
+            {% if not site or site.aboutEnabled %}
+                <a
+                    href="{{ path('about_show') }}"
+                    class="{{ route == 'about_show'
+                        ? 'is-active'
+                        : ''
+                    }}"
+                >
+                    {{ site ? site.aboutLabel : 'About' }}
+                </a>
+            {% endif %}
+        </nav>
+
+        <div class="site-header__right">
+            {% include 'layout/_daily_jam.html.twig' %}
+
+            {% if site %}
+                <div class="site-header__socials">
+                    {% for social in site.socialLinks %}
+                        {% if social.enabled %}
+                            <a
+                                href="{{ social.url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="{{ social.platform }}"
+                            >
+                                {% include 'layout/_social_icon.html.twig' with {
+                                    social: social
+                                } only %}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</header>

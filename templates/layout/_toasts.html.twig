@@ -1,0 +1,57 @@
+{% set flashes = app.flashes %}
+
+{% if flashes is not empty %}
+    <div
+        class="toast-container"
+        aria-live="polite"
+        aria-atomic="false"
+    >
+        {% for label, messages in flashes %}
+            {% set type =
+                label in ['error', 'danger']
+                    ? 'error'
+                    : (
+                        label in ['warning']
+                            ? 'warning'
+                            : (
+                                label in ['info']
+                                    ? 'info'
+                                    : 'success'
+                            )
+                    )
+            %}
+
+            {% for message in messages %}
+                <div
+                    class="toast toast--{{ type }} js-toast"
+                    role="{{ type == 'error' ? 'alert' : 'status' }}"
+                    data-duration="{{ type == 'error' ? '8000' : '5000' }}"
+                >
+                    <div class="toast__icon" aria-hidden="true">
+                        {% if type == 'success' %}
+                            <i class="fa-solid fa-circle-check"></i>
+                        {% elseif type == 'error' %}
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        {% elseif type == 'warning' %}
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        {% else %}
+                            <i class="fa-solid fa-circle-info"></i>
+                        {% endif %}
+                    </div>
+
+                    <div class="toast__content">
+                        {{ message }}
+                    </div>
+
+                    <button
+                        type="button"
+                        class="toast__close js-toast-close"
+                        aria-label="Fermer"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}

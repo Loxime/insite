@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FAQ — INQUEST{% endblock %}
+{% block page_header %}{% endblock %}
+
+{% block body %}
+    <main class="faq-page">
+        <h1 class="faq-page__title">FAQ</h1>
+
+        <div class="faq-list">
+            {% for question in questions %}
+                <details class="faq-item">
+                    <summary class="faq-item__question">
+                        {{ question.title }}
+                    </summary>
+
+                    <div class="faq-item__answer">
+                        {{ question.content|nl2br }}
+                    </div>
+                </details>
+            {% else %}
+                <p class="faq-page__empty">
+                    Aucune question disponible pour le moment.
+                </p>
+            {% endfor %}
+        </div>
+
+        <div class="faq-page__contact">
+            Vous n'avez pas trouvé votre réponse ?
+
+            <a href="{{ path('contact') }}">
+                Contactez-nous
+            </a>
+        </div>
+    </main>
+{% endblock %}

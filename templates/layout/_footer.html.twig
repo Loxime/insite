@@ -1,0 +1,64 @@
+{% set site = site_settings() %}
+
+<footer class="site-footer">
+    <div class="site-footer__inner">
+        <div class="site-footer__content">
+            <strong class="site-footer__brand">
+                {{ site ? site.brandText : 'INQUEST' }}
+            </strong>
+
+            {% if site and site.footerText %}
+                <p class="site-footer__text">
+                    {{ site.footerText|nl2br }}
+                </p>
+            {% endif %}
+        </div>
+
+        <div class="site-footer__right">
+            <nav class="site-footer__nav">
+                <div class="site-footer__nav-row">
+                    {% if not site or site.blogEnabled %}
+                        <a href="{{ path('app_frontoffice_home_show') }}">
+                            {{ site ? site.blogLabel : 'Blog' }}
+                        </a>
+                    {% endif %}
+
+                    {% if not site or site.gamesEnabled %}
+                        <a href="{{ path('games_index') }}">
+                            {{ site ? site.gamesLabel : 'Games' }}
+                        </a>
+                    {% endif %}
+
+                    {% if not site or site.aboutEnabled %}
+                        <a href="{{ path('about_show') }}">
+                            {{ site ? site.aboutLabel : 'About' }}
+                        </a>
+                    {% endif %}
+                </div>
+
+                <div class="site-footer__nav-row">
+                    <a href="{{ path('faq_index') }}">FAQ</a>
+                    <a href="{{ path('contact') }}">Contact</a>
+                    <a href="{{ path('careers_index') }}">Careers</a>
+                </div>
+            </nav>
+
+            {% if site %}
+                <div class="site-footer__socials">
+                    {% for social in site.socialLinks %}
+                        {% if social.enabled %}
+                            <a href="{{ social.url }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="{{ social.platform }}">
+                                {% include 'layout/_social_icon.html.twig' with {
+                                    social: social
+                                } only %}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</footer>

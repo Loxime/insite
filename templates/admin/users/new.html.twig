@@ -1,0 +1,19 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Nouvel administrateur{% endblock %}
+
+{% block body %}
+<div class="admin-page">
+    <h1 class="admin-page__title">
+        Nouvel administrateur
+    </h1>
+
+    {{ form_start(form, {attr: {class: 'admin-simple-form'}}) }}
+        {{ form_widget(form) }}
+
+        <button class="admin-button admin-button--primary">
+            Créer
+        </button>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{{ form_start(form, {
+    attr: {
+        class: 'admin-tag-form'
+    }
+}) }}
+
+    <div class="admin-form-field">
+        {{ form_label(form.libelle) }}
+        {{ form_widget(form.libelle) }}
+        {{ form_errors(form.libelle) }}
+    </div>
+
+    <div class="admin-form-actions">
+        <button
+            type="submit"
+            class="admin-button admin-button--primary"
+        >
+            Enregistrer
+        </button>
+
+        <a
+            href="{{ path('admin_tags_index') }}"
+            class="admin-button admin-button--secondary"
+        >
+            Annuler
+        </a>
+    </div>
+
+{{ form_end(form) }}

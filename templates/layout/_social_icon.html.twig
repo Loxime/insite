@@ -1,0 +1,23 @@
+{% if social.platform == 'tiktok' %}
+    <i class="fa-brands fa-tiktok"></i>
+{% elseif social.platform == 'youtube' %}
+    <i class="fa-brands fa-youtube"></i>
+{% elseif social.platform == 'discord' %}
+    <i class="fa-brands fa-discord"></i>
+{% elseif social.platform == 'facebook' %}
+    <i class="fa-brands fa-facebook-f"></i>
+{% elseif social.platform == 'instagram' %}
+    <i class="fa-brands fa-instagram"></i>
+{% elseif social.platform == 'x-twitter' %}
+    <i class="fa-brands fa-x-twitter"></i>
+{% elseif social.platform == 'twitch' %}
+    <i class="fa-brands fa-twitch"></i>
+{% elseif social.platform == 'github' %}
+    <i class="fa-brands fa-github"></i>
+{% elseif social.platform == 'linkedin' %}
+    <i class="fa-brands fa-linkedin-in"></i>
+{% elseif social.platform == 'bluesky' %}
+    <i class="fa-brands fa-bluesky"></i>
+{% else %}
+    <i class="fa-solid fa-link"></i>
+{% endif %}

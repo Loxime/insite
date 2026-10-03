@@ -1,0 +1,111 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    Site — Administration
+{% endblock %}
+
+{% block body %}
+    <div class="admin-page">
+        <h1 class="admin-page__title">
+            Configuration du site
+        </h1>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="admin-flash admin-flash--{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {{ form_start(form, {
+            attr: {
+                class: 'admin-site-form'
+            }
+        }) }}
+
+            <section class="admin-site-section">
+                <h2>Header</h2>
+
+                {{ form_row(form.brandText) }}
+
+                <div class="admin-form-row">
+                    <div>
+                        {{ form_row(form.blogLabel) }}
+                        {{ form_row(form.blogEnabled) }}
+                    </div>
+
+                    <div>
+                        {{ form_row(form.gamesLabel) }}
+                        {{ form_row(form.gamesEnabled) }}
+                    </div>
+
+                    <div>
+                        {{ form_row(form.aboutLabel) }}
+                        {{ form_row(form.aboutEnabled) }}
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-site-section">
+                <h2>Footer</h2>
+
+                {{ form_row(form.footerText) }}
+            </section>
+
+            <section
+                class="admin-site-section js-site-socials"
+                data-index="{{ form.socialLinks|length }}"
+                data-prototype="{{ form_widget(form.socialLinks.vars.prototype)|e('html_attr') }}"
+            >
+                <header class="admin-site-socials__header">
+                    <div>
+                        <h2>Réseaux sociaux</h2>
+                        <p>
+                            Liens affichés sous forme d'icônes dans le header et le footer.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="admin-button admin-button--primary js-site-social-add"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        Ajouter
+                    </button>
+                </header>
+
+                <div class="admin-site-socials__list js-site-socials-list">
+                    {% for socialForm in form.socialLinks %}
+                        <article class="admin-site-social js-site-social">
+                            <div class="admin-site-social__fields">
+                                {{ form_row(socialForm.platform) }}
+                                {{ form_row(socialForm.url) }}
+                                {{ form_row(socialForm.displayOrder) }}
+                                {{ form_row(socialForm.enabled) }}
+                            </div>
+
+                            <button
+                                type="button"
+                                class="admin-action admin-action--danger js-site-social-remove"
+                            >
+                                <i class="fa-solid fa-trash"></i>
+                                Supprimer
+                            </button>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <div class="admin-form-actions">
+                <button
+                    type="submit"
+                    class="admin-button admin-button--primary"
+                >
+                    Enregistrer
+                </button>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
