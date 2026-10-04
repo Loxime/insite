@@ -1,76 +1,82 @@
 name: insite
+
 services:
-    web:
-        container_name: insite_app
-        build:
-            context: .
-            target: web
-        ports:
-            - "8080:80"
-        volumes:
-            - .:/var/www/html
-        depends_on:
-            postgres:
-                condition: service_healthy
+  web:
+    container_name: insite_app
+    build:
+      context: .
+      target: web
+      args:
+        APP_ENV: ${APP_ENV:-dev}
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8080}:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
 
-    postgres:
-        image: postgres:16-alpine
-        container_name: insite_db
-        environment:
-            POSTGRES_DB: ${POSTGRES_DB}
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        ports:
-            - "5432:5432"
-        healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-            interval: 5s
-            timeout: 5s
-            retries: 10
-        volumes:
-            - postgres_data:/var/lib/postgresql/data
+  postgres:
+    image: postgres:16-alpine
+    container_name: insite_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
+  minio:
+    container_name: insite_minio
+    build:
+      context: .
+      target: minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
 
-    minio:
-        container_name: insite_minio
-        build:
-            context: .
-            target: minio
-        restart: unless-stopped
-        environment:
-            MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-            MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-        ports:
-            - "127.0.0.1:9000:9000"
-            - "127.0.0.1:9002:9001"
-        volumes:
-            - minio-data:/data
+  mailhog:
+    image: mailhog/mailhog
+    container_name: insite_mail
+    profiles:
+      - dev
+    ports:
+      - "127.0.0.1:${MAILHOG_SMTP_PORT:-1025}:1025"
+      - "127.0.0.1:${MAILHOG_WEB_PORT:-9001}:8025"
 
-    mailhog:
-        image: mailhog/mailhog
-        container_name: 'insite_mail'
-        ports:
-            - "1025:1025"
-            - "9001:8025"
-
-    pgadmin:
-        image: dpage/pgadmin4:9.17
-        container_name: 'insite_pgadmin'
-        restart: unless-stopped
-        ports:
-            - "5050:80"
-        environment:
-            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-            PGADMIN_DISABLE_POSTFIX: "1"
-        volumes:
-            - pgadmin-data:/var/lib/pgadmin
-        depends_on:
-            postgres:
-                condition: service_healthy
-
+  pgadmin:
+    image: dpage/pgadmin4:9.17
+    container_name: insite_pgadmin
+    profiles:
+      - dev
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${PGADMIN_WEB_PORT:-5050}:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_DISABLE_POSTFIX: "1"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
-    postgres_data:
-    pgadmin-data:
-    minio-data:
+  postgres_data:
+  pgadmin_data:
+  minio_data:

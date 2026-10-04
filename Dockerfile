@@ -88,13 +88,24 @@ COPY --from=composer:latest \
     /usr/bin/composer \
     /usr/bin/composer
 
-RUN COMPOSER_ALLOW_SUPERUSER=1 \
-    composer install \
-        --no-dev \
-        --no-scripts \
-        --no-interaction \
-        --prefer-dist \
-        --optimize-autoloader
+ARG APP_ENV=dev
+
+RUN if [ "$APP_ENV" = "prod" ]; then \
+        COMPOSER_ALLOW_SUPERUSER=1 composer install \
+            --no-dev \
+            --no-scripts \
+            --no-interaction \
+            --prefer-dist \
+            --optimize-autoloader; \
+    else \
+        COMPOSER_ALLOW_SUPERUSER=1 composer install \
+            --no-scripts \
+            --no-interaction \
+            --prefer-dist; \
+    fi
+
+RUN mkdir -p var/cache var/log \
+    && chown -R www-data:www-data var
 
 RUN sed -i \
     's!/var/www/html!/var/www/html/public!g' \
