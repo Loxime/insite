@@ -90,8 +90,11 @@ COPY --from=composer:latest \
 
 RUN COMPOSER_ALLOW_SUPERUSER=1 \
     composer install \
+        --no-dev \
         --no-scripts \
-        --no-autoloader
+        --no-interaction \
+        --prefer-dist \
+        --optimize-autoloader
 
 RUN sed -i \
     's!/var/www/html!/var/www/html/public!g' \
