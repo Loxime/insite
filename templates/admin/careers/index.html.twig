@@ -32,8 +32,8 @@
                     <td>
                         <div class="admin-table__actions">
                             <a class="admin-action"
-                               href="{{ path('admin_careers_edit', {id: offer.id}) }}">
-                                Modifier
+                               href="{{ path('admin_careers_edit', {id: offer.id}) }}" aria-label="Modifier" title="Modifier">
+                                <i class="fa-solid fa-pen" aria-hidden="true"></i>
                             </a>
 
                             <form method="post"
@@ -43,8 +43,8 @@
                                        value="{{ csrf_token('delete-career-' ~ offer.id) }}">
 
                                 <button type="submit"
-                                        class="admin-action admin-action--danger">
-                                    Supprimer
+                                        class="admin-action admin-action--danger" aria-label="Supprimer" title="Supprimer">
+                                    <i class="fa-solid fa-trash" aria-hidden="true"></i>
                                 </button>
                             </form>
                         </div>

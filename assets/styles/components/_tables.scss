@@ -76,3 +76,74 @@ tbody {
 .admin-table button {
     color: #0f0a0a !important;
 }
+
+
+/* ADMIN — ACTIONS ICONIQUES */
+
+.admin .admin-content table .admin-action,
+.admin .admin-content table .admin-action:visited {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+    padding: 0;
+
+    color: #ffffff !important;
+    background: #e88927 !important;
+
+    border: 0;
+    border-radius: var(--radius-sm);
+
+    text-decoration: none;
+    cursor: pointer;
+
+    transition:
+        filter var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.admin .admin-content table .admin-action--view,
+.admin .admin-content table .admin-action--view:visited {
+    background: var(--color-primary) !important;
+}
+
+.admin .admin-content table .admin-action > i {
+    color: #ffffff !important;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.admin .admin-content table .admin-action:not(:disabled):hover {
+    color: #ffffff !important;
+    filter: brightness(0.92);
+}
+
+.admin .admin-content table .admin-action:focus-visible {
+    outline: 3px solid #0f0a0a;
+    outline-offset: 3px;
+}
+
+.admin .admin-content table .admin-action:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.admin .admin-content table .admin-table__actions {
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admin .admin-content table td > form {
+    display: inline-block;
+    margin: 0 4px 0 0;
+    vertical-align: middle;
+}
+
+.admin .admin-content table td > .admin-action {
+    margin-right: 8px;
+}

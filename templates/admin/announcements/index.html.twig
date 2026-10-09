@@ -75,8 +75,8 @@
                                 <td>
                                     <a href="{{ path('admin_announcements_edit', {
                                         id: announcement.id
-                                    }) }}">
-                                        Modifier
+                                    }) }}" class="admin-action" aria-label="Modifier" title="Modifier">
+                                        <i class="fa-solid fa-pen" aria-hidden="true"></i>
                                     </a>
 
                                     <form
@@ -91,8 +91,8 @@
                                             value="{{ csrf_token('delete-announcement-' ~ announcement.id) }}"
                                         >
 
-                                        <button type="submit">
-                                            Supprimer
+                                        <button type="submit" class="admin-action" aria-label="Supprimer" title="Supprimer">
+                                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </form>
                                 </td>
