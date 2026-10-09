@@ -31,15 +31,34 @@
 }
 
 .admin-sidebar__brand {
-    color: var(--color-on-primary);
+    display: inline-flex;
+    align-items: center;
 
-    font-size: 1.4rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+    width: fit-content;
+    max-width: 100%;
+
+    text-decoration: none;
 }
 
-.admin-sidebar__brand:hover {
-    color: var(--color-on-primary);
+.admin-sidebar__logo {
+    display: block;
+
+    width: auto;
+    height: 68px;
+    max-width: 100%;
+
+    object-fit: contain;
+}
+
+.admin-sidebar__brand:focus-visible {
+    outline: 3px solid var(--color-on-primary);
+    outline-offset: 6px;
+}
+
+@media (max-width: 800px) {
+    .admin-sidebar__logo {
+        height: 56px;
+    }
 }
 
 .admin-sidebar__navigation {
