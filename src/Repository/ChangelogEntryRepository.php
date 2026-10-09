@@ -27,6 +27,17 @@ final class ChangelogEntryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findLatestPublished(): ?ChangelogEntry
+    {
+        return $this->createQueryBuilder('entry')
+            ->andWhere('entry.publishedAt IS NOT NULL')
+            ->orderBy('entry.publishedAt', 'DESC')
+            ->addOrderBy('entry.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findPublishedByVersion(string $version): ?ChangelogEntry
     {
         return $this->createQueryBuilder('entry')

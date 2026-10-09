@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if entry %}
+        {{ entry.title }} — Changelog
+    {% else %}
+        Changelog — INQUEST
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <main class="changelog-page">
+        {% if entry %}
+            <header class="changelog-page__header">
+                <h1 class="changelog-page__title">
+                    {{ entry.title }}
+                </h1>
+
+                <div class="changelog-page__metadata">
+                    <span class="changelog-page__version">
+                        Version {{ entry.version }}
+                    </span>
+
+                    <time datetime="{{ entry.publishedAt|date('c') }}">
+                        Publié le {{ entry.publishedAt|date('d/m/Y') }}
+                    </time>
+
+                    <time datetime="{{ entry.updatedAt|date('c') }}">
+                        Modifié le {{ entry.updatedAt|date('d/m/Y') }}
+                    </time>
+                </div>
+            </header>
+
+            <article class="changelog-page__article">
+                {{ entry.text }}
+            </article>
+        {% else %}
+            <header class="changelog-page__header">
+                <h1 class="changelog-page__title">Changelog</h1>
+            </header>
+
+            <p>Aucune note de patch publiée pour le moment.</p>
+        {% endif %}
+    </main>
+{% endblock %}
