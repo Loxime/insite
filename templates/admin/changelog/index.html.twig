@@ -1,0 +1,90 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Changelog — Administration{% endblock %}
+
+{% block body %}
+    <section class="admin-changelog">
+        <header class="admin-changelog__header">
+            <div>
+                <h1>Changelog</h1>
+                <p>Gestion des notes de patch et des versions.</p>
+            </div>
+
+            <a
+                href="{{ path('admin_changelog_new') }}"
+                class="admin-changelog__create"
+            >
+                Ajouter une note
+            </a>
+        </header>
+
+        {% if entries is empty %}
+            <p>Aucune note de patch enregistrée.</p>
+        {% else %}
+            <div class="admin-changelog__table-wrapper">
+                <table class="admin-changelog__table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Version</th>
+                            <th scope="col">Titre</th>
+                            <th scope="col">Modification</th>
+                            <th scope="col">Publication</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in entries %}
+                            <tr>
+                                <td>{{ entry.version }}</td>
+                                <td>{{ entry.title }}</td>
+                                <td>{{ entry.updatedAt|date('d/m/Y H:i') }}</td>
+                                <td>
+                                    {% if entry.publishedAt %}
+                                        {{ entry.publishedAt|date('d/m/Y H:i') }}
+                                    {% else %}
+                                        Brouillon
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ path('admin_changelog_edit', {id: entry.id}) }}">
+                                        Modifier
+                                    </a>
+
+                                    {% if not entry.publishedAt %}
+                                        <form
+                                            action="{{ path('admin_changelog_publish', {id: entry.id}) }}"
+                                            method="post"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token('publish-changelog-' ~ entry.id) }}"
+                                            >
+                                            <button type="submit">
+                                                Publier
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form
+                                            action="{{ path('admin_changelog_unpublish', {id: entry.id}) }}"
+                                            method="post"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token('unpublish-changelog-' ~ entry.id) }}"
+                                            >
+                                            <button type="submit">
+                                                Dépublier
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

@@ -29,6 +29,7 @@
                         </a>
                     {% endif %}
 
+                    <a href="{{ path('changelog_index') }}">Changelog</a>
                     {% if not site or site.aboutEnabled %}
                         <a href="{{ path('about_show') }}">
                             {{ site ? site.aboutLabel : 'About' }}

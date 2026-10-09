@@ -2,6 +2,8 @@ name: insite
 
 services:
   web:
+    volumes:
+      - ./.env:/var/www/html/.env:ro
     container_name: insite_app
     build:
       context: .

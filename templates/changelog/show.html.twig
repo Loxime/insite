@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if entry %}
+        {{ entry.title }} — Changelog
+    {% else %}
+        Changelog — INQUEST
+    {% endif %}
+{% endblock %}
+
+{% block page_header %}{% endblock %}
+
+{% block body %}
+    <section class="changelog-page">
+        {% if entry %}
+            <header class="changelog-page__header">
+                <h1 class="changelog-page__title">
+                    {{ entry.title }}
+                </h1>
+
+                <div class="changelog-page__metadata">
+                    <span class="changelog-page__version">
+                        Version {{ entry.version }}
+                    </span>
+
+                    <time datetime="{{ entry.publishedAt|date('c') }}">
+                        Publié le {{ entry.publishedAt|date('d/m/Y') }}
+                    </time>
+
+                    <time datetime="{{ entry.updatedAt|date('c') }}">
+                        Modifié le {{ entry.updatedAt|date('d/m/Y') }}
+                    </time>
+                </div>
+            </header>
+
+            <article class="changelog-page__article">
+                {{ entry.text }}
+            </article>
+
+            {% if older or newer %}
+                <nav
+                    class="changelog-page__navigation"
+                    aria-label="Navigation entre les versions"
+                >
+                    {% if older %}
+                        <a
+                            class="changelog-page__nav-link"
+                            href="{{ path('changelog_show', {version: older.version}) }}"
+                            rel="prev"
+                        >
+                            <span aria-hidden="true">←</span>
+                            <span>
+                                Plus ancienne
+                                <small>v{{ older.version }}</small>
+                            </span>
+                        </a>
+                    {% endif %}
+
+                    {% if newer %}
+                        <a
+                            class="changelog-page__nav-link changelog-page__nav-link--newer"
+                            href="{{ path('changelog_show', {version: newer.version}) }}"
+                            rel="next"
+                        >
+                            <span>
+                                Plus récente
+                                <small>v{{ newer.version }}</small>
+                            </span>
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    {% endif %}
+                </nav>
+            {% endif %}
+        {% else %}
+            <header class="changelog-page__header">
+                <h1 class="changelog-page__title">Changelog</h1>
+            </header>
+
+            <p class="changelog-page__empty">Aucune note de patch publiée pour le moment.</p>
+        {% endif %}
+    </section>
+{% endblock %}
