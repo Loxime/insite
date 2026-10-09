@@ -64,6 +64,20 @@
                                                 Publier
                                             </button>
                                         </form>
+                                    {% else %}
+                                        <form
+                                            action="{{ path('admin_changelog_unpublish', {id: entry.id}) }}"
+                                            method="post"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token('unpublish-changelog-' ~ entry.id) }}"
+                                            >
+                                            <button type="submit">
+                                                Dépublier
+                                            </button>
+                                        </form>
                                     {% endif %}
                                 </td>
                             </tr>

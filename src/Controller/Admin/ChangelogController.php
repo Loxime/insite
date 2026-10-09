@@ -114,6 +114,29 @@ final class ChangelogController extends AbstractController
         return $this->redirectToRoute('admin_changelog_index');
     }
 
+    #[Route('/{id}/unpublish', name: 'unpublish', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function unpublish(
+        Request $request,
+        ChangelogEntry $entry,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        if (!$this->isCsrfTokenValid(
+            'unpublish-changelog-' . $entry->getId(),
+            $request->getPayload()->getString('_token'),
+        )) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($entry->isPublished()) {
+            $entry->unpublish();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Note de patch dépubliée.');
+        }
+
+        return $this->redirectToRoute('admin_changelog_index');
+    }
+
     private function validateUniqueVersion(
         FormInterface $form,
         ChangelogEntry $entry,
