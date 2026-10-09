@@ -7,8 +7,10 @@ namespace App\Controller\Admin;
 use App\Entity\TemporaryAnnouncement;
 use App\Form\TemporaryAnnouncementType;
 use App\Repository\TemporaryAnnouncementRepository;
+use App\Service\MinioStorage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +36,7 @@ final class TemporaryAnnouncementController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
+        MinioStorage $storage,
     ): Response {
         $announcement = new TemporaryAnnouncement();
 
@@ -48,8 +51,24 @@ final class TemporaryAnnouncementController extends AbstractController
             $this->validateSchedule($form, $announcement);
 
             if ($form->isValid()) {
-                $entityManager->persist($announcement);
-                $entityManager->flush();
+                $image = $form->get('image')->getData();
+                $uploadedKey = null;
+
+                if ($image instanceof UploadedFile) {
+                    $uploadedKey = $storage->uploadAnnouncementImage($image);
+                    $announcement->setImageKey($uploadedKey);
+                }
+
+                try {
+                    $entityManager->persist($announcement);
+                    $entityManager->flush();
+                } catch (\Throwable $exception) {
+                    if ($uploadedKey !== null) {
+                        $storage->delete($uploadedKey);
+                    }
+
+                    throw $exception;
+                }
 
                 $this->addFlash('success', 'Annonce créée.');
 
@@ -74,6 +93,7 @@ final class TemporaryAnnouncementController extends AbstractController
         Request $request,
         TemporaryAnnouncement $announcement,
         EntityManagerInterface $entityManager,
+        MinioStorage $storage,
     ): Response {
         $form = $this->createForm(
             TemporaryAnnouncementType::class,
@@ -86,8 +106,37 @@ final class TemporaryAnnouncementController extends AbstractController
             $this->validateSchedule($form, $announcement);
 
             if ($form->isValid()) {
+                $previousKey = $announcement->getImageKey();
+                $image = $form->get('image')->getData();
+                $removeImage = (bool) $form->get('removeImage')->getData();
+
+                $uploadedKey = null;
+                $keyToDelete = null;
+
+                if ($image instanceof UploadedFile) {
+                    $uploadedKey = $storage->uploadAnnouncementImage($image);
+                    $announcement->setImageKey($uploadedKey);
+                    $keyToDelete = $previousKey;
+                } elseif ($removeImage && $previousKey !== null) {
+                    $announcement->setImageKey(null);
+                    $keyToDelete = $previousKey;
+                }
+
                 $announcement->touchUpdatedAt();
-                $entityManager->flush();
+
+                try {
+                    $entityManager->flush();
+                } catch (\Throwable $exception) {
+                    if ($uploadedKey !== null) {
+                        $storage->delete($uploadedKey);
+                    }
+
+                    throw $exception;
+                }
+
+                if ($keyToDelete !== null) {
+                    $storage->delete($keyToDelete);
+                }
 
                 $this->addFlash('success', 'Annonce modifiée.');
 
@@ -112,6 +161,7 @@ final class TemporaryAnnouncementController extends AbstractController
         Request $request,
         TemporaryAnnouncement $announcement,
         EntityManagerInterface $entityManager,
+        MinioStorage $storage,
     ): Response {
         if (!$this->isCsrfTokenValid(
             'delete-announcement-' . $announcement->getId(),
@@ -120,8 +170,12 @@ final class TemporaryAnnouncementController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        $imageKey = $announcement->getImageKey();
+
         $entityManager->remove($announcement);
         $entityManager->flush();
+
+        $storage->delete($imageKey);
 
         $this->addFlash('success', 'Annonce supprimée.');
 

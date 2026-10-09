@@ -19,6 +19,7 @@
                 <table class="admin-announcements__table">
                     <thead>
                         <tr>
+                            <th scope="col">Image</th>
                             <th scope="col">Bouton</th>
                             <th scope="col">Début</th>
                             <th scope="col">Fin</th>
@@ -29,6 +30,22 @@
                     <tbody>
                         {% for announcement in announcements %}
                             <tr>
+                                <td>
+                                    {% if announcement.imageKey %}
+                                        <img
+                                            src="{{ path('media_show', {
+                                                key: announcement.imageKey
+                                            }) }}"
+                                            alt="Aperçu de l’annonce"
+                                            width="104"
+                                            height="64"
+                                            loading="lazy"
+                                            style="object-fit: cover; border-radius: 6px;"
+                                        >
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
                                 <td>{{ announcement.buttonLabel }}</td>
 
                                 <td>

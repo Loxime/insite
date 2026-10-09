@@ -8,6 +8,7 @@ use App\Entity\TemporaryAnnouncement;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -39,6 +40,27 @@ final class TemporaryAnnouncementType extends AbstractType
                         message: 'Saisis un chemin interne ou une URL HTTP(S).',
                     ),
                 ],
+            ])
+            ->add('image', FileType::class, [
+                'label' => 'Image de l’annonce',
+                'mapped' => false,
+                'required' => false,
+                'help' => 'JPEG, PNG ou WebP — 5 Mo maximum.',
+                'constraints' => [
+                    new Assert\Image(
+                        maxSize: '5M',
+                        mimeTypes: [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                        ],
+                    ),
+                ],
+            ])
+            ->add('removeImage', CheckboxType::class, [
+                'label' => 'Supprimer l’image actuelle',
+                'mapped' => false,
+                'required' => false,
             ])
             ->add('startsAt', DateTimeType::class, [
                 'label' => 'Début de publication (heure de Paris)',

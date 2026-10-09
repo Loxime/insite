@@ -14,6 +14,27 @@
             {{ form_row(form.buttonLabel) }}
             {{ form_row(form.buttonUrl) }}
 
+            <div class="admin-announcements__image">
+                {{ form_row(form.image) }}
+
+                {% if announcement.imageKey %}
+                    <figure>
+                        <img
+                            src="{{ path('media_show', {
+                                key: announcement.imageKey
+                            }) }}"
+                            alt="Image actuelle de l’annonce"
+                            width="420"
+                            style="max-width: 100%; height: auto;"
+                        >
+                    </figure>
+
+                    {{ form_row(form.removeImage) }}
+                {% else %}
+                    {% do form.removeImage.setRendered() %}
+                {% endif %}
+            </div>
+
             {{ form_row(form.startsAt) }}
             {{ form_row(form.endsAt) }}
 
