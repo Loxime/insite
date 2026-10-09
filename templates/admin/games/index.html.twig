@@ -114,12 +114,11 @@
                                             href="{{ path('games_show', {
                                                 slug: game.slug
                                             }) }}"
-                                            class="admin-action"
+                                            class="admin-action admin-action--view"
                                             target="_blank"
                                             rel="noopener"
-                                        >
-                                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                            Voir
+                                         aria-label="Voir" title="Voir">
+                                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
                                         </a>
                                     {% endif %}
 
@@ -128,9 +127,8 @@
                                             id: game.id
                                         }) }}"
                                         class="admin-action"
-                                    >
-                                        <i class="fa-solid fa-pen"></i>
-                                        Modifier
+                                     aria-label="Modifier" title="Modifier">
+                                        <i class="fa-solid fa-pen" aria-hidden="true"></i>
                                     </a>
 
                                     {% if game.status != 'published' %}
@@ -152,9 +150,8 @@
                                             <button
                                                 type="submit"
                                                 class="admin-action"
-                                            >
-                                                <i class="fa-solid fa-globe"></i>
-                                                Publier
+                                             aria-label="Publier" title="Publier">
+                                                <i class="fa-solid fa-globe" aria-hidden="true"></i>
                                             </button>
                                         </form>
                                     {% else %}
@@ -176,9 +173,8 @@
                                             <button
                                                 type="submit"
                                                 class="admin-action"
-                                            >
-                                                <i class="fa-solid fa-file"></i>
-                                                Brouillon
+                                             aria-label="Brouillon" title="Brouillon">
+                                                <i class="fa-solid fa-file" aria-hidden="true"></i>
                                             </button>
                                         </form>
                                     {% endif %}
@@ -202,9 +198,8 @@
                                             <button
                                                 type="submit"
                                                 class="admin-action"
-                                            >
-                                                <i class="fa-solid fa-box-archive"></i>
-                                                Archiver
+                                             aria-label="Archiver" title="Archiver">
+                                                <i class="fa-solid fa-box-archive" aria-hidden="true"></i>
                                             </button>
                                         </form>
                                     {% else %}
@@ -226,9 +221,8 @@
                                             <button
                                                 type="submit"
                                                 class="admin-action"
-                                            >
-                                                <i class="fa-solid fa-rotate-left"></i>
-                                                Restaurer
+                                             aria-label="Restaurer" title="Restaurer">
+                                                <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                                             </button>
                                         </form>
                                     {% endif %}
@@ -251,9 +245,8 @@
                                         <button
                                             type="submit"
                                             class="admin-action admin-action--danger"
-                                        >
-                                            <i class="fa-solid fa-trash"></i>
-                                            Supprimer
+                                         aria-label="Supprimer" title="Supprimer">
+                                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </form>
                                 </div>

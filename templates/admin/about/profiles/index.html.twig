@@ -63,8 +63,8 @@
                                         href="{{ path('admin_about_profiles_edit', {
                                             id: profile.id
                                         }) }}"
-                                    >
-                                        Modifier
+                                     class="admin-action" aria-label="Modifier" title="Modifier">
+                                        <i class="fa-solid fa-pen" aria-hidden="true"></i>
                                     </a>
 
                                     <form
@@ -79,8 +79,8 @@
                                             value="{{ csrf_token('delete-about-profile-' ~ profile.id) }}"
                                         >
 
-                                        <button type="submit">
-                                            Supprimer
+                                        <button type="submit" class="admin-action" aria-label="Supprimer" title="Supprimer">
+                                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </form>
                                 </td>

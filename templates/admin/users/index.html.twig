@@ -34,8 +34,8 @@
                     <td>{{ user.role }}</td>
                     <td>
                         <a class="admin-action"
-                           href="{{ path('admin_users_password', {id: user.id}) }}">
-                            Forcer un mot de passe
+                           href="{{ path('admin_users_password', {id: user.id}) }}" aria-label="Forcer un mot de passe" title="Forcer un mot de passe">
+                            <i class="fa-solid fa-key" aria-hidden="true"></i>
                         </a>
                     </td>
                 </tr>
