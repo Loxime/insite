@@ -83,6 +83,12 @@
                         Careers
                     </a>
 <a
+                        href="{{ path('admin_changelog_index') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_changelog' %} is-active{% endif %}"
+                    >
+                        Changelog
+                    </a>
+                    <a
                         href="{{ path('admin_faq_index') }}"
                         class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_faq' %} is-active{% endif %}"
                     >

@@ -1,0 +1,38 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ title }} — Administration{% endblock %}
+
+{% block body %}
+    <section class="admin-changelog">
+        <header class="admin-changelog__header">
+            <div>
+                <h1>{{ title }}</h1>
+                <p>
+                    {% if entry.publishedAt %}
+                        Publiée le {{ entry.publishedAt|date('d/m/Y à H:i') }}
+                    {% else %}
+                        Brouillon — non publié
+                    {% endif %}
+                </p>
+            </div>
+        </header>
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.version) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.text) }}
+
+            <div class="admin-changelog__actions">
+                <a href="{{ path('admin_changelog_index') }}">
+                    Annuler
+                </a>
+
+                <button type="submit">
+                    Enregistrer
+                </button>
+            </div>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}
