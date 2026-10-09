@@ -8,8 +8,10 @@
     {% endif %}
 {% endblock %}
 
+{% block page_header %}{% endblock %}
+
 {% block body %}
-    <main class="changelog-page">
+    <section class="changelog-page">
         {% if entry %}
             <header class="changelog-page__header">
                 <h1 class="changelog-page__title">
@@ -39,7 +41,7 @@
                 <h1 class="changelog-page__title">Changelog</h1>
             </header>
 
-            <p>Aucune note de patch publiée pour le moment.</p>
+            <p class="changelog-page__empty">Aucune note de patch publiée pour le moment.</p>
         {% endif %}
-    </main>
+    </section>
 {% endblock %}
