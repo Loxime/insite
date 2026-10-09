@@ -147,3 +147,22 @@ tbody {
 .admin .admin-content table td > .admin-action {
     margin-right: 8px;
 }
+
+
+/* ADMIN — TYPOGRAPHIE DES TABLEAUX */
+
+.admin .admin-content table thead {
+    background: rgba(34, 146, 164, 0.08);
+}
+
+.admin .admin-content table thead th {
+    color: #0f0a0a !important;
+
+    font-family: var(--font-family-base);
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.5;
+
+    letter-spacing: 0.01em;
+    text-transform: none;
+}
