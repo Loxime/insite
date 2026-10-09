@@ -11,7 +11,7 @@
 {% block page_header %}{% endblock %}
 
 {% block body %}
-    <main class="about-page">
+    <section class="about-page">
         {% if about %}
             <header class="about-page__header">
                 <h1 class="about-page__title">
@@ -35,6 +35,10 @@
                     {{ about.content|raw }}
                 </div>
             {% endif %}
+
+            {% include 'about/_team.html.twig' with {
+                profiles: profiles
+            } only %}
 
             {% if about.socialLinks is not empty %}
                 <nav
@@ -83,6 +87,10 @@
             <h1 class="about-page__title">
                 About
             </h1>
+
+            {% include 'about/_team.html.twig' with {
+                profiles: profiles
+            } only %}
         {% endif %}
-    </main>
+    </section>
 {% endblock %}

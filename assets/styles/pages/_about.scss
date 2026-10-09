@@ -116,3 +116,110 @@
     text-align: center;
 }
 
+
+/* Équipe — continuité visuelle de la page About */
+
+.about-team {
+    margin-top: clamp(64px, 9vw, 112px);
+    padding-top: clamp(40px, 6vw, 72px);
+    border-top: 1px solid var(--color-border);
+}
+
+.about-team__header {
+    margin-bottom: clamp(32px, 5vw, 56px);
+    text-align: center;
+}
+
+.about-team__title {
+    margin: 0;
+    color: #0f0a0a;
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+}
+
+.about-team__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 56px 28px;
+}
+
+.about-team__member {
+    min-width: 0;
+}
+
+.about-team__portrait {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--color-border);
+}
+
+.about-team__portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-team__placeholder {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    color: var(--color-primary);
+    font-size: clamp(3rem, 7vw, 5rem);
+}
+
+.about-team__information {
+    padding-top: 20px;
+}
+
+.about-team__name {
+    margin: 0;
+    color: #0f0a0a;
+    font-size: clamp(1.45rem, 2.4vw, 1.9rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+}
+
+.about-team__role {
+    margin: 8px 0 0;
+    color: var(--color-primary);
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.about-team__description {
+    margin: 16px 0 0;
+    color: #0f0a0a;
+    opacity: 0.78;
+    font-size: 1rem;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+    .about-team__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 44px 22px;
+    }
+}
+
+@media (max-width: 600px) {
+    .about-team {
+        margin-top: 56px;
+        padding-top: 40px;
+    }
+
+    .about-team__grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 40px;
+    }
+
+    .about-team__information {
+        padding-top: 16px;
+    }
+}
