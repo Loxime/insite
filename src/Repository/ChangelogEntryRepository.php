@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Repository;
+
+use App\Entity\ChangelogEntry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
+final class ChangelogEntryRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ChangelogEntry::class);
+    }
+
+    /**
+     * @return list<ChangelogEntry>
+     */
+    public function findPublishedOrdered(): array
+    {
+        return $this->createQueryBuilder('entry')
+            ->andWhere('entry.publishedAt IS NOT NULL')
+            ->orderBy('entry.publishedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findPublishedByVersion(string $version): ?ChangelogEntry
+    {
+        return $this->createQueryBuilder('entry')
+            ->andWhere('entry.version = :version')
+            ->andWhere('entry.publishedAt IS NOT NULL')
+            ->setParameter('version', $version)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+}
