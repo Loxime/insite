@@ -1,5 +1,9 @@
 {% if profiles is not empty %}
-    <section class="about-team" aria-labelledby="about-team-title">
+    <section
+        class="about-team"
+        id="equipe"
+        aria-labelledby="about-team-title"
+    >
         <header class="about-team__header">
             <h2 class="about-team__title" id="about-team-title">
                 L'équipe
@@ -9,41 +13,48 @@
         <div class="about-team__grid">
             {% for profile in profiles %}
                 <article class="about-team__member">
-                    <div class="about-team__portrait">
-                        {% if profile.imageKey %}
-                            <img
-                                src="{{ path('media_show', {
-                                    key: profile.imageKey
-                                }) }}"
-                                alt="Portrait de {{ profile.displayName }}"
-                                loading="lazy"
-                                decoding="async"
-                            >
-                        {% else %}
-                            <div
-                                class="about-team__placeholder"
-                                aria-hidden="true"
-                            >
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                        {% endif %}
-                    </div>
+                    <a
+                        class="about-team__link"
+                        href="{{ path('about_profile_show', {
+                            slug: profile.slug
+                        }) }}"
+                    >
+                        <div class="about-team__portrait">
+                            {% if profile.imageKey %}
+                                <img
+                                    src="{{ path('media_show', {
+                                        key: profile.imageKey
+                                    }) }}"
+                                    alt=""
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                            {% else %}
+                                <div
+                                    class="about-team__placeholder"
+                                    aria-hidden="true"
+                                >
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+                            {% endif %}
+                        </div>
 
-                    <div class="about-team__information">
-                        <h3 class="about-team__name">
-                            {{ profile.displayName }}
-                        </h3>
+                        <div class="about-team__information">
+                            <h3 class="about-team__name">
+                                {{ profile.displayName }}
+                            </h3>
 
-                        <p class="about-team__role">
-                            {{ profile.role }}
-                        </p>
-
-                        {% if profile.description %}
-                            <p class="about-team__description">
-                                {{ profile.description }}
+                            <p class="about-team__role">
+                                {{ profile.role }}
                             </p>
-                        {% endif %}
-                    </div>
+
+                            {% if profile.description %}
+                                <p class="about-team__description">
+                                    {{ profile.description }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </a>
                 </article>
             {% endfor %}
         </div>
