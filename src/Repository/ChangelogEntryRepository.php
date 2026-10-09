@@ -38,6 +38,42 @@ final class ChangelogEntryRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findOlderPublishedThan(
+        ChangelogEntry $current,
+    ): ?ChangelogEntry {
+        return $this->createQueryBuilder('entry')
+            ->andWhere('entry.publishedAt IS NOT NULL')
+            ->andWhere(
+                '(entry.publishedAt < :publishedAt OR
+                (entry.publishedAt = :publishedAt AND entry.id < :id))'
+            )
+            ->setParameter('publishedAt', $current->getPublishedAt())
+            ->setParameter('id', $current->getId())
+            ->orderBy('entry.publishedAt', 'DESC')
+            ->addOrderBy('entry.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findNewerPublishedThan(
+        ChangelogEntry $current,
+    ): ?ChangelogEntry {
+        return $this->createQueryBuilder('entry')
+            ->andWhere('entry.publishedAt IS NOT NULL')
+            ->andWhere(
+                '(entry.publishedAt > :publishedAt OR
+                (entry.publishedAt = :publishedAt AND entry.id > :id))'
+            )
+            ->setParameter('publishedAt', $current->getPublishedAt())
+            ->setParameter('id', $current->getId())
+            ->orderBy('entry.publishedAt', 'ASC')
+            ->addOrderBy('entry.id', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findPublishedByVersion(string $version): ?ChangelogEntry
     {
         return $this->createQueryBuilder('entry')

@@ -36,6 +36,41 @@
             <article class="changelog-page__article">
                 {{ entry.text }}
             </article>
+
+            {% if older or newer %}
+                <nav
+                    class="changelog-page__navigation"
+                    aria-label="Navigation entre les versions"
+                >
+                    {% if older %}
+                        <a
+                            class="changelog-page__nav-link"
+                            href="{{ path('changelog_show', {version: older.version}) }}"
+                            rel="prev"
+                        >
+                            <span aria-hidden="true">←</span>
+                            <span>
+                                Plus ancienne
+                                <small>v{{ older.version }}</small>
+                            </span>
+                        </a>
+                    {% endif %}
+
+                    {% if newer %}
+                        <a
+                            class="changelog-page__nav-link changelog-page__nav-link--newer"
+                            href="{{ path('changelog_show', {version: newer.version}) }}"
+                            rel="next"
+                        >
+                            <span>
+                                Plus récente
+                                <small>v{{ newer.version }}</small>
+                            </span>
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    {% endif %}
+                </nav>
+            {% endif %}
         {% else %}
             <header class="changelog-page__header">
                 <h1 class="changelog-page__title">Changelog</h1>

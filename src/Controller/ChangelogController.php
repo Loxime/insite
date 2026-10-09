@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\ChangelogEntry;
 use App\Repository\ChangelogEntryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +17,10 @@ final class ChangelogController extends AbstractController
     public function index(
         ChangelogEntryRepository $repository,
     ): Response {
-        return $this->render('changelog/show.html.twig', [
-            'entry' => $repository->findLatestPublished(),
-        ]);
+        return $this->renderEntry(
+            $repository->findLatestPublished(),
+            $repository,
+        );
     }
 
     #[Route(
@@ -39,8 +41,21 @@ final class ChangelogController extends AbstractController
             );
         }
 
+        return $this->renderEntry($entry, $repository);
+    }
+
+    private function renderEntry(
+        ?ChangelogEntry $entry,
+        ChangelogEntryRepository $repository,
+    ): Response {
         return $this->render('changelog/show.html.twig', [
             'entry' => $entry,
+            'older' => $entry === null
+                ? null
+                : $repository->findOlderPublishedThan($entry),
+            'newer' => $entry === null
+                ? null
+                : $repository->findNewerPublishedThan($entry),
         ]);
     }
 }
