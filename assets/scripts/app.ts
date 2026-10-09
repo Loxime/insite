@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', (): void => {
     document.documentElement.classList.add('js-enabled');
 
     initToasts();
+
+    if (document.querySelector('.js-announcement-dialog')) {
+        void import('./ui/announcement-popup').then(
+            ({ initAnnouncementPopup }) => {
+                initAnnouncementPopup();
+            },
+        );
+    }
 });
 
 if (document.querySelector('.js-ckeditor')) {

@@ -56,5 +56,12 @@
     </main>
 
     {% include 'layout/_footer.html.twig' %}
+
+    {% set activeAnnouncement = active_temporary_announcement() %}
+    {% if activeAnnouncement %}
+        {% include 'layout/_announcement_popup.html.twig' with {
+            announcement: activeAnnouncement
+        } only %}
+    {% endif %}
 </body>
 </html>

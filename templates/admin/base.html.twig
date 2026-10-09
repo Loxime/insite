@@ -89,6 +89,12 @@
                         Changelog
                     </a>
                     <a
+                        href="{{ path('admin_announcements_index') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_announcements' %} is-active{% endif %}"
+                    >
+                        Annonces
+                    </a>
+                    <a
                         href="{{ path('admin_faq_index') }}"
                         class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_faq' %} is-active{% endif %}"
                     >

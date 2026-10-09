@@ -26,6 +26,7 @@ final class MediaController extends AbstractController
             !str_starts_with($key, 'blog/')
             && !str_starts_with($key, 'games/')
             && !str_starts_with($key, 'about/')
+            && !str_starts_with($key, 'announcements/')
         ) {
             throw $this->createNotFoundException();
         }

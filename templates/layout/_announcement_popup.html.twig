@@ -1,0 +1,32 @@
+<dialog
+    class="announcement-dialog js-announcement-dialog"
+    data-announcement-id="{{ announcement.id }}"
+    data-announcement-revision="{{ announcement.updatedAt|date('U') }}"
+    aria-label="Annonce temporaire INQUEST"
+>
+    <button
+        type="button"
+        class="announcement-dialog__close js-announcement-close"
+        aria-label="Fermer l'annonce"
+    >
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <div class="announcement-dialog__content">
+        <img
+            class="announcement-dialog__image"
+            src="{{ path('media_show', {
+                key: announcement.imageKey
+            }) }}"
+            alt="Annonce promotionnelle INQUEST"
+        >
+
+        <a
+            class="announcement-dialog__cta js-announcement-cta"
+            href="{{ announcement.buttonUrl }}"
+        >
+            {{ announcement.buttonLabel }}
+            <span aria-hidden="true">→</span>
+        </a>
+    </div>
+</dialog>

@@ -98,6 +98,12 @@ final class MinioStorage
         );
     }
 
+    public function uploadAnnouncementImage(
+        UploadedFile $file,
+    ): string {
+        return $this->uploadImage($file, 'announcements');
+    }
+
     private function uploadImage(
         UploadedFile $file,
         string $directory,

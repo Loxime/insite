@@ -1,0 +1,204 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Controller\Admin;
+
+use App\Entity\TemporaryAnnouncement;
+use App\Form\TemporaryAnnouncementType;
+use App\Repository\TemporaryAnnouncementRepository;
+use App\Service\MinioStorage;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Route('/admin/announcements', name: 'admin_announcements_')]
+final class TemporaryAnnouncementController extends AbstractController
+{
+    #[Route('', name: 'index', methods: ['GET'])]
+    public function index(
+        TemporaryAnnouncementRepository $repository,
+    ): Response {
+        return $this->render('admin/announcements/index.html.twig', [
+            'announcements' => $repository->findBy(
+                [],
+                ['createdAt' => 'DESC', 'id' => 'DESC'],
+            ),
+        ]);
+    }
+
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        MinioStorage $storage,
+    ): Response {
+        $announcement = new TemporaryAnnouncement();
+
+        $form = $this->createForm(
+            TemporaryAnnouncementType::class,
+            $announcement,
+        );
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->validateSchedule($form, $announcement);
+
+            if ($form->isValid()) {
+                $image = $form->get('image')->getData();
+                $uploadedKey = null;
+
+                if ($image instanceof UploadedFile) {
+                    $uploadedKey = $storage->uploadAnnouncementImage($image);
+                    $announcement->setImageKey($uploadedKey);
+                }
+
+                try {
+                    $entityManager->persist($announcement);
+                    $entityManager->flush();
+                } catch (\Throwable $exception) {
+                    if ($uploadedKey !== null) {
+                        $storage->delete($uploadedKey);
+                    }
+
+                    throw $exception;
+                }
+
+                $this->addFlash('success', 'Annonce créée.');
+
+                return $this->redirectToRoute('admin_announcements_index');
+            }
+        }
+
+        return $this->render('admin/announcements/form.html.twig', [
+            'form' => $form,
+            'announcement' => $announcement,
+            'title' => 'Nouvelle annonce',
+        ]);
+    }
+
+    #[Route(
+        '/{id}/edit',
+        name: 'edit',
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST'],
+    )]
+    public function edit(
+        Request $request,
+        TemporaryAnnouncement $announcement,
+        EntityManagerInterface $entityManager,
+        MinioStorage $storage,
+    ): Response {
+        $form = $this->createForm(
+            TemporaryAnnouncementType::class,
+            $announcement,
+        );
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->validateSchedule($form, $announcement);
+
+            if ($form->isValid()) {
+                $previousKey = $announcement->getImageKey();
+                $image = $form->get('image')->getData();
+                $removeImage = (bool) $form->get('removeImage')->getData();
+
+                $uploadedKey = null;
+                $keyToDelete = null;
+
+                if ($image instanceof UploadedFile) {
+                    $uploadedKey = $storage->uploadAnnouncementImage($image);
+                    $announcement->setImageKey($uploadedKey);
+                    $keyToDelete = $previousKey;
+                } elseif ($removeImage && $previousKey !== null) {
+                    $announcement->setImageKey(null);
+                    $keyToDelete = $previousKey;
+                }
+
+                $announcement->touchUpdatedAt();
+
+                try {
+                    $entityManager->flush();
+                } catch (\Throwable $exception) {
+                    if ($uploadedKey !== null) {
+                        $storage->delete($uploadedKey);
+                    }
+
+                    throw $exception;
+                }
+
+                if ($keyToDelete !== null) {
+                    $storage->delete($keyToDelete);
+                }
+
+                $this->addFlash('success', 'Annonce modifiée.');
+
+                return $this->redirectToRoute('admin_announcements_index');
+            }
+        }
+
+        return $this->render('admin/announcements/form.html.twig', [
+            'form' => $form,
+            'announcement' => $announcement,
+            'title' => 'Modifier une annonce',
+        ]);
+    }
+
+    #[Route(
+        '/{id}/delete',
+        name: 'delete',
+        requirements: ['id' => '\d+'],
+        methods: ['POST'],
+    )]
+    public function delete(
+        Request $request,
+        TemporaryAnnouncement $announcement,
+        EntityManagerInterface $entityManager,
+        MinioStorage $storage,
+    ): Response {
+        if (!$this->isCsrfTokenValid(
+            'delete-announcement-' . $announcement->getId(),
+            $request->getPayload()->getString('_token'),
+        )) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $imageKey = $announcement->getImageKey();
+
+        $entityManager->remove($announcement);
+        $entityManager->flush();
+
+        $storage->delete($imageKey);
+
+        $this->addFlash('success', 'Annonce supprimée.');
+
+        return $this->redirectToRoute('admin_announcements_index');
+    }
+
+    private function validateSchedule(
+        FormInterface $form,
+        TemporaryAnnouncement $announcement,
+    ): void {
+        $startsAt = $announcement->getStartsAt();
+        $endsAt = $announcement->getEndsAt();
+
+        if (
+            $startsAt !== null
+            && $endsAt !== null
+            && $endsAt <= $startsAt
+        ) {
+            $form->get('endsAt')->addError(
+                new FormError(
+                    'La fin doit être postérieure au début de publication.',
+                ),
+            );
+        }
+    }
+}
