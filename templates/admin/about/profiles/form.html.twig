@@ -1,0 +1,45 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ heading }} — Administration{% endblock %}
+
+{% block body %}
+    <section class="admin-about-profiles">
+        <header class="admin-about-profiles__header">
+            <h1>{{ heading }}</h1>
+        </header>
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.lastName) }}
+            {{ form_row(form.slug) }}
+            {{ form_row(form.role) }}
+
+            {{ form_row(form.description) }}
+            {{ form_row(form.content) }}
+
+            {{ form_row(form.age) }}
+            {{ form_row(form.languagesInput) }}
+            {{ form_row(form.skillsInput) }}
+
+            {{ form_row(form.displayOrder) }}
+            {{ form_row(form.enabled) }}
+
+            <div class="admin-about-profiles__actions">
+                <a
+                    href="{{ path('admin_about_profiles_index') }}"
+                >
+                    Annuler
+                </a>
+
+                <button
+                    type="submit"
+                    class="admin-button admin-button--primary"
+                >
+                    Enregistrer
+                </button>
+            </div>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

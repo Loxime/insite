@@ -50,6 +50,13 @@
                     >
                         About
                     </a>
+
+                    <a
+                        href="{{ path('admin_about_profiles_index') }}"
+                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_about_profiles_' %} is-active{% endif %}"
+                    >
+                        Membres de l'équipe
+                    </a>
 <a
                         href="{{ path('admin_jam_index') }}"
                         class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_jam' %} is-active{% endif %}"
