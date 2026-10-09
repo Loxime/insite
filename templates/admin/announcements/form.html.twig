@@ -1,0 +1,33 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ title }} — Administration{% endblock %}
+
+{% block body %}
+    <section class="admin-announcements">
+        <header class="admin-announcements__header">
+            <h1>{{ title }}</h1>
+        </header>
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.buttonLabel) }}
+            {{ form_row(form.buttonUrl) }}
+
+            {{ form_row(form.startsAt) }}
+            {{ form_row(form.endsAt) }}
+
+            {{ form_row(form.enabled) }}
+
+            <div class="admin-announcements__actions">
+                <a href="{{ path('admin_announcements_index') }}">
+                    Annuler
+                </a>
+
+                <button type="submit">
+                    Enregistrer
+                </button>
+            </div>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

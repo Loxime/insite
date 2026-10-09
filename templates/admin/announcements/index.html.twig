@@ -1,0 +1,89 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Annonces — Administration{% endblock %}
+
+{% block body %}
+    <section class="admin-announcements">
+        <header class="admin-announcements__header">
+            <h1>Annonces temporaires</h1>
+
+            <a href="{{ path('admin_announcements_new') }}">
+                Ajouter une annonce
+            </a>
+        </header>
+
+        {% if announcements is empty %}
+            <p>Aucune annonce enregistrée.</p>
+        {% else %}
+            <div class="admin-announcements__table-wrapper">
+                <table class="admin-announcements__table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Bouton</th>
+                            <th scope="col">Début</th>
+                            <th scope="col">Fin</th>
+                            <th scope="col">État</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for announcement in announcements %}
+                            <tr>
+                                <td>{{ announcement.buttonLabel }}</td>
+
+                                <td>
+                                    {{ announcement.startsAt
+                                        ? announcement.startsAt|date('d/m/Y H:i', 'Europe/Paris')
+                                        : 'Immédiat'
+                                    }}
+                                </td>
+
+                                <td>
+                                    {{ announcement.endsAt
+                                        ? announcement.endsAt|date('d/m/Y H:i', 'Europe/Paris')
+                                        : 'Sans échéance'
+                                    }}
+                                </td>
+
+                                <td>
+                                    {% if not announcement.enabled %}
+                                        Désactivée
+                                    {% elseif not announcement.imageKey %}
+                                        Image manquante
+                                    {% else %}
+                                        Activée
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <a href="{{ path('admin_announcements_edit', {
+                                        id: announcement.id
+                                    }) }}">
+                                        Modifier
+                                    </a>
+
+                                    <form
+                                        action="{{ path('admin_announcements_delete', {
+                                            id: announcement.id
+                                        }) }}"
+                                        method="post"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="_token"
+                                            value="{{ csrf_token('delete-announcement-' ~ announcement.id) }}"
+                                        >
+
+                                        <button type="submit">
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
