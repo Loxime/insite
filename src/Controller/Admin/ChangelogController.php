@@ -91,6 +91,29 @@ final class ChangelogController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/publish', name: 'publish', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function publish(
+        Request $request,
+        ChangelogEntry $entry,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        if (!$this->isCsrfTokenValid(
+            'publish-changelog-' . $entry->getId(),
+            $request->getPayload()->getString('_token'),
+        )) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if (!$entry->isPublished()) {
+            $entry->publish();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Note de patch publiée.');
+        }
+
+        return $this->redirectToRoute('admin_changelog_index');
+    }
+
     private function validateUniqueVersion(
         FormInterface $form,
         ChangelogEntry $entry,

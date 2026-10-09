@@ -49,6 +49,22 @@
                                     <a href="{{ path('admin_changelog_edit', {id: entry.id}) }}">
                                         Modifier
                                     </a>
+
+                                    {% if not entry.publishedAt %}
+                                        <form
+                                            action="{{ path('admin_changelog_publish', {id: entry.id}) }}"
+                                            method="post"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token('publish-changelog-' ~ entry.id) }}"
+                                            >
+                                            <button type="submit">
+                                                Publier
+                                            </button>
+                                        </form>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
