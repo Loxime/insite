@@ -1,0 +1,65 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ heading }} — Administration{% endblock %}
+
+{% block body %}
+    <section class="admin-about-profiles">
+        <header class="admin-about-profiles__header">
+            <h1>{{ heading }}</h1>
+        </header>
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.lastName) }}
+            {{ form_row(form.slug) }}
+            {{ form_row(form.role) }}
+
+            <div class="admin-about-image">
+                {{ form_row(form.image) }}
+
+                {% if profile.imageKey %}
+                    <img
+                        src="{{ path('media_show', {
+                            key: profile.imageKey
+                        }) }}"
+                        alt="Photo de {{ profile.displayName }}"
+                        width="320"
+                        height="320"
+                        style="max-width: 100%; height: auto; object-fit: cover;"
+                    >
+                {% endif %}
+
+                {% if form.removeImage is defined %}
+                    {{ form_row(form.removeImage) }}
+                {% endif %}
+            </div>
+
+            {{ form_row(form.description) }}
+            {{ form_row(form.content) }}
+
+            {{ form_row(form.age) }}
+            {{ form_row(form.languagesInput) }}
+            {{ form_row(form.skillsInput) }}
+
+            {{ form_row(form.displayOrder) }}
+            {{ form_row(form.enabled) }}
+
+            <div class="admin-about-profiles__actions">
+                <a
+                    href="{{ path('admin_about_profiles_index') }}"
+                >
+                    Annuler
+                </a>
+
+                <button
+                    type="submit"
+                    class="admin-button admin-button--primary"
+                >
+                    Enregistrer
+                </button>
+            </div>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

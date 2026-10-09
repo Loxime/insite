@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ profile.displayName }} — INQUEST
+{% endblock %}
+
+{% block meta_description %}
+    Découvrez {{ profile.displayName }}, {{ profile.role }} chez INQUEST.
+{% endblock %}
+
+{% block page_header %}{% endblock %}
+
+{% block body %}
+    <section class="about-profile">
+        <a
+            href="{{ path('about_show') }}#equipe"
+            class="about-profile__back"
+        >
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            Retour à l'équipe
+        </a>
+
+        <div class="about-profile__layout">
+            <aside
+                class="about-profile__sidebar"
+                aria-label="Informations du membre"
+            >
+                <figure class="about-profile__portrait">
+                    {% if profile.imageKey %}
+                        <img
+                            src="{{ path('media_show', {
+                                key: profile.imageKey
+                            }) }}"
+                            alt="Portrait de {{ profile.displayName }}"
+                        >
+                    {% else %}
+                        <div
+                            class="about-profile__placeholder"
+                            aria-hidden="true"
+                        >
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    {% endif %}
+                </figure>
+
+                {% if profile.age is not null
+                    or profile.languages is not empty
+                    or profile.skills is not empty
+                %}
+                    <dl class="about-profile__facts">
+                        {% if profile.age is not null %}
+                            <div class="about-profile__fact">
+                                <dt>Âge</dt>
+                                <dd>{{ profile.age }} ans</dd>
+                            </div>
+                        {% endif %}
+
+                        {% if profile.languages is not empty %}
+                            <div class="about-profile__fact">
+                                <dt>Langues</dt>
+                                <dd>
+                                    <ul class="about-profile__list">
+                                        {% for language in profile.languages %}
+                                            <li>{{ language }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </dd>
+                            </div>
+                        {% endif %}
+
+                        {% if profile.skills is not empty %}
+                            <div class="about-profile__fact">
+                                <dt>Compétences</dt>
+                                <dd>
+                                    <ul class="about-profile__list">
+                                        {% for skill in profile.skills %}
+                                            <li>{{ skill }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </dd>
+                            </div>
+                        {% endif %}
+                    </dl>
+                {% endif %}
+            </aside>
+
+            <article class="about-profile__biography">
+                <header class="about-profile__header">
+                    <h1 class="about-profile__name">
+                        {{ profile.displayName }}
+                    </h1>
+
+                    <p class="about-profile__role">
+                        {{ profile.role }}
+                    </p>
+                </header>
+
+                {% if profile.content %}
+                    <div class="about-profile__content">
+                        {{ profile.content|raw }}
+                    </div>
+                {% elseif profile.description %}
+                    <div class="about-profile__content">
+                        <p>{{ profile.description }}</p>
+                    </div>
+                {% endif %}
+            </article>
+        </div>
+    </section>
+{% endblock %}

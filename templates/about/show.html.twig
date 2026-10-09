@@ -11,7 +11,7 @@
 {% block page_header %}{% endblock %}
 
 {% block body %}
-    <main class="about-page">
+    <section class="about-page">
         {% if about %}
             <header class="about-page__header">
                 <h1 class="about-page__title">
@@ -34,6 +34,19 @@
                 <div class="about-page__content">
                     {{ about.content|raw }}
                 </div>
+            {% endif %}
+
+            {% include 'about/_team.html.twig' with {
+                profiles: profiles
+            } only %}
+
+            {% if about.secondaryContent %}
+                <section
+                    class="about-page__content about-page__content--secondary"
+                    aria-label="Informations complémentaires sur le studio"
+                >
+                    {{ about.secondaryContent|raw }}
+                </section>
             {% endif %}
 
             {% if about.socialLinks is not empty %}
@@ -83,6 +96,10 @@
             <h1 class="about-page__title">
                 About
             </h1>
+
+            {% include 'about/_team.html.twig' with {
+                profiles: profiles
+            } only %}
         {% endif %}
-    </main>
+    </section>
 {% endblock %}

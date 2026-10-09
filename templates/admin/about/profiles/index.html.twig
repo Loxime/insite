@@ -1,0 +1,94 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Profils de l'équipe — Administration{% endblock %}
+
+{% block body %}
+    <section class="admin-about-profiles">
+        <header class="admin-about-profiles__header">
+            <h1>Profils de l'équipe</h1>
+
+            <a
+                class="admin-button admin-button--primary"
+                href="{{ path('admin_about_profiles_new') }}"
+            >
+                Ajouter un membre
+            </a>
+        </header>
+
+        {% if profiles is empty %}
+            <p>Aucun membre enregistré.</p>
+        {% else %}
+            <div style="overflow-x: auto;">
+                <table class="admin-about-profiles__table">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Ordre</th>
+                            <th>Nom</th>
+                            <th>Rôle</th>
+                            <th>URL</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for profile in profiles %}
+                            <tr>
+                                <td>
+                                    {% if profile.imageKey %}
+                                        <img
+                                            src="{{ path('media_show', {
+                                                key: profile.imageKey
+                                            }) }}"
+                                            alt="{{ profile.displayName }}"
+                                            width="64"
+                                            height="64"
+                                            loading="lazy"
+                                            style="object-fit: cover; border-radius: 8px;"
+                                        >
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+                                <td>{{ profile.displayOrder }}</td>
+                                <td>{{ profile.displayName }}</td>
+                                <td>{{ profile.role }}</td>
+                                <td>{{ profile.slug }}</td>
+                                <td>
+                                    {{ profile.enabled ? 'Visible' : 'Masqué' }}
+                                </td>
+                                <td>
+                                    <a
+                                        href="{{ path('admin_about_profiles_edit', {
+                                            id: profile.id
+                                        }) }}"
+                                    >
+                                        Modifier
+                                    </a>
+
+                                    <form
+                                        method="post"
+                                        action="{{ path('admin_about_profiles_delete', {
+                                            id: profile.id
+                                        }) }}"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="_token"
+                                            value="{{ csrf_token('delete-about-profile-' ~ profile.id) }}"
+                                        >
+
+                                        <button type="submit">
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

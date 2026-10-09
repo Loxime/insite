@@ -61,6 +61,15 @@
                 {{ form_errors(form.content) }}
             </div>
 
+            <div class="admin-form-field">
+                <h2>Contenu après l'équipe</h2>
+
+                {{ form_label(form.secondaryContent) }}
+                {{ form_widget(form.secondaryContent) }}
+                {{ form_help(form.secondaryContent) }}
+                {{ form_errors(form.secondaryContent) }}
+            </div>
+
             <section
                 class="admin-about-socials js-about-socials"
                 data-index="{{ form.socialLinks|length }}"

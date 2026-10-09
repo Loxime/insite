@@ -22,6 +22,9 @@ class About
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $secondaryContent = null;
+
     #[ORM\Column(length: 512, nullable: true)]
     private ?string $imageKey = null;
 
@@ -73,6 +76,19 @@ class About
     public function setContent(?string $content): static
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getSecondaryContent(): ?string
+    {
+        return $this->secondaryContent;
+    }
+
+    public function setSecondaryContent(
+        ?string $secondaryContent,
+    ): static {
+        $this->secondaryContent = $secondaryContent;
 
         return $this;
     }
