@@ -8,6 +8,7 @@ use App\Entity\AboutProfile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,6 +49,22 @@ final class AboutProfileType extends AbstractType
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Length(max: 160),
+                ],
+            ])
+            ->add('image', FileType::class, [
+                'label' => 'Photo du membre',
+                'mapped' => false,
+                'required' => false,
+                'help' => 'JPEG, PNG ou WebP — 5 Mo maximum.',
+                'constraints' => [
+                    new Assert\Image(
+                        maxSize: '5M',
+                        mimeTypes: [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                        ],
+                    ),
                 ],
             ])
             ->add('description', TextareaType::class, [
@@ -103,6 +120,14 @@ final class AboutProfileType extends AbstractType
                 'label' => 'Profil visible publiquement',
                 'required' => false,
             ]);
+
+        if ($options['show_remove_image']) {
+            $builder->add('removeImage', CheckboxType::class, [
+                'label' => 'Supprimer la photo actuelle',
+                'mapped' => false,
+                'required' => false,
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -111,9 +136,11 @@ final class AboutProfileType extends AbstractType
             'data_class' => AboutProfile::class,
             'languages_data' => '',
             'skills_data' => '',
+            'show_remove_image' => false,
         ]);
 
         $resolver->setAllowedTypes('languages_data', 'string');
         $resolver->setAllowedTypes('skills_data', 'string');
+        $resolver->setAllowedTypes('show_remove_image', 'bool');
     }
 }

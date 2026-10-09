@@ -104,6 +104,12 @@ final class MinioStorage
         return $this->uploadImage($file, 'announcements');
     }
 
+    public function uploadAboutProfileImage(
+        UploadedFile $file,
+    ): string {
+        return $this->uploadImage($file, 'about/profiles');
+    }
+
     private function uploadImage(
         UploadedFile $file,
         string $directory,

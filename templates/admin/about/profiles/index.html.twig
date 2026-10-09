@@ -22,6 +22,7 @@
                 <table class="admin-about-profiles__table">
                     <thead>
                         <tr>
+                            <th>Photo</th>
                             <th>Ordre</th>
                             <th>Nom</th>
                             <th>Rôle</th>
@@ -34,6 +35,22 @@
                     <tbody>
                         {% for profile in profiles %}
                             <tr>
+                                <td>
+                                    {% if profile.imageKey %}
+                                        <img
+                                            src="{{ path('media_show', {
+                                                key: profile.imageKey
+                                            }) }}"
+                                            alt="{{ profile.displayName }}"
+                                            width="64"
+                                            height="64"
+                                            loading="lazy"
+                                            style="object-fit: cover; border-radius: 8px;"
+                                        >
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
                                 <td>{{ profile.displayOrder }}</td>
                                 <td>{{ profile.displayName }}</td>
                                 <td>{{ profile.role }}</td>

@@ -7,10 +7,12 @@ namespace App\Controller\Admin;
 use App\Entity\AboutProfile;
 use App\Form\AboutProfileType;
 use App\Repository\AboutProfileRepository;
+use App\Service\MinioStorage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -37,6 +39,7 @@ final class AboutProfileController extends AbstractController
         EntityManagerInterface $entityManager,
         AboutProfileRepository $repository,
         SluggerInterface $slugger,
+        MinioStorage $storage,
     ): Response {
         $profile = new AboutProfile();
         $form = $this->createProfileForm($profile);
@@ -46,8 +49,24 @@ final class AboutProfileController extends AbstractController
             $this->prepareProfile($form, $profile, $repository, $slugger);
 
             if ($form->isValid()) {
-                $entityManager->persist($profile);
-                $entityManager->flush();
+                $image = $form->get('image')->getData();
+                $uploadedKey = null;
+
+                if ($image instanceof UploadedFile) {
+                    $uploadedKey = $storage->uploadAboutProfileImage($image);
+                    $profile->setImageKey($uploadedKey);
+                }
+
+                try {
+                    $entityManager->persist($profile);
+                    $entityManager->flush();
+                } catch (\Throwable $exception) {
+                    if ($uploadedKey !== null) {
+                        $storage->delete($uploadedKey);
+                    }
+
+                    throw $exception;
+                }
 
                 $this->addFlash('success', 'Profil créé.');
 
@@ -76,6 +95,7 @@ final class AboutProfileController extends AbstractController
         EntityManagerInterface $entityManager,
         AboutProfileRepository $repository,
         SluggerInterface $slugger,
+        MinioStorage $storage,
     ): Response {
         $form = $this->createProfileForm($profile);
         $form->handleRequest($request);
@@ -84,8 +104,38 @@ final class AboutProfileController extends AbstractController
             $this->prepareProfile($form, $profile, $repository, $slugger);
 
             if ($form->isValid()) {
+                $previousKey = $profile->getImageKey();
+                $image = $form->get('image')->getData();
+                $removeImage = $form->has('removeImage')
+                    && (bool) $form->get('removeImage')->getData();
+
+                $uploadedKey = null;
+                $keyToDelete = null;
+
+                if ($image instanceof UploadedFile) {
+                    $uploadedKey = $storage->uploadAboutProfileImage($image);
+                    $profile->setImageKey($uploadedKey);
+                    $keyToDelete = $previousKey;
+                } elseif ($removeImage && $previousKey !== null) {
+                    $profile->setImageKey(null);
+                    $keyToDelete = $previousKey;
+                }
+
                 $profile->touchUpdatedAt();
-                $entityManager->flush();
+
+                try {
+                    $entityManager->flush();
+                } catch (\Throwable $exception) {
+                    if ($uploadedKey !== null) {
+                        $storage->delete($uploadedKey);
+                    }
+
+                    throw $exception;
+                }
+
+                if ($keyToDelete !== null) {
+                    $storage->delete($keyToDelete);
+                }
 
                 $this->addFlash('success', 'Profil mis à jour.');
 
@@ -112,6 +162,7 @@ final class AboutProfileController extends AbstractController
         Request $request,
         AboutProfile $profile,
         EntityManagerInterface $entityManager,
+        MinioStorage $storage,
     ): Response {
         if (!$this->isCsrfTokenValid(
             'delete-about-profile-' . $profile->getId(),
@@ -120,8 +171,12 @@ final class AboutProfileController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        $imageKey = $profile->getImageKey();
+
         $entityManager->remove($profile);
         $entityManager->flush();
+
+        $storage->delete($imageKey);
 
         $this->addFlash('success', 'Profil supprimé.');
 
@@ -134,6 +189,7 @@ final class AboutProfileController extends AbstractController
         return $this->createForm(AboutProfileType::class, $profile, [
             'languages_data' => implode("\n", $profile->getLanguages()),
             'skills_data' => implode("\n", $profile->getSkills()),
+            'show_remove_image' => $profile->getImageKey() !== null,
         ]);
     }
 

@@ -16,6 +16,26 @@
             {{ form_row(form.slug) }}
             {{ form_row(form.role) }}
 
+            <div class="admin-about-image">
+                {{ form_row(form.image) }}
+
+                {% if profile.imageKey %}
+                    <img
+                        src="{{ path('media_show', {
+                            key: profile.imageKey
+                        }) }}"
+                        alt="Photo de {{ profile.displayName }}"
+                        width="320"
+                        height="320"
+                        style="max-width: 100%; height: auto; object-fit: cover;"
+                    >
+                {% endif %}
+
+                {% if form.removeImage is defined %}
+                    {{ form_row(form.removeImage) }}
+                {% endif %}
+            </div>
+
             {{ form_row(form.description) }}
             {{ form_row(form.content) }}
 
