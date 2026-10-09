@@ -258,3 +258,12 @@
         transform: none;
     }
 }
+
+
+/* Contenu complémentaire après l'équipe */
+
+.about-page__content--secondary {
+    margin-top: clamp(56px, 8vw, 96px);
+    padding-top: clamp(40px, 6vw, 64px);
+    border-top: 1px solid var(--color-border);
+}

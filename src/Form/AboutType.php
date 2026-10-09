@@ -47,6 +47,15 @@ final class AboutType extends AbstractType
                     'rows' => 18,
                 ],
             ])
+            ->add('secondaryContent', TextareaType::class, [
+                'label' => 'Contenu complémentaire',
+                'required' => false,
+                'help' => 'Texte affiché après les membres de l’équipe.',
+                'attr' => [
+                    'class' => 'js-ckeditor',
+                    'rows' => 14,
+                ],
+            ])
             ->add('socialLinks', CollectionType::class, [
                 'entry_type' => SocialLinkType::class,
                 'entry_options' => [

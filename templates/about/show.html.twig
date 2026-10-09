@@ -40,6 +40,15 @@
                 profiles: profiles
             } only %}
 
+            {% if about.secondaryContent %}
+                <section
+                    class="about-page__content about-page__content--secondary"
+                    aria-label="Informations complémentaires sur le studio"
+                >
+                    {{ about.secondaryContent|raw }}
+                </section>
+            {% endif %}
+
             {% if about.socialLinks is not empty %}
                 <nav
                     class="about-page__socials"
