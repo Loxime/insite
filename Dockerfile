@@ -131,3 +131,23 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install \
     --prefer-dist \
     --optimize-autoloader \
     && rm -rf tests phpunit.xml.dist
+
+# Build the official MinIO client from a pinned release
+FROM golang:1.24-alpine AS minio-mc-builder
+
+RUN apk add --no-cache ca-certificates git
+
+ARG MC_VERSION=RELEASE.2025-08-13T08-35-41Z
+
+RUN CGO_ENABLED=0 GOBIN=/out \
+    go install github.com/minio/mc@${MC_VERSION}
+
+
+# MinIO provisioning client with a POSIX shell
+FROM alpine:3.22 AS minio-init
+
+RUN apk add --no-cache ca-certificates
+
+COPY --from=minio-mc-builder /out/mc /usr/local/bin/mc
+
+RUN mc --version
