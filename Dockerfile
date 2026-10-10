@@ -55,7 +55,7 @@ RUN npm run build
 
 
 
-FROM php:8.4-apache AS web
+FROM php:8.4-apache AS web-base
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -88,22 +88,6 @@ COPY --from=composer:latest \
     /usr/bin/composer \
     /usr/bin/composer
 
-ARG APP_ENV=dev
-
-RUN if [ "$APP_ENV" = "prod" ]; then \
-        COMPOSER_ALLOW_SUPERUSER=1 composer install \
-            --no-dev \
-            --no-scripts \
-            --no-interaction \
-            --prefer-dist \
-            --optimize-autoloader; \
-    else \
-        COMPOSER_ALLOW_SUPERUSER=1 composer install \
-            --no-scripts \
-            --no-interaction \
-            --prefer-dist; \
-    fi
-
 RUN mkdir -p var/cache var/log \
     && chown -R www-data:www-data var
 
@@ -114,3 +98,36 @@ RUN sed -i \
 EXPOSE 80
 
 CMD ["apache2-foreground"]
+
+
+# ============================================================
+# Development
+# ============================================================
+
+FROM web-base AS web
+
+ENV APP_ENV=dev
+ENV APP_DEBUG=1
+
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install \
+    --no-scripts \
+    --no-interaction \
+    --prefer-dist
+
+
+# ============================================================
+# Production
+# ============================================================
+
+FROM web-base AS web-prod
+
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install \
+    --no-dev \
+    --no-scripts \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    && rm -rf tests phpunit.xml.dist
