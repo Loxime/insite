@@ -37,6 +37,31 @@ services:
     volumes:
       - minio_prod_data:/data
 
+
+  minio-init:
+    image: minio/mc:RELEASE.2025-08-13T08-35-41Z
+    profiles:
+      - setup
+    restart: "no"
+
+    entrypoint:
+      - /bin/sh
+      - /provision/minio-init.sh
+
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER required}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD required}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:?MINIO_ACCESS_KEY required}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:?MINIO_SECRET_KEY required}
+      MINIO_BUCKET: ${MINIO_BUCKET:?MINIO_BUCKET required}
+
+    volumes:
+      - ./deploy/minio-init.sh:/provision/minio-init.sh:ro
+
+    depends_on:
+      minio:
+        condition: service_started
+
   web:
     build:
       context: .
