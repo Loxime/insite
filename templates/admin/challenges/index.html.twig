@@ -1,0 +1,68 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}JAM Challenges — Administration{% endblock %}
+
+{% block body %}
+<div class="admin-page">
+    <header class="admin-page__header admin-page__header--actions">
+        <div>
+            <h1 class="admin-page__title">JAM Challenges</h1>
+            <p class="admin-page__description">Pages indépendantes avec thème, palette et compte à rebours.</p>
+        </div>
+        <a href="{{ path('admin_challenges_new') }}" class="admin-button admin-button--primary">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> Nouvelle JAM
+        </a>
+    </header>
+
+    {% for message in app.flashes('success') %}
+        <div class="admin-flash admin-flash--success">{{ message }}</div>
+    {% endfor %}
+
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead><tr><th>Nom / Thème</th><th>Période (Paris)</th><th>Palette</th><th>État</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for jam in jams %}
+                    {% set state = jam.stateAt(now) %}
+                    <tr>
+                        <td><strong>{{ jam.name }}</strong><div>{{ jam.theme }}</div></td>
+                        <td>
+                            {{ jam.startsAt ? jam.startsAt|date('d/m/Y H:i', 'Europe/Paris') : '—' }}
+                            <div>→ {{ jam.endsAt ? jam.endsAt|date('d/m/Y H:i', 'Europe/Paris') : '—' }}</div>
+                        </td>
+                        <td><div class="admin-challenge-palette">
+                            {% for color in jam.colors %}
+                                <span class="admin-challenge-palette__color" style="background-color:{{ color }}" title="{{ color }}"></span>
+                            {% endfor %}
+                        </div></td>
+                        <td>
+                            {% if state == 'upcoming' %}Programmée
+                            {% elseif state == 'active' %}En cours
+                            {% elseif state == 'submissions' %}Publications ouvertes
+                            {% elseif state == 'expired' %}Terminée
+                            {% else %}Désactivée{% endif %}
+                        </td>
+                        <td><div class="admin-table__actions">
+                            {% if state not in ['expired', 'disabled'] %}
+                                <a class="admin-action admin-action--view" href="{{ path('jam_challenge_show', {slug: jam.slug}) }}" target="_blank" rel="noopener noreferrer" title="Voir la JAM" aria-label="Voir la JAM">
+                                    <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                </a>
+                            {% endif %}
+                            <a class="admin-action" href="{{ path('admin_challenges_edit', {id: jam.id}) }}" title="Modifier" aria-label="Modifier">
+                                <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                            </a>
+                            <form method="post" action="{{ path('admin_challenges_delete', {id: jam.id}) }}" onsubmit="return confirm('Supprimer cette JAM ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-challenge-' ~ jam.id) }}">
+                                <button class="admin-action admin-action--danger" type="submit" title="Supprimer" aria-label="Supprimer">
+                                    <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </div></td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="5">Aucune JAM créée.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

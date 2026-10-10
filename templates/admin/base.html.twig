@@ -16,6 +16,39 @@
 </head>
 
 <body class="admin">
+    {# Une seule source de verite pour les rubriques et leurs onglets. #}
+    {% set currentRoute = app.request.attributes.get('_route')|default('') %}
+    {% set staffItems = [] %}
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        {% set staffItems = [{label: 'Administrateurs', route: 'admin_users_index', prefix: 'admin_users_'}] %}
+    {% endif %}
+    {% set staffItems = staffItems|merge([
+        {label: "Membres de l'équipe", route: 'admin_about_profiles_index', prefix: 'admin_about_profiles_'}
+    ]) %}
+    {% set sections = [
+        {id: 'studios', label: 'Studios', icon: 'fa-clapperboard', items: [
+            {label: 'Blog', route: 'admin_blog_index', prefix: 'admin_blog_'},
+            {label: 'Games', route: 'admin_games_index', prefix: 'admin_games_'},
+            {label: 'About', route: 'admin_about_edit', prefix: 'admin_about_edit'},
+            {label: 'Changelog', route: 'admin_changelog_index', prefix: 'admin_changelog_'},
+            {label: 'Tags', route: 'admin_tags_index', prefix: 'admin_tags_'}
+        ]},
+        {id: 'community', label: 'Community', icon: 'fa-users', items: [
+            {label: 'Annonces', route: 'admin_announcements_index', prefix: 'admin_announcements_'},
+            {label: 'FAQ', route: 'admin_faq_index', prefix: 'admin_faq_'},
+            {label: 'Careers', route: 'admin_careers_index', prefix: 'admin_careers_'},
+            {label: 'Jam', route: 'admin_challenges_index', prefix: 'admin_challenges_'}
+        ]},
+        {id: 'staff', label: 'Staff', icon: 'fa-user-shield', items: staffItems}
+    ] %}
+    {% set activeSection = null %}
+    {% for section in sections %}
+        {% for item in section.items %}
+            {% if currentRoute starts with item.prefix %}
+                {% set activeSection = section %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
     {% include 'layout/_toasts.html.twig' %}
     <div class="admin-layout">
         <aside class="admin-sidebar">
@@ -32,111 +65,56 @@
                     >
                 </a>
 
-                <nav
-                    class="admin-sidebar__navigation"
-                    aria-label="Navigation administration"
-                >
+                <nav class="admin-sidebar__navigation" aria-label="Navigation administration">
+                    {% for section in sections %}
+                        <a
+                            href="{{ path(section.items[0].route) }}"
+                            class="admin-sidebar__link{{ activeSection and activeSection.id == section.id ? ' is-active' : '' }}"
+                            {% if activeSection and activeSection.id == section.id %}aria-current="page"{% endif %}
+                        >
+                            <i class="fa-solid {{ section.icon }}" aria-hidden="true"></i>
+                            <span>{{ section.label }}</span>
+                        </a>
+                    {% endfor %}
                     <a
-                        href="{{ path('admin_blog_index') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_blog' %} is-active{% endif %}"
-                    >
-                        Blog
-                    </a>
-
-                    <a
-                        href="{{ path('admin_games_index') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_games' %} is-active{% endif %}"
-                    >
-                        Games
-                    </a>
-<a
-                        href="{{ path('admin_about_edit') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_about' %} is-active{% endif %}"
-                    >
-                        About
-                    </a>
-
-                    <a
-                        href="{{ path('admin_about_profiles_index') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_about_profiles_' %} is-active{% endif %}"
-                    >
-                        Membres de l'équipe
-                    </a>
-<a
-                        href="{{ path('admin_jam_index') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_jam' %} is-active{% endif %}"
-                    >
-                        Jam
-                    </a>
-<a
                         href="{{ path('admin_site_edit') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_site' %} is-active{% endif %}"
+                        class="admin-sidebar__link{{ currentRoute starts with 'admin_site_' ? ' is-active' : '' }}"
                     >
-                        Site
-                    </a>
-{% if is_granted('ROLE_SUPER_ADMIN') %}
-<a
-                        href="{{ path('admin_users_index') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_users' %} is-active{% endif %}"
-                    >
-                        Administrateurs
-                    </a>
-{% endif %}
-<a
-                        href="{{ path('admin_tags_index') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_tags' %} is-active{% endif %}"
-                    >
-                        Tags
-                    </a>
-<a
-                        href="{{ path('admin_careers_index') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_careers' %} is-active{% endif %}"
-                    >
-                        Careers
-                    </a>
-<a
-                        href="{{ path('admin_changelog_index') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_changelog' %} is-active{% endif %}"
-                    >
-                        Changelog
-                    </a>
-                    <a
-                        href="{{ path('admin_announcements_index') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_announcements' %} is-active{% endif %}"
-                    >
-                        Annonces
-                    </a>
-                    <a
-                        href="{{ path('admin_faq_index') }}"
-                        class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_faq' %} is-active{% endif %}"
-                    >
-                        FAQ
+                        <i class="fa-solid fa-gear" aria-hidden="true"></i>
+                        <span>Site</span>
                     </a>
                 </nav>
             </div>
 
             <div class="admin-sidebar__bottom">
-                <div class="admin-sidebar__user">
-                    {{ app.user.userIdentifier }}
+                <div class="admin-sidebar__user">{{ app.user.userIdentifier }}</div>
+                <div class="admin-sidebar__quick-actions">
+                    <a href="{{ path('app_frontoffice_home_show') }}"
+                       class="admin-sidebar__icon-button"
+                       aria-label="Retour au site" title="Retour au site">
+                        <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                    </a>
+                    <a href="{{ path('admin_logout') }}"
+                       class="admin-sidebar__icon-button"
+                       aria-label="Déconnexion" title="Déconnexion">
+                        <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+                    </a>
                 </div>
-
-                <a
-                href="{{ path('app_frontoffice_home_show') }}"
-                class="admin-sidebar__logout"
-            >
-                Retour au site
-            </a>
-
-            <a
-                    href="{{ path('admin_logout') }}"
-                    class="admin-sidebar__logout"
-                >
-                    Déconnexion
-                </a>
             </div>
         </aside>
 
         <main class="admin-content">
+            {% if activeSection %}
+                <nav class="admin-section-tabs" aria-label="Rubriques {{ activeSection.label }}">
+                    {% for item in activeSection.items %}
+                        <a
+                            href="{{ path(item.route) }}"
+                            class="admin-section-tabs__link{{ currentRoute starts with item.prefix ? ' is-active' : '' }}"
+                            {% if currentRoute starts with item.prefix %}aria-current="page"{% endif %}
+                        >{{ item.label }}</a>
+                    {% endfor %}
+                </nav>
+            {% endif %}
             {% block body %}{% endblock %}
         </main>
     </div>

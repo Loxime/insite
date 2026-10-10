@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, follow">
+    <title>{{ jam.name }} — INQUEST</title>
+    {{ reprise_entry_link_tags('app') }}
+    {{ reprise_entry_script_tags('app') }}
+</head>
+<body class="jam-challenge-page">
+    <main class="jam-challenge">
+        <p class="jam-challenge__brand">INQUEST</p>
+        <h1 class="jam-challenge__title">{{ jam.name }}</h1>
+
+        {% if state == 'submissions' %}
+            <div class="jam-challenge__end">
+                <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                <h2>Merci pour votre participation au InQuest {{ jam.durationHours }}h Challenge !</h2>
+                <a href="#publication-platforms" class="jam-challenge__publish-cta">
+                    Allez publier vos jeux ! <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+                </a>
+                <div id="publication-platforms" class="jam-challenge__platforms">
+                    {% for platform in jam.platforms %}
+                        <a href="{{ platform.url }}" class="jam-challenge__platform" target="_blank" rel="noopener noreferrer">
+                            {% if platform.icon in ['steam', 'itch-io', 'epic-games', 'xbox', 'playstation'] %}
+                                <i class="fa-brands fa-{{ platform.icon }}" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                            {% endif %}
+                            <strong>{{ platform.name }}</strong>
+                            <span>Publier mon jeu <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></span>
+                        </a>
+                    {% else %}
+                        <p>Aucune plateforme de publication configurée.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <p class="jam-challenge__eyebrow">Thème de la JAM</p>
+            <h2 class="jam-challenge__theme">{{ jam.theme }}</h2>
+            <div class="jam-challenge__colors" aria-label="Palette de la JAM">
+                {% for color in jam.colors %}
+                    <div class="jam-challenge__swatch" style="--swatch:{{ color }}">
+                        <span>{{ color|upper }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="jam-challenge__timer js-jam-countdown"
+                 data-target="{{ (state == 'upcoming' ? jam.startsAt : jam.endsAt)|date('c', 'UTC') }}"
+                 data-server-now="{{ 'now'|date('c', 'UTC') }}">
+                <p>{{ state == 'upcoming' ? 'Début dans' : 'Temps restant' }}</p>
+                <div class="jam-challenge__clock" role="timer" aria-label="Compte à rebours">
+                    {% for unit, label in {'days': 'Jours', 'hours': 'Heures', 'minutes': 'Minutes', 'seconds': 'Secondes'} %}
+                        <div class="jam-challenge__clock-unit">
+                            <strong data-jam-unit="{{ unit }}">00</strong>
+                            <span>{{ label }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </main>
+    <a class="jam-challenge__back" href="{{ path('app_frontoffice_home_show') }}">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour au site
+    </a>
+</body>
+</html>

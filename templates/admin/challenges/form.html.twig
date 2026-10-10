@@ -1,0 +1,71 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}{{ jam.id ? 'Modifier' : 'Nouvelle' }} JAM — Administration{% endblock %}
+
+{% block body %}
+<div class="admin-page">
+    <header class="admin-page__header">
+        <h1 class="admin-page__title">{{ jam.id ? 'Modifier la JAM' : 'Nouvelle JAM' }}</h1>
+    </header>
+
+    {{ form_start(form, {attr: {class: 'admin-simple-form js-challenge-form'}}) }}
+        {{ form_errors(form) }}
+        <div class="admin-form-row">
+            {{ form_row(form.name) }}
+            {{ form_row(form.theme) }}
+        </div>
+        <div class="admin-form-row">
+            {{ form_row(form.startsAt) }}
+            {{ form_row(form.endsAt) }}
+        </div>
+
+        <section class="admin-challenge-section">
+            <h2>Palette (1 à 3 couleurs)</h2>
+            {{ form_errors(form.colors) }}
+            <div class="js-challenge-collection" data-max="3" data-index="{{ form.colors|length }}"
+                 data-prototype="{{ form_widget(form.colors.vars.prototype)|e('html_attr') }}">
+                <div class="admin-challenge-colors js-challenge-items">
+                    {% for color in form.colors %}
+                        <div class="admin-challenge-color js-challenge-row">
+                            {{ form_widget(color) }}
+                            <button type="button" class="admin-button admin-button--secondary js-challenge-remove" aria-label="Retirer la couleur"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="admin-button admin-button--secondary js-challenge-add" type="button">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i> Ajouter une couleur
+                </button>
+            </div>
+        </section>
+
+        <section class="admin-challenge-section">
+            <h2>Plateformes de publication</h2>
+            <p>Les cartes s'afficheront pendant les trois jours suivant la fin de la JAM.</p>
+            {{ form_errors(form.platforms) }}
+            <div class="js-challenge-collection" data-max="12" data-index="{{ form.platforms|length }}"
+                 data-prototype="{{ form_widget(form.platforms.vars.prototype)|e('html_attr') }}">
+                <div class="admin-challenge-platforms js-challenge-items">
+                    {% for platform in form.platforms %}
+                        <div class="admin-challenge-platform js-challenge-row">
+                            <div class="admin-form-row">
+                                {{ form_row(platform.name) }}
+                                {{ form_row(platform.url) }}
+                                {{ form_row(platform.icon) }}
+                            </div>
+                            <button type="button" class="admin-button admin-button--secondary js-challenge-remove">Retirer</button>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="admin-button admin-button--secondary js-challenge-add" type="button">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i> Ajouter une plateforme
+                </button>
+            </div>
+        </section>
+
+        {{ form_row(form.enabled) }}
+        <div class="admin-form-actions">
+            <button class="admin-button admin-button--primary" type="submit">Enregistrer</button>
+            <a class="admin-button admin-button--secondary" href="{{ path('admin_challenges_index') }}">Annuler</a>
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

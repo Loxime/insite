@@ -79,3 +79,10 @@ if (document.querySelector('.js-jam-form')) {
     );
 }
 
+
+if (document.querySelector('.js-challenge-form')) {
+    void import('./admin/jam-challenge-form').then(({ initJamChallengeForm }) => initJamChallengeForm());
+}
+if (document.querySelector('.js-jam-countdown')) {
+    void import('./ui/jam-countdown').then(({ initJamCountdown }) => initJamCountdown());
+}

@@ -1,0 +1,125 @@
+/* Back-office: navigation par rubriques et onglets */
+.admin-sidebar__navigation {
+    align-content: start;
+}
+
+.admin-sidebar__link {
+    gap: 12px;
+    text-decoration: none;
+}
+
+.admin-sidebar__link i {
+    width: 20px;
+    text-align: center;
+}
+
+.admin-sidebar__quick-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.admin-sidebar__icon-button {
+    display: inline-flex;
+    flex: 1 1 0;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    color: var(--color-on-primary);
+    border: 1px solid rgba(245, 239, 237, .4);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.admin-sidebar__icon-button:hover,
+.admin-sidebar__icon-button:focus-visible {
+    color: var(--color-primary);
+    background: var(--color-on-primary);
+}
+
+.admin-section-tabs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: min(100%, 1400px);
+    margin: 0 auto 32px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.admin-section-tabs__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 8px 16px;
+    color: var(--color-text);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.admin-section-tabs__link:hover {
+    color: var(--color-primary);
+    background: rgba(34, 146, 164, .08);
+}
+
+.admin-section-tabs__link.is-active {
+    color: var(--color-on-primary);
+    background: var(--color-primary);
+}
+
+/* Garder les actions sur une ligne, meme sous 760px. */
+.admin .admin-content table .admin-table__actions {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    width: max-content;
+    white-space: nowrap;
+}
+
+.admin .admin-content table .admin-table__actions > * {
+    flex: 0 0 auto;
+}
+
+.admin .admin-content table .admin-table__actions form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.admin .admin-content .admin-form-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+@media (max-width: 800px) {
+    .admin-sidebar__navigation {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .admin-sidebar__bottom {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .admin-sidebar__quick-actions {
+        min-width: 112px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-sidebar__navigation {
+        grid-template-columns: 1fr 1fr;
+    }
+    .admin-section-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    .admin-section-tabs__link {
+        white-space: nowrap;
+    }
+}
