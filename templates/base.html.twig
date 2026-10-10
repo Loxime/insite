@@ -15,6 +15,8 @@
     >
 
     <title>{% block title %}INQUEST{% endblock %}</title>
+    {% block canonical %}{% endblock %}
+    {% block social_meta %}{% endblock %}
 
     {% block stylesheets %}
         {{ reprise_entry_link_tags('app') }}

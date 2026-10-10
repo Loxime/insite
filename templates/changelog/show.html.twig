@@ -2,10 +2,23 @@
 
 {% block title %}
     {% if entry %}
-        {{ entry.title }} — Changelog
+        {{ entry.title }} — Version {{ entry.version }} | INQUEST
     {% else %}
         Changelog — INQUEST
     {% endif %}
+{% endblock %}
+
+{% block meta_description %}{% if entry %}{{ ('Version ' ~ entry.version ~ ' : ' ~ (entry.text|striptags|replace({"\n": " ", "\r": " ", "\t": " "})|trim))|slice(0, 155) }}{% else %}Découvrez les notes de versions et les améliorations d’INQUEST.{% endif %}{% endblock %}
+
+{% block canonical %}
+    <link rel="canonical" href="{{ absolute_url(entry ? path('changelog_show', {version: entry.version}) : path('changelog_index')) }}">
+{% endblock %}
+
+{% block social_meta %}
+    <meta property="og:type" content="{{ entry ? 'article' : 'website' }}">
+    <meta property="og:title" content="{{ block('title')|trim }}">
+    <meta property="og:description" content="{{ block('meta_description')|trim }}">
+    <meta property="og:url" content="{{ absolute_url(entry ? path('changelog_show', {version: entry.version}) : path('changelog_index')) }}">
 {% endblock %}
 
 {% block page_header %}{% endblock %}
