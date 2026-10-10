@@ -29,6 +29,13 @@
 
 <body>
     {% include 'layout/_toasts.html.twig' %}
+    {% set activeBanner = active_banner_announcement() %}
+    {% if activeBanner %}
+        {% include 'layout/_announcement_banner.html.twig' with {
+            banner: activeBanner
+        } only %}
+    {% endif %}
+
     {% include 'layout/_header.html.twig' %}
 
     <main class="page">

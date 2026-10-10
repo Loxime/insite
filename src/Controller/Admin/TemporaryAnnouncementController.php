@@ -34,7 +34,7 @@ final class TemporaryAnnouncementController extends AbstractController
             ->addOrderBy('announcement.id', 'DESC');
 
         if ($search !== '') {
-            $fields = ['announcement.buttonLabel', 'announcement.buttonUrl'];
+            $fields = ['announcement.bannerText', 'announcement.buttonLabel', 'announcement.buttonUrl'];
             $conditions = array_map(
                 static fn (string $field): string => 'LOWER(' . $field . ') LIKE :search',
                 $fields,
@@ -71,6 +71,7 @@ final class TemporaryAnnouncementController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->validateSchedule($form, $announcement);
+            $this->validateContent($form, $announcement);
 
             if ($form->isValid()) {
                 $image = $form->get('image')->getData();
@@ -126,6 +127,7 @@ final class TemporaryAnnouncementController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->validateSchedule($form, $announcement);
+            $this->validateContent($form, $announcement);
 
             if ($form->isValid()) {
                 $previousKey = $announcement->getImageKey();
@@ -202,6 +204,43 @@ final class TemporaryAnnouncementController extends AbstractController
         $this->addFlash('success', 'Annonce supprimée.');
 
         return $this->redirectToRoute('admin_announcements_index');
+    }
+
+    private function validateContent(
+        FormInterface $form,
+        TemporaryAnnouncement $announcement,
+    ): void {
+        if ($announcement->getType() === TemporaryAnnouncement::TYPE_BANNER) {
+            if (trim((string) $announcement->getBannerText()) === '') {
+                $form->get('bannerText')->addError(
+                    new FormError('Le texte du bandeau est obligatoire.'),
+                );
+            }
+
+            return;
+        }
+
+        if (trim($announcement->getButtonLabel()) === '') {
+            $form->get('buttonLabel')->addError(
+                new FormError('Le texte du bouton est obligatoire.'),
+            );
+        }
+
+        $image = $form->get('image')->getData();
+        $removeImage = (bool) $form->get('removeImage')->getData();
+
+        if (
+            $announcement->isEnabled()
+            && !($image instanceof UploadedFile)
+            && (
+                $announcement->getImageKey() === null
+                || $removeImage
+            )
+        ) {
+            $form->get('image')->addError(
+                new FormError('Une popup activée doit posséder une image.'),
+            );
+        }
     }
 
     private function validateSchedule(

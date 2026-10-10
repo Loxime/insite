@@ -7,6 +7,7 @@ namespace App\Form;
 use App\Entity\TemporaryAnnouncement;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,11 +22,30 @@ final class TemporaryAnnouncementType extends AbstractType
         array $options,
     ): void {
         $builder
+            ->add('type', ChoiceType::class, [
+                'label' => 'Type d’annonce',
+                'choices' => [
+                    'Popup' => TemporaryAnnouncement::TYPE_POPUP,
+                    'Banner' => TemporaryAnnouncement::TYPE_BANNER,
+                ],
+            ])
+            ->add('bannerText', TextType::class, [
+                'label' => 'Texte du bandeau',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Découvrez notre prochain événement !',
+                    'maxlength' => 255,
+                ],
+                'constraints' => [
+                    new Assert\Length(max: 255),
+                ],
+            ])
             ->add('buttonLabel', TextType::class, [
                 'label' => 'Texte du bouton',
                 'attr' => ['placeholder' => 'Découvrir le jeu'],
+                'required' => false,
+                'empty_data' => '',
                 'constraints' => [
-                    new Assert\NotBlank(),
                     new Assert\Length(max: 120),
                 ],
             ])

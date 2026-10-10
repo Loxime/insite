@@ -8,10 +8,30 @@
         <h1 class="admin-page__title">{{ title }}</h1>
     </header>
 
-    {{ form_start(form, {attr: {class: 'admin-post-form'}}) }}
+    {{ form_start(form, {attr: {class: 'admin-post-form js-announcement-form'}}) }}
         {{ form_errors(form) }}
 
-        <div class="admin-form-row">
+        <div class="admin-form-field">
+            {{ form_label(form.type) }}
+            {{ form_widget(form.type, {
+                attr: {'data-announcement-type': '1'}
+            }) }}
+            {{ form_errors(form.type) }}
+        </div>
+
+        <section class="admin-announcement-fields"
+                 data-announcement-section="banner"
+                 {% if form.type.vars.value != 'banner' %}hidden{% endif %}>
+            <div class="admin-form-field">
+                {{ form_label(form.bannerText) }}
+                {{ form_widget(form.bannerText) }}
+                {{ form_errors(form.bannerText) }}
+            </div>
+        </section>
+
+        <section class="admin-announcement-fields"
+                 data-announcement-section="popup"
+                 {% if form.type.vars.value == 'banner' %}hidden{% endif %}>
             <div class="admin-form-field">
                 {{ form_label(form.buttonLabel) }}
                 {{ form_widget(form.buttonLabel) }}
@@ -19,35 +39,35 @@
             </div>
 
             <div class="admin-form-field">
-                {{ form_label(form.buttonUrl) }}
-                {{ form_widget(form.buttonUrl) }}
-                {{ form_errors(form.buttonUrl) }}
+                {{ form_label(form.image) }}
+                {{ form_widget(form.image) }}
+                {{ form_help(form.image) }}
+                {{ form_errors(form.image) }}
+
+                {% if announcement.imageKey %}
+                    <div class="admin-post-image-preview">
+                        <img src="{{ path('media_show', {
+                            key: announcement.imageKey
+                        }) }}"
+                             alt="Image actuelle de l’annonce"
+                             class="admin-announcement-preview">
+                    </div>
+
+                    <div class="admin-form-checkbox">
+                        {{ form_widget(form.removeImage) }}
+                        {{ form_label(form.removeImage) }}
+                        {{ form_errors(form.removeImage) }}
+                    </div>
+                {% else %}
+                    {% do form.removeImage.setRendered() %}
+                {% endif %}
             </div>
-        </div>
+        </section>
 
         <div class="admin-form-field">
-            {{ form_label(form.image) }}
-            {{ form_widget(form.image) }}
-            {{ form_help(form.image) }}
-            {{ form_errors(form.image) }}
-
-            {% if announcement.imageKey %}
-                <div class="admin-post-image-preview">
-                    <img src="{{ path('media_show', {
-                             key: announcement.imageKey
-                         }) }}"
-                         alt="Image actuelle de l’annonce"
-                         class="admin-announcement-preview">
-                </div>
-
-                <div class="admin-form-checkbox">
-                    {{ form_widget(form.removeImage) }}
-                    {{ form_label(form.removeImage) }}
-                    {{ form_errors(form.removeImage) }}
-                </div>
-            {% else %}
-                {% do form.removeImage.setRendered() %}
-            {% endif %}
+            {{ form_label(form.buttonUrl) }}
+            {{ form_widget(form.buttonUrl) }}
+            {{ form_errors(form.buttonUrl) }}
         </div>
 
         <div class="admin-form-row">

@@ -552,3 +552,39 @@
     margin: 0;
     cursor: pointer;
 }
+
+/* Formulaire d'annonces : Banner / Popup */
+
+.admin-post-form .admin-announcement-fields {
+    display: grid;
+    gap: 24px;
+    min-width: 0;
+}
+
+.admin-post-form .admin-announcement-fields[hidden] {
+    display: none !important;
+}
+
+
+/* Tableau des annonces */
+
+.admin-announcement-thumbnail {
+    display: block;
+    width: 104px;
+    height: 64px;
+    margin-bottom: 8px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+}
+
+.admin-announcement-list__detail {
+    display: block;
+    max-width: 320px;
+    margin-top: 6px;
+    color: var(--color-text-muted);
+    overflow-wrap: anywhere;
+}
+
+.admin .admin-content table .admin-action--danger {
+    background: var(--color-danger) !important;
+}

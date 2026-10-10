@@ -22,18 +22,23 @@
         {% endfor %}
     {% endfor %}
 
-    <form method="get" action="{{ path('admin_announcements_index') }}"
+    <form method="get"
+          action="{{ path('admin_announcements_index') }}"
           class="admin-search">
         <label for="announcement-search" class="admin-search__label">
             Rechercher
         </label>
+
         <div class="admin-search__row">
-            <input type="search" id="announcement-search" name="q"
+            <input type="search"
+                   id="announcement-search"
+                   name="q"
                    value="{{ search }}"
-                   placeholder="Rechercher par bouton ou URL..."
+                   placeholder="Rechercher une annonce..."
                    class="admin-search__input">
 
-            <button type="submit" class="admin-button admin-button--primary">
+            <button class="admin-button admin-button--primary"
+                    type="submit">
                 Rechercher
             </button>
 
@@ -50,76 +55,125 @@
         <table class="admin-table">
             <thead>
                 <tr>
-                    <th>Image</th>
-                    <th>Bouton</th>
+                    <th>Type</th>
+                    <th>Contenu</th>
                     <th>Début</th>
                     <th>Fin</th>
                     <th>Statut</th>
                     <th class="admin-table__actions-heading">Actions</th>
                 </tr>
             </thead>
+
             <tbody>
                 {% for announcement in announcements %}
                     <tr>
                         <td>
-                            {% if announcement.imageKey %}
-                                <img class="admin-announcement-thumbnail"
-                                     src="{{ path('media_show', {
-                                         key: announcement.imageKey
-                                     }) }}"
-                                     alt="Aperçu de l’annonce"
-                                     width="104" height="64" loading="lazy">
-                            {% else %}
-                                —
-                            {% endif %}
+                            <strong>
+                                {{ announcement.type == 'banner'
+                                    ? 'Banner'
+                                    : 'Popup' }}
+                            </strong>
                         </td>
-                        <td><strong>{{ announcement.buttonLabel }}</strong></td>
+
+                        <td>
+                            {% if announcement.type == 'banner' %}
+                                <strong>{{ announcement.bannerText ?: '—' }}</strong>
+                            {% else %}
+                                {% if announcement.imageKey %}
+                                    <img
+                                        class="admin-announcement-thumbnail"
+                                        src="{{ path('media_show', {
+                                            key: announcement.imageKey
+                                        }) }}"
+                                        alt="Aperçu de l’annonce"
+                                        width="104"
+                                        height="64"
+                                        loading="lazy">
+                                {% endif %}
+
+                                <strong>
+                                    {{ announcement.buttonLabel ?: '—' }}
+                                </strong>
+                            {% endif %}
+
+                            <small class="admin-announcement-list__detail">
+                                {{ announcement.buttonUrl }}
+                            </small>
+                        </td>
+
                         <td>
                             {{ announcement.startsAt
                                 ? announcement.startsAt|date('d/m/Y H:i', 'Europe/Paris')
                                 : 'Immédiat' }}
                         </td>
+
                         <td>
                             {{ announcement.endsAt
                                 ? announcement.endsAt|date('d/m/Y H:i', 'Europe/Paris')
                                 : 'Sans échéance' }}
                         </td>
+
                         <td>
                             {% if not announcement.enabled %}
                                 <span class="admin-status admin-status--draft">
                                     Désactivée
                                 </span>
-                            {% elseif not announcement.imageKey %}
+                            {% elseif announcement.type == 'banner'
+                                and not announcement.bannerText %}
+                                <span class="admin-status admin-status--draft">
+                                    Texte manquant
+                                </span>
+                            {% elseif announcement.type == 'popup'
+                                and not announcement.imageKey %}
                                 <span class="admin-status admin-status--draft">
                                     Image manquante
                                 </span>
+                            {% elseif announcement.startsAt
+                                and announcement.startsAt > date() %}
+                                <span class="admin-status admin-status--draft">
+                                    Programmée
+                                </span>
+                            {% elseif announcement.endsAt
+                                and announcement.endsAt <= date() %}
+                                <span class="admin-status admin-status--archived">
+                                    Terminée
+                                </span>
                             {% else %}
                                 <span class="admin-status admin-status--published">
-                                    Activée
+                                    Active
                                 </span>
                             {% endif %}
                         </td>
+
                         <td>
                             <div class="admin-table__actions">
                                 <a href="{{ path('admin_announcements_edit', {
                                     id: announcement.id
                                 }) }}"
                                    class="admin-action"
-                                   aria-label="Modifier" title="Modifier">
-                                    <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                                   aria-label="Modifier"
+                                   title="Modifier">
+                                    <i class="fa-solid fa-pen"
+                                       aria-hidden="true"></i>
                                 </a>
 
                                 <form method="post"
                                       action="{{ path('admin_announcements_delete', {
                                           id: announcement.id
                                       }) }}"
-                                      onsubmit="return confirm('Supprimer définitivement cette annonce ?');">
-                                    <input type="hidden" name="_token"
-                                           value="{{ csrf_token('delete-announcement-' ~ announcement.id) }}">
+                                      class="js-announcement-delete">
+                                    <input type="hidden"
+                                           name="_token"
+                                           value="{{ csrf_token(
+                                               'delete-announcement-' ~ announcement.id
+                                           ) }}">
+
                                     <button type="submit"
                                             class="admin-action admin-action--danger"
-                                            aria-label="Supprimer" title="Supprimer">
-                                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                                            aria-label="Supprimer"
+                                            title="Supprimer">
+                                        <i class="fa-solid fa-trash"
+                                           aria-hidden="true"></i>
                                     </button>
                                 </form>
                             </div>
@@ -137,7 +191,8 @@
     </div>
 
     {% if announcements.pageCount > 1 %}
-        <nav class="admin-pagination" aria-label="Pagination des annonces">
+        <nav class="admin-pagination"
+             aria-label="Pagination des annonces">
             {{ knp_pagination_render(announcements) }}
         </nav>
     {% endif %}

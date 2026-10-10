@@ -16,6 +16,15 @@ class TemporaryAnnouncement
     #[ORM\Column]
     private ?int $id = null;
 
+    public const TYPE_POPUP = 'popup';
+    public const TYPE_BANNER = 'banner';
+
+    #[ORM\Column(length: 12, options: ['default' => 'popup'])]
+    private string $type = self::TYPE_POPUP;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bannerText = null;
+
     #[ORM\Column(length: 512, nullable: true)]
     private ?string $imageKey = null;
 
@@ -51,6 +60,41 @@ class TemporaryAnnouncement
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        if (!in_array(
+            $type,
+            [self::TYPE_POPUP, self::TYPE_BANNER],
+            true,
+        )) {
+            throw new \InvalidArgumentException(
+                'Type d’annonce invalide.',
+            );
+        }
+
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getBannerText(): ?string
+    {
+        return $this->bannerText;
+    }
+
+    public function setBannerText(?string $text): static
+    {
+        $text = trim((string) $text);
+        $this->bannerText = $text === '' ? null : $text;
+
+        return $this;
     }
 
     public function getImageKey(): ?string

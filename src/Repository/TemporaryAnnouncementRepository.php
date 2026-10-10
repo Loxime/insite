@@ -18,15 +18,40 @@ final class TemporaryAnnouncementRepository extends ServiceEntityRepository
     public function findActive(
         \DateTimeImmutable $now,
     ): ?TemporaryAnnouncement {
+        return $this->findActiveByType(
+            $now,
+            TemporaryAnnouncement::TYPE_POPUP,
+        );
+    }
+
+    public function findActiveBanner(
+        \DateTimeImmutable $now,
+    ): ?TemporaryAnnouncement {
+        return $this->findActiveByType(
+            $now,
+            TemporaryAnnouncement::TYPE_BANNER,
+        );
+    }
+
+    private function findActiveByType(
+        \DateTimeImmutable $now,
+        string $type,
+    ): ?TemporaryAnnouncement {
+        $requiredContent = $type === TemporaryAnnouncement::TYPE_POPUP
+            ? 'announcement.imageKey IS NOT NULL'
+            : 'announcement.bannerText IS NOT NULL';
+
         return $this->createQueryBuilder('announcement')
+            ->andWhere('announcement.type = :type')
             ->andWhere('announcement.enabled = :enabled')
-            ->andWhere('announcement.imageKey IS NOT NULL')
+            ->andWhere($requiredContent)
             ->andWhere(
                 '(announcement.startsAt IS NULL OR announcement.startsAt <= :now)'
             )
             ->andWhere(
                 '(announcement.endsAt IS NULL OR announcement.endsAt > :now)'
             )
+            ->setParameter('type', $type)
             ->setParameter('enabled', true)
             ->setParameter('now', $now)
             ->orderBy('announcement.createdAt', 'DESC')

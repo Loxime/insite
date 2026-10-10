@@ -23,12 +23,22 @@ final class TemporaryAnnouncementExtension extends AbstractExtension
                 'active_temporary_announcement',
                 [$this, 'getActiveAnnouncement'],
             ),
+            new TwigFunction(
+                'active_banner_announcement',
+                [$this, 'getActiveBanner'],
+            ),
         ];
     }
 
     public function getActiveAnnouncement(): ?TemporaryAnnouncement
     {
         return $this->repository->findActive(
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC')),
+        );
+    }
+    public function getActiveBanner(): ?TemporaryAnnouncement
+    {
+        return $this->repository->findActiveBanner(
             new \DateTimeImmutable('now', new \DateTimeZone('UTC')),
         );
     }

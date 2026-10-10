@@ -7,6 +7,22 @@ document.addEventListener('DOMContentLoaded', (): void => {
     document.documentElement.classList.add('js-enabled');
 
     initToasts();
+    if (document.querySelector('.js-announcement-delete')) {
+        void import('./admin/announcement-delete').then(
+            ({ initAnnouncementDelete }) => {
+                initAnnouncementDelete();
+            },
+        );
+    }
+
+    if (document.querySelector('.js-announcement-form')) {
+        void import('./admin/announcement-form').then(
+            ({ initAnnouncementForm }) => {
+                initAnnouncementForm();
+            },
+        );
+    }
+
 
     if (document.querySelector('.js-announcement-dialog')) {
         void import('./ui/announcement-popup').then(
