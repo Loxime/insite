@@ -22,10 +22,10 @@ final class MinioStorage
         #[Autowire('%env(MINIO_BUCKET)%')]
         private readonly string $bucket,
 
-        #[Autowire('%env(MINIO_ROOT_USER)%')]
+        #[Autowire('%env(MINIO_ACCESS_KEY)%')]
         string $accessKey,
 
-        #[Autowire('%env(MINIO_ROOT_PASSWORD)%')]
+        #[Autowire('%env(MINIO_SECRET_KEY)%')]
         string $secretKey,
     ) {
         $this->client = new S3Client([
