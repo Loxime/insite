@@ -8,6 +8,7 @@ use App\Entity\ChangelogEntry;
 use App\Form\ChangelogEntryType;
 use App\Repository\ChangelogEntryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
@@ -20,13 +21,34 @@ final class ChangelogController extends AbstractController
 {
     #[Route('', name: 'index', methods: ['GET'])]
     public function index(
+        Request $request,
         ChangelogEntryRepository $repository,
+        PaginatorInterface $paginator,
     ): Response {
+        $search = mb_substr(trim($request->query->getString('q')), 0, 120);
+
+        $query = $repository->createQueryBuilder('entry')
+            ->orderBy('entry.updatedAt', 'DESC')
+            ->addOrderBy('entry.id', 'DESC');
+
+        if ($search !== '') {
+            $fields = ['entry.title', 'entry.version'];
+            $conditions = array_map(
+                static fn (string $field): string => 'LOWER(' . $field . ') LIKE :search',
+                $fields,
+            );
+
+            $query->andWhere(implode(' OR ', $conditions))
+                ->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
         return $this->render('admin/changelog/index.html.twig', [
-            'entries' => $repository->findBy(
-                [],
-                ['updatedAt' => 'DESC', 'id' => 'DESC'],
+            'entries' => $paginator->paginate(
+                $query,
+                max(1, $request->query->getInt('page', 1)),
+                10,
             ),
+            'search' => $search,
         ]);
     }
 

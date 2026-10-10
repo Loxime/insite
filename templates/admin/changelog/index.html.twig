@@ -3,88 +3,144 @@
 {% block title %}Changelog — Administration{% endblock %}
 
 {% block body %}
-    <section class="admin-changelog">
-        <header class="admin-changelog__header">
-            <div>
-                <h1>Changelog</h1>
-                <p>Gestion des notes de patch et des versions.</p>
+<div class="admin-page">
+    <header class="admin-page__header admin-page__header--actions">
+        <h1 class="admin-page__title">Changelog</h1>
+
+        <a href="{{ path('admin_changelog_new') }}"
+           class="admin-button admin-button--primary">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+            Créer
+        </a>
+    </header>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="admin-flash admin-flash--{{ label }}">
+                {{ message }}
             </div>
+        {% endfor %}
+    {% endfor %}
 
-            <a
-                href="{{ path('admin_changelog_new') }}"
-                class="admin-changelog__create"
-            >
-                Ajouter une note
-            </a>
-        </header>
+    <form method="get" action="{{ path('admin_changelog_index') }}"
+          class="admin-search">
+        <label for="changelog-search" class="admin-search__label">
+            Rechercher
+        </label>
+        <div class="admin-search__row">
+            <input type="search" id="changelog-search" name="q"
+                   value="{{ search }}"
+                   placeholder="Rechercher par titre ou version..."
+                   class="admin-search__input">
 
-        {% if entries is empty %}
-            <p>Aucune note de patch enregistrée.</p>
-        {% else %}
-            <div class="admin-changelog__table-wrapper">
-                <table class="admin-changelog__table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Version</th>
-                            <th scope="col">Titre</th>
-                            <th scope="col">Modification</th>
-                            <th scope="col">Publication</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in entries %}
-                            <tr>
-                                <td>{{ entry.version }}</td>
-                                <td>{{ entry.title }}</td>
-                                <td>{{ entry.updatedAt|date('d/m/Y H:i') }}</td>
-                                <td>
-                                    {% if entry.publishedAt %}
-                                        {{ entry.publishedAt|date('d/m/Y H:i') }}
-                                    {% else %}
-                                        Brouillon
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <a href="{{ path('admin_changelog_edit', {id: entry.id}) }}" class="admin-action" aria-label="Modifier" title="Modifier">
-                                        <i class="fa-solid fa-pen" aria-hidden="true"></i>
+            <button type="submit" class="admin-button admin-button--primary">
+                Rechercher
+            </button>
+
+            {% if search %}
+                <a href="{{ path('admin_changelog_index') }}"
+                   class="admin-button admin-button--secondary">
+                    Réinitialiser
+                </a>
+            {% endif %}
+        </div>
+    </form>
+
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Version</th>
+                    <th>Titre</th>
+                    <th>Modification</th>
+                    <th>Statut</th>
+                    <th class="admin-table__actions-heading">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                    <tr>
+                        <td><strong>{{ entry.version }}</strong></td>
+                        <td>{{ entry.title }}</td>
+                        <td>{{ entry.updatedAt|date('d/m/Y H:i', 'Europe/Paris') }}</td>
+                        <td>
+                            {% if entry.publishedAt %}
+                                <span class="admin-status admin-status--published">
+                                    Publié
+                                </span>
+                            {% else %}
+                                <span class="admin-status admin-status--draft">
+                                    Brouillon
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="admin-table__actions">
+                                {% if entry.publishedAt %}
+                                    <a href="{{ path('changelog_show', {
+                                        version: entry.version
+                                    }) }}"
+                                       class="admin-action admin-action--view"
+                                       target="_blank"
+                                       rel="noopener"
+                                       aria-label="Voir"
+                                       title="Voir">
+                                        <i class="fa-solid fa-eye" aria-hidden="true"></i>
                                     </a>
+                                {% endif %}
 
-                                    {% if not entry.publishedAt %}
-                                        <form
-                                            action="{{ path('admin_changelog_publish', {id: entry.id}) }}"
-                                            method="post"
-                                        >
-                                            <input
-                                                type="hidden"
-                                                name="_token"
-                                                value="{{ csrf_token('publish-changelog-' ~ entry.id) }}"
-                                            >
-                                            <button type="submit" class="admin-action" aria-label="Publier" title="Publier">
-                                                <i class="fa-solid fa-globe" aria-hidden="true"></i>
-                                            </button>
-                                        </form>
-                                    {% else %}
-                                        <form
-                                            action="{{ path('admin_changelog_unpublish', {id: entry.id}) }}"
-                                            method="post"
-                                        >
-                                            <input
-                                                type="hidden"
-                                                name="_token"
-                                                value="{{ csrf_token('unpublish-changelog-' ~ entry.id) }}"
-                                            >
-                                            <button type="submit">
-                                                Dépublier
-                                            </button>
-                                        </form>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        {% endif %}
-    </section>
+                                <a href="{{ path('admin_changelog_edit', {
+                                    id: entry.id
+                                }) }}"
+                                   class="admin-action"
+                                   aria-label="Modifier"
+                                   title="Modifier">
+                                    <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                                </a>
+
+                                {% if not entry.publishedAt %}
+                                    <form method="post"
+                                          action="{{ path('admin_changelog_publish', {
+                                              id: entry.id
+                                          }) }}">
+                                        <input type="hidden" name="_token"
+                                               value="{{ csrf_token('publish-changelog-' ~ entry.id) }}">
+                                        <button type="submit" class="admin-action"
+                                                aria-label="Publier" title="Publier">
+                                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form method="post"
+                                          action="{{ path('admin_changelog_unpublish', {
+                                              id: entry.id
+                                          }) }}">
+                                        <input type="hidden" name="_token"
+                                               value="{{ csrf_token('unpublish-changelog-' ~ entry.id) }}">
+                                        <button type="submit" class="admin-action"
+                                                aria-label="Dépublier" title="Dépublier">
+                                            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="admin-table__empty">
+                            Aucune note de patch trouvée.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if entries.pageCount > 1 %}
+        <nav class="admin-pagination" aria-label="Pagination du changelog">
+            {{ knp_pagination_render(entries) }}
+        </nav>
+    {% endif %}
+</div>
 {% endblock %}

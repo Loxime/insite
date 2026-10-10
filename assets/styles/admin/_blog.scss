@@ -523,3 +523,32 @@
     margin-top: 8px;
     padding: 10px 12px;
 }
+
+/* Changelog et annonces : composants partagés avec Blog */
+
+.admin-announcement-thumbnail {
+    display: block;
+    width: 104px;
+    height: 64px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+}
+
+.admin-announcement-preview {
+    display: block;
+    width: min(100%, 420px);
+    height: auto;
+    border-radius: var(--radius-sm);
+}
+
+.admin-form-checkbox {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.admin-form-checkbox label {
+    margin: 0;
+    cursor: pointer;
+}

@@ -3,36 +3,50 @@
 {% block title %}{{ title }} — Administration{% endblock %}
 
 {% block body %}
-    <section class="admin-changelog">
-        <header class="admin-changelog__header">
-            <div>
-                <h1>{{ title }}</h1>
-                <p>
-                    {% if entry.publishedAt %}
-                        Publiée le {{ entry.publishedAt|date('d/m/Y à H:i') }}
-                    {% else %}
-                        Brouillon — non publié
-                    {% endif %}
-                </p>
+<div class="admin-page">
+    <header class="admin-page__header">
+        <h1 class="admin-page__title">{{ title }}</h1>
+        <p class="admin-page__description">
+            {% if entry.publishedAt %}
+                Publiée le {{ entry.publishedAt|date('d/m/Y à H:i', 'Europe/Paris') }}
+            {% else %}
+                Brouillon — non publié
+            {% endif %}
+        </p>
+    </header>
+
+    {{ form_start(form, {attr: {class: 'admin-post-form'}}) }}
+        {{ form_errors(form) }}
+
+        <div class="admin-form-row">
+            <div class="admin-form-field">
+                {{ form_label(form.version) }}
+                {{ form_widget(form.version) }}
+                {{ form_errors(form.version) }}
             </div>
-        </header>
 
-        {{ form_start(form) }}
-            {{ form_errors(form) }}
-
-            {{ form_row(form.version) }}
-            {{ form_row(form.title) }}
-            {{ form_row(form.text) }}
-
-            <div class="admin-changelog__actions">
-                <a href="{{ path('admin_changelog_index') }}">
-                    Annuler
-                </a>
-
-                <button type="submit">
-                    Enregistrer
-                </button>
+            <div class="admin-form-field">
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+                {{ form_errors(form.title) }}
             </div>
-        {{ form_end(form) }}
-    </section>
+        </div>
+
+        <div class="admin-form-field">
+            {{ form_label(form.text) }}
+            {{ form_widget(form.text) }}
+            {{ form_errors(form.text) }}
+        </div>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-button admin-button--primary">
+                Enregistrer
+            </button>
+            <a href="{{ path('admin_changelog_index') }}"
+               class="admin-button admin-button--secondary">
+                Annuler
+            </a>
+        </div>
+    {{ form_end(form) }}
+</div>
 {% endblock %}

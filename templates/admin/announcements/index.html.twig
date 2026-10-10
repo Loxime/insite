@@ -3,104 +3,143 @@
 {% block title %}Annonces — Administration{% endblock %}
 
 {% block body %}
-    <section class="admin-announcements">
-        <header class="admin-announcements__header">
-            <h1>Annonces temporaires</h1>
+<div class="admin-page">
+    <header class="admin-page__header admin-page__header--actions">
+        <h1 class="admin-page__title">Annonces</h1>
 
-            <a href="{{ path('admin_announcements_new') }}">
-                Ajouter une annonce
-            </a>
-        </header>
+        <a href="{{ path('admin_announcements_new') }}"
+           class="admin-button admin-button--primary">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+            Créer
+        </a>
+    </header>
 
-        {% if announcements is empty %}
-            <p>Aucune annonce enregistrée.</p>
-        {% else %}
-            <div class="admin-announcements__table-wrapper">
-                <table class="admin-announcements__table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Image</th>
-                            <th scope="col">Bouton</th>
-                            <th scope="col">Début</th>
-                            <th scope="col">Fin</th>
-                            <th scope="col">État</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for announcement in announcements %}
-                            <tr>
-                                <td>
-                                    {% if announcement.imageKey %}
-                                        <img
-                                            src="{{ path('media_show', {
-                                                key: announcement.imageKey
-                                            }) }}"
-                                            alt="Aperçu de l’annonce"
-                                            width="104"
-                                            height="64"
-                                            loading="lazy"
-                                            style="object-fit: cover; border-radius: 6px;"
-                                        >
-                                    {% else %}
-                                        —
-                                    {% endif %}
-                                </td>
-                                <td>{{ announcement.buttonLabel }}</td>
-
-                                <td>
-                                    {{ announcement.startsAt
-                                        ? announcement.startsAt|date('d/m/Y H:i', 'Europe/Paris')
-                                        : 'Immédiat'
-                                    }}
-                                </td>
-
-                                <td>
-                                    {{ announcement.endsAt
-                                        ? announcement.endsAt|date('d/m/Y H:i', 'Europe/Paris')
-                                        : 'Sans échéance'
-                                    }}
-                                </td>
-
-                                <td>
-                                    {% if not announcement.enabled %}
-                                        Désactivée
-                                    {% elseif not announcement.imageKey %}
-                                        Image manquante
-                                    {% else %}
-                                        Activée
-                                    {% endif %}
-                                </td>
-
-                                <td>
-                                    <a href="{{ path('admin_announcements_edit', {
-                                        id: announcement.id
-                                    }) }}" class="admin-action" aria-label="Modifier" title="Modifier">
-                                        <i class="fa-solid fa-pen" aria-hidden="true"></i>
-                                    </a>
-
-                                    <form
-                                        action="{{ path('admin_announcements_delete', {
-                                            id: announcement.id
-                                        }) }}"
-                                        method="post"
-                                    >
-                                        <input
-                                            type="hidden"
-                                            name="_token"
-                                            value="{{ csrf_token('delete-announcement-' ~ announcement.id) }}"
-                                        >
-
-                                        <button type="submit" class="admin-action" aria-label="Supprimer" title="Supprimer">
-                                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="admin-flash admin-flash--{{ label }}">
+                {{ message }}
             </div>
-        {% endif %}
-    </section>
+        {% endfor %}
+    {% endfor %}
+
+    <form method="get" action="{{ path('admin_announcements_index') }}"
+          class="admin-search">
+        <label for="announcement-search" class="admin-search__label">
+            Rechercher
+        </label>
+        <div class="admin-search__row">
+            <input type="search" id="announcement-search" name="q"
+                   value="{{ search }}"
+                   placeholder="Rechercher par bouton ou URL..."
+                   class="admin-search__input">
+
+            <button type="submit" class="admin-button admin-button--primary">
+                Rechercher
+            </button>
+
+            {% if search %}
+                <a href="{{ path('admin_announcements_index') }}"
+                   class="admin-button admin-button--secondary">
+                    Réinitialiser
+                </a>
+            {% endif %}
+        </div>
+    </form>
+
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Bouton</th>
+                    <th>Début</th>
+                    <th>Fin</th>
+                    <th>Statut</th>
+                    <th class="admin-table__actions-heading">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for announcement in announcements %}
+                    <tr>
+                        <td>
+                            {% if announcement.imageKey %}
+                                <img class="admin-announcement-thumbnail"
+                                     src="{{ path('media_show', {
+                                         key: announcement.imageKey
+                                     }) }}"
+                                     alt="Aperçu de l’annonce"
+                                     width="104" height="64" loading="lazy">
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td><strong>{{ announcement.buttonLabel }}</strong></td>
+                        <td>
+                            {{ announcement.startsAt
+                                ? announcement.startsAt|date('d/m/Y H:i', 'Europe/Paris')
+                                : 'Immédiat' }}
+                        </td>
+                        <td>
+                            {{ announcement.endsAt
+                                ? announcement.endsAt|date('d/m/Y H:i', 'Europe/Paris')
+                                : 'Sans échéance' }}
+                        </td>
+                        <td>
+                            {% if not announcement.enabled %}
+                                <span class="admin-status admin-status--draft">
+                                    Désactivée
+                                </span>
+                            {% elseif not announcement.imageKey %}
+                                <span class="admin-status admin-status--draft">
+                                    Image manquante
+                                </span>
+                            {% else %}
+                                <span class="admin-status admin-status--published">
+                                    Activée
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="admin-table__actions">
+                                <a href="{{ path('admin_announcements_edit', {
+                                    id: announcement.id
+                                }) }}"
+                                   class="admin-action"
+                                   aria-label="Modifier" title="Modifier">
+                                    <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                                </a>
+
+                                <form method="post"
+                                      action="{{ path('admin_announcements_delete', {
+                                          id: announcement.id
+                                      }) }}"
+                                      onsubmit="return confirm('Supprimer définitivement cette annonce ?');">
+                                    <input type="hidden" name="_token"
+                                           value="{{ csrf_token('delete-announcement-' ~ announcement.id) }}">
+                                    <button type="submit"
+                                            class="admin-action admin-action--danger"
+                                            aria-label="Supprimer" title="Supprimer">
+                                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="admin-table__empty">
+                            Aucune annonce trouvée.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if announcements.pageCount > 1 %}
+        <nav class="admin-pagination" aria-label="Pagination des annonces">
+            {{ knp_pagination_render(announcements) }}
+        </nav>
+    {% endif %}
+</div>
 {% endblock %}

@@ -3,52 +3,82 @@
 {% block title %}{{ title }} — Administration{% endblock %}
 
 {% block body %}
-    <section class="admin-announcements">
-        <header class="admin-announcements__header">
-            <h1>{{ title }}</h1>
-        </header>
+<div class="admin-page">
+    <header class="admin-page__header">
+        <h1 class="admin-page__title">{{ title }}</h1>
+    </header>
 
-        {{ form_start(form) }}
-            {{ form_errors(form) }}
+    {{ form_start(form, {attr: {class: 'admin-post-form'}}) }}
+        {{ form_errors(form) }}
 
-            {{ form_row(form.buttonLabel) }}
-            {{ form_row(form.buttonUrl) }}
-
-            <div class="admin-announcements__image">
-                {{ form_row(form.image) }}
-
-                {% if announcement.imageKey %}
-                    <figure>
-                        <img
-                            src="{{ path('media_show', {
-                                key: announcement.imageKey
-                            }) }}"
-                            alt="Image actuelle de l’annonce"
-                            width="420"
-                            style="max-width: 100%; height: auto;"
-                        >
-                    </figure>
-
-                    {{ form_row(form.removeImage) }}
-                {% else %}
-                    {% do form.removeImage.setRendered() %}
-                {% endif %}
+        <div class="admin-form-row">
+            <div class="admin-form-field">
+                {{ form_label(form.buttonLabel) }}
+                {{ form_widget(form.buttonLabel) }}
+                {{ form_errors(form.buttonLabel) }}
             </div>
 
-            {{ form_row(form.startsAt) }}
-            {{ form_row(form.endsAt) }}
-
-            {{ form_row(form.enabled) }}
-
-            <div class="admin-announcements__actions">
-                <a href="{{ path('admin_announcements_index') }}">
-                    Annuler
-                </a>
-
-                <button type="submit">
-                    Enregistrer
-                </button>
+            <div class="admin-form-field">
+                {{ form_label(form.buttonUrl) }}
+                {{ form_widget(form.buttonUrl) }}
+                {{ form_errors(form.buttonUrl) }}
             </div>
-        {{ form_end(form) }}
-    </section>
+        </div>
+
+        <div class="admin-form-field">
+            {{ form_label(form.image) }}
+            {{ form_widget(form.image) }}
+            {{ form_help(form.image) }}
+            {{ form_errors(form.image) }}
+
+            {% if announcement.imageKey %}
+                <div class="admin-post-image-preview">
+                    <img src="{{ path('media_show', {
+                             key: announcement.imageKey
+                         }) }}"
+                         alt="Image actuelle de l’annonce"
+                         class="admin-announcement-preview">
+                </div>
+
+                <div class="admin-form-checkbox">
+                    {{ form_widget(form.removeImage) }}
+                    {{ form_label(form.removeImage) }}
+                    {{ form_errors(form.removeImage) }}
+                </div>
+            {% else %}
+                {% do form.removeImage.setRendered() %}
+            {% endif %}
+        </div>
+
+        <div class="admin-form-row">
+            <div class="admin-form-field">
+                {{ form_label(form.startsAt) }}
+                {{ form_widget(form.startsAt) }}
+                {{ form_errors(form.startsAt) }}
+            </div>
+
+            <div class="admin-form-field">
+                {{ form_label(form.endsAt) }}
+                {{ form_widget(form.endsAt) }}
+                {{ form_errors(form.endsAt) }}
+            </div>
+        </div>
+
+        <div class="admin-form-checkbox">
+            {{ form_widget(form.enabled) }}
+            {{ form_label(form.enabled) }}
+            {{ form_errors(form.enabled) }}
+        </div>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-button admin-button--primary">
+                Enregistrer
+            </button>
+            <a href="{{ path('admin_announcements_index') }}"
+               class="admin-button admin-button--secondary">
+                Annuler
+            </a>
+        </div>
+    {{ form_end(form) }}
+</div>
 {% endblock %}

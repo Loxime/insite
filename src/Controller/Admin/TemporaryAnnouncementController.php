@@ -9,6 +9,7 @@ use App\Form\TemporaryAnnouncementType;
 use App\Repository\TemporaryAnnouncementRepository;
 use App\Service\MinioStorage;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\FormError;
@@ -22,13 +23,34 @@ final class TemporaryAnnouncementController extends AbstractController
 {
     #[Route('', name: 'index', methods: ['GET'])]
     public function index(
+        Request $request,
         TemporaryAnnouncementRepository $repository,
+        PaginatorInterface $paginator,
     ): Response {
+        $search = mb_substr(trim($request->query->getString('q')), 0, 120);
+
+        $query = $repository->createQueryBuilder('announcement')
+            ->orderBy('announcement.createdAt', 'DESC')
+            ->addOrderBy('announcement.id', 'DESC');
+
+        if ($search !== '') {
+            $fields = ['announcement.buttonLabel', 'announcement.buttonUrl'];
+            $conditions = array_map(
+                static fn (string $field): string => 'LOWER(' . $field . ') LIKE :search',
+                $fields,
+            );
+
+            $query->andWhere(implode(' OR ', $conditions))
+                ->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
         return $this->render('admin/announcements/index.html.twig', [
-            'announcements' => $repository->findBy(
-                [],
-                ['createdAt' => 'DESC', 'id' => 'DESC'],
+            'announcements' => $paginator->paginate(
+                $query,
+                max(1, $request->query->getInt('page', 1)),
+                10,
             ),
+            'search' => $search,
         ]);
     }
 
