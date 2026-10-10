@@ -143,6 +143,11 @@ RUN mkdir -p /var/www/html/var/cache/prod /var/www/html/var/log \
     && chmod -R u+rwX /var/www/html/var
 
 # Build the official MinIO client from a pinned release
+
+
+# Ensure application source files are readable by Apache
+RUN chmod -R a+rX /var/www/html/src /var/www/html/templates
+
 FROM golang:1.24-alpine AS minio-mc-builder
 
 RUN apk add --no-cache ca-certificates git
