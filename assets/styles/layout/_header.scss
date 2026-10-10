@@ -398,3 +398,113 @@
         justify-self: center;
     }
 }
+
+
+/* HEADER — COMPACT JAM LINK */
+
+.site-header__right {
+    gap: 14px;
+}
+
+.site-header__jam-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 3px;
+
+    min-width: 0;
+    max-width: 185px;
+    padding: 3px 0 3px 12px;
+
+    background: transparent;
+    border: 0;
+    border-left: 2px solid rgb(255 255 255 / 48%);
+    border-radius: 0;
+    box-shadow: none;
+    color: #ffffff;
+}
+
+.site-header__jam-label {
+    color: rgb(255 255 255 / 76%);
+    font-size: .58rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.site-header__jam-title {
+    display: block;
+    max-width: 160px;
+    overflow: hidden;
+    color: #ffffff;
+    font-size: .79rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-header__jam-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+
+    min-height: 26px;
+    margin-top: 3px;
+    padding: 4px 11px;
+
+    background: #ffffff;
+    color: #197888;
+    border: 1px solid transparent;
+    border-radius: 7px;
+
+    font-size: .72rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    box-shadow: none;
+
+    transition: background 160ms ease,
+                color 160ms ease;
+}
+
+.site-header__jam-button:hover,
+.site-header__jam-button:focus-visible {
+    background: #eaf9fb;
+    color: #125d69;
+}
+
+@media (max-width: 1000px) {
+    .site-header__jam-cta {
+        max-width: 155px;
+        padding-left: 9px;
+    }
+
+    .site-header__jam-title {
+        max-width: 135px;
+        font-size: .75rem;
+    }
+}
+
+@media (max-width: 760px) {
+    .site-header__jam-cta {
+        align-items: center;
+        max-width: 100%;
+        padding: 8px 0 0;
+        border-left: 0;
+        border-top: 1px solid rgb(255 255 255 / 35%);
+    }
+
+    .site-header__jam-title {
+        max-width: 100%;
+        white-space: normal;
+        text-align: center;
+    }
+
+    .site-header__jam-button {
+        align-self: center;
+    }
+}
