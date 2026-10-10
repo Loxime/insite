@@ -16,3 +16,6 @@
 ###< symfony/reprise ###
 .env.*
 !.env.example
+
+# Local production credentials - never commit or build
+deploy/production.env
