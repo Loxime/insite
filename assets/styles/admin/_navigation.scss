@@ -123,3 +123,18 @@
         white-space: nowrap;
     }
 }
+
+
+.admin .admin-content table td .admin-table__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+.admin .admin-content table td .admin-table__actions .admin-action,
+.admin .admin-content table td .admin-table__actions form,
+.admin .admin-content table td .admin-table__actions button {
+    margin: 0;
+    vertical-align: middle;
+}

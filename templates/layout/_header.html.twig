@@ -1,5 +1,6 @@
 {% set site = site_settings() %}
 {% set route = app.request.attributes.get('_route') %}
+{% set activeJam = active_jam_challenge() %}
 
 <header class="site-header">
     <div class="site-header__inner">
@@ -57,6 +58,26 @@
         </nav>
 
         <div class="site-header__right">
+            {% if activeJam %}
+                <div class="site-header__jam-cta">
+                    <span class="site-header__jam-label">
+                        JAM en cours
+                    </span>
+
+                    <strong class="site-header__jam-title">
+                        {{ activeJam.name }}
+                    </strong>
+
+                    <a
+                        href="{{ path('jam_challenge_show', {
+                            slug: activeJam.slug
+                        }) }}"
+                        class="site-header__jam-button"
+                    >
+                        Rejoindre
+                    </a>
+                </div>
+            {% endif %}
 
             {% if site %}
                 <div class="site-header__socials">

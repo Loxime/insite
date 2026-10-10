@@ -5,76 +5,390 @@
     padding-block: 22px;
     border-top: 1px solid var(--color-border);
 }
-.admin-challenge-section h2, .admin-challenge-section p { margin: 0; }
-.admin-challenge-colors { display: flex; flex-wrap: wrap; gap: 16px; }
-.admin-challenge-color { display: inline-flex; align-items: center; gap: 8px; }
-.admin-challenge-color input[type='color'] { width: 92px; height: 50px; padding: 4px; cursor: pointer; }
-.admin-challenge-platforms { display: grid; gap: 16px; }
-.admin-challenge-platform { display: grid; gap: 12px; padding: 20px; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
-.admin-challenge-platform .admin-form-row { margin: 0; }
-.admin-challenge-platform > button { justify-self: start; }
-.admin-challenge-palette { display: flex; gap: 5px; }
-.admin-challenge-palette__color { width: 30px; height: 30px; border-radius: 7px; border: 1px solid rgba(0,0,0,.14); }
+
+.admin-challenge-section h2,
+.admin-challenge-section p {
+    margin: 0;
+}
+
+.admin-challenge-colors {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.admin-challenge-color {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-challenge-color__field {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.admin-challenge-color input[type='color'] {
+    width: 76px;
+    height: 52px;
+    padding: 4px;
+    cursor: pointer;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.admin-challenge-color__preview {
+    --challenge-color: #000000;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 148px;
+    min-height: 52px;
+    padding: 8px 14px;
+    border-radius: 14px;
+    background: var(--challenge-color);
+    box-shadow:
+        inset 0 0 0 1px rgb(0 0 0 / 10%),
+        0 8px 20px rgb(0 0 0 / 10%);
+}
+
+.admin-challenge-color__preview > span {
+    padding: 5px 9px;
+    color: #ffffff;
+    background: rgb(17 24 39 / 55%);
+    border-radius: 999px;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+}
+
+.admin-challenge-platforms {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.admin-challenge-platform {
+    display: grid;
+    gap: 14px;
+    padding: 20px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.admin-challenge-platform .admin-form-row {
+    margin: 0;
+}
+
+.admin-challenge-platform > button {
+    justify-self: start;
+}
+
+.admin-challenge-collection__add {
+    margin-top: 10px;
+}
+
+.admin-challenge-palette {
+    display: flex;
+    gap: 5px;
+}
+
+.admin-challenge-palette__color {
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgb(0 0 0 / 14%);
+    border-radius: 7px;
+}
+
+.admin-challenge-publish {
+    display: grid;
+    gap: 8px;
+    margin-top: 22px;
+    margin-bottom: 8px;
+}
+
+.admin-challenge-publish .admin-form-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-challenge-publish .admin-form-checkbox input {
+    margin: 0;
+}
+
+.admin-challenge-publish .admin-form-checkbox label {
+    margin: 0;
+}
 
 .jam-challenge-page {
-    --jam-bg: #0d1020;
     min-height: 100vh;
     margin: 0;
-    color: #fff;
-    background: radial-gradient(circle at 50% 10%, #252d4d, var(--jam-bg) 68%);
+    color: #111827;
+    background:
+        radial-gradient(circle at 50% 0%, #ffffff, #eef2f8 70%);
 }
+
 .jam-challenge {
-    width: min(100%, 1150px);
-    min-height: 100vh;
-    margin-inline: auto;
-    padding: 78px 30px 120px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: min(100%, 1150px);
+    min-height: 100vh;
+    margin-inline: auto;
+    padding: 72px 30px 120px;
     text-align: center;
 }
-.jam-challenge__brand { font-size: .9rem; font-weight: 800; letter-spacing: .3em; color: #d1cefb; }
-.jam-challenge__title { margin: 18px 0 48px; font-size: clamp(2.8rem, 7vw, 5.5rem); letter-spacing: -.04em; line-height: 1.06; }
-.jam-challenge__eyebrow { margin: 0 0 12px; color: #b9bee0; font-size: .85rem; letter-spacing: .15em; text-transform: uppercase; }
-.jam-challenge__theme { margin: 0 0 42px; font-size: clamp(1.6rem, 4vw, 3rem); }
-.jam-challenge__colors { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; width: 100%; }
+
+.jam-challenge__brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    text-decoration: none;
+}
+
+.jam-challenge__brand-logo {
+    display: block;
+    width: clamp(72px, 9vw, 116px);
+    height: auto;
+    object-fit: contain;
+}
+
+.jam-challenge__title {
+    margin: 0 0 46px;
+    color: #111827;
+    font-size: clamp(2.6rem, 7vw, 5.3rem);
+    line-height: 1.04;
+    letter-spacing: -.04em;
+}
+
+.jam-challenge__eyebrow {
+    margin: 0 0 12px;
+    color: #475569;
+    font-size: .88rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.jam-challenge__theme {
+    margin: 0 0 42px;
+    color: #111827;
+    font-size: clamp(1.7rem, 4vw, 3rem);
+}
+
+.jam-challenge__colors {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+}
+
 .jam-challenge__swatch {
+    display: flex;
     flex: 1 1 185px;
+    align-items: flex-end;
     max-width: 300px;
     min-height: 170px;
+    padding: 18px;
     border-radius: 20px;
     background: var(--swatch);
-    display: flex;
-    align-items: flex-end;
-    padding: 18px;
-    box-shadow: 0 15px 32px rgba(0,0,0,.22);
+    box-shadow: 0 16px 34px rgb(15 23 42 / 12%);
 }
-.jam-challenge__swatch span { padding: 4px 9px; border-radius: 7px; color: #fff; background: #111a; font-size: .8rem; font-weight: 750; }
-.jam-challenge__timer { margin-top: 60px; }
-.jam-challenge__timer > p { margin-bottom: 18px; color: #c5cbed; }
-.jam-challenge__clock { display: flex; justify-content: center; gap: 14px; }
-.jam-challenge__clock-unit { display: grid; gap: 6px; padding: 16px 20px; min-width: 105px; background: #ffffff14; border: 1px solid #ffffff25; border-radius: 14px; }
-.jam-challenge__clock-unit strong { font-size: clamp(1.8rem, 5vw, 3rem); font-variant-numeric: tabular-nums; }
-.jam-challenge__clock-unit span { color: #c5cbed; font-size: .8rem; }
-.jam-challenge__end { display: grid; justify-items: center; gap: 15px; width: 100%; }
-.jam-challenge__end > i { font-size: 3.5rem; color: #f4b942; }
-.jam-challenge__end h2 { max-width: 780px; margin: 0; font-size: clamp(1.7rem, 3.8vw, 3rem); }
-.jam-challenge__end > p { margin: 0; color: #d1d5ed; font-size: 1.4rem; }
-.jam-challenge__publish-cta { display: inline-flex; gap: 12px; align-items: center; margin-top: 12px; padding: 15px 22px; color: #161b32; background: #f4b942; border-radius: 12px; font-weight: 800; text-decoration: none; }
-.jam-challenge__publish-cta:hover { color: #161b32; background: #f7c961; }
-.jam-challenge__platforms { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 18px; width: 100%; margin-top: 28px; }
-.jam-challenge__platform { min-height: 175px; padding: 24px; display: grid; align-content: center; justify-items: center; gap: 12px; color: #fff; background: #ffffff15; border: 1px solid #ffffff2a; border-radius: 18px; text-decoration: none; transition: transform .2s ease, background .2s ease; }
-.jam-challenge__platform:hover { color: #fff; background: #ffffff28; transform: translateY(-4px); }
-.jam-challenge__platform > i { font-size: 3rem; }
-.jam-challenge__platform strong { font-size: 1.3rem; }
-.jam-challenge__platform span { font-size: .82rem; color: #cdd2e9; }
-.jam-challenge__back { position: fixed; left: 26px; bottom: 26px; display: inline-flex; gap: 10px; align-items: center; padding: 14px 18px; border-radius: 12px; color: #fff; background: #2b345c; text-decoration: none; box-shadow: 0 6px 24px #0005; }
-.jam-challenge__back:hover { color: #fff; background: #3d497f; }
+
+.jam-challenge__swatch span {
+    padding: 4px 9px;
+    color: #ffffff;
+    background: rgb(17 24 39 / 60%);
+    border-radius: 7px;
+    font-size: .8rem;
+    font-weight: 750;
+}
+
+.jam-challenge__timer {
+    margin-top: 60px;
+}
+
+.jam-challenge__timer > p {
+    margin-bottom: 18px;
+    color: #475569;
+    font-size: 1.05rem;
+}
+
+.jam-challenge__clock {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+.jam-challenge__clock-unit {
+    display: grid;
+    gap: 6px;
+    min-width: 108px;
+    padding: 16px 20px;
+    background: #ffffff;
+    border: 1px solid #dce3ef;
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgb(15 23 42 / 8%);
+}
+
+.jam-challenge__clock-unit strong {
+    color: #111827;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-variant-numeric: tabular-nums;
+}
+
+.jam-challenge__clock-unit span {
+    color: #64748b;
+    font-size: .8rem;
+}
+
+.jam-challenge__end {
+    display: grid;
+    justify-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.jam-challenge__end > i {
+    color: #f4b942;
+    font-size: 3.5rem;
+}
+
+.jam-challenge__end h2 {
+    max-width: 780px;
+    margin: 0;
+    color: #111827;
+    font-size: clamp(1.7rem, 3.8vw, 3rem);
+}
+
+.jam-challenge__publish-cta {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 12px;
+    padding: 15px 22px;
+    color: #111827;
+    background: #f4b942;
+    border-radius: 12px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.jam-challenge__publish-cta:hover {
+    color: #111827;
+    background: #f7c961;
+}
+
+.jam-challenge__platforms {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 220px), 1fr)
+    );
+    gap: 18px;
+    width: 100%;
+    margin-top: 28px;
+}
+
+.jam-challenge__platform {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 12px;
+    min-height: 175px;
+    padding: 24px;
+    color: #111827;
+    background: #ffffff;
+    border: 1px solid #dce3ef;
+    border-radius: 18px;
+    box-shadow: 0 10px 24px rgb(15 23 42 / 8%);
+    text-decoration: none;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.jam-challenge__platform:hover {
+    color: #111827;
+    background: #f8fafc;
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px rgb(15 23 42 / 12%);
+}
+
+.jam-challenge__platform > i {
+    font-size: 3rem;
+}
+
+.jam-challenge__platform strong {
+    font-size: 1.3rem;
+}
+
+.jam-challenge__platform span {
+    color: #64748b;
+    font-size: .82rem;
+}
+
+.jam-challenge__back {
+    position: fixed;
+    left: 26px;
+    bottom: 26px;
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    padding: 14px 18px;
+    color: #ffffff;
+    background: #2b345c;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px #0005;
+    text-decoration: none;
+}
+
+.jam-challenge__back:hover {
+    color: #ffffff;
+    background: #3d497f;
+}
+
+@media (max-width: 900px) {
+    .admin-challenge-color {
+        flex-wrap: wrap;
+    }
+
+    .admin-challenge-color__field {
+        width: 100%;
+    }
+}
+
 @media (max-width: 600px) {
-    .jam-challenge { padding: 55px 16px 110px; }
-    .jam-challenge__clock { gap: 6px; }
-    .jam-challenge__clock-unit { min-width: 0; padding: 10px; }
-    .jam-challenge__clock-unit span { font-size: .65rem; }
-    .jam-challenge__swatch { min-height: 130px; }
-    .jam-challenge__back { left: 15px; bottom: 15px; }
+    .jam-challenge {
+        padding: 55px 16px 110px;
+    }
+
+    .jam-challenge__clock {
+        gap: 6px;
+    }
+
+    .jam-challenge__clock-unit {
+        min-width: 0;
+        padding: 10px;
+    }
+
+    .jam-challenge__clock-unit span {
+        font-size: .65rem;
+    }
+
+    .jam-challenge__swatch {
+        min-height: 130px;
+    }
+
+    .jam-challenge__back {
+        left: 15px;
+        bottom: 15px;
+    }
 }

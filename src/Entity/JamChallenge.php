@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\JamChallengeRepository;
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: JamChallengeRepository::class)]
 #[ORM\Table(name: 'jam_challenge')]
 class JamChallenge
 {

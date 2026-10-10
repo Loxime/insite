@@ -132,6 +132,11 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install \
     --optimize-autoloader \
     && rm -rf tests phpunit.xml.dist
 
+# Ensure Apache can write Symfony's production cache and logs
+RUN mkdir -p /var/www/html/var/cache/prod /var/www/html/var/log \
+    && chown -R www-data:www-data /var/www/html/var \
+    && chmod -R u+rwX /var/www/html/var
+
 # Build the official MinIO client from a pinned release
 FROM golang:1.24-alpine AS minio-mc-builder
 
