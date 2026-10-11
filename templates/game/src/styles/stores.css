@@ -1,0 +1,153 @@
+/* Stores */
+
+.game-stores__heading {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+}
+
+.game-stores__heading h2 {
+  margin: 0;
+}
+
+.game-stores__heading p {
+  margin: 0;
+  max-width: 55ch;
+}
+
+.game-stores__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.game-store {
+  flex: 0 1 335px;
+  min-width: min(100%, 260px);
+}
+
+.game-store__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+
+  min-height: 235px;
+  height: 100%;
+  padding: 28px 24px;
+
+  color: var(--game-text);
+  background: color-mix(
+    in srgb,
+    var(--game-text) 5%,
+    var(--game-bg)
+  );
+
+  border: 1px solid color-mix(
+    in srgb,
+    var(--game-text) 18%,
+    transparent
+  );
+
+  border-radius: 16px;
+  text-decoration: none;
+
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+.game-store__link:hover {
+  transform: translateY(-4px);
+
+  background: color-mix(
+    in srgb,
+    var(--game-text) 9%,
+    var(--game-bg)
+  );
+
+  border-color: var(--game-accent);
+}
+
+.game-store__logo {
+  display: grid;
+  place-items: center;
+  width: 160px;
+  height: 85px;
+}
+
+.game-store__logo img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.game-store__information {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.game-store__name {
+  font-size: 1.15rem;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.game-store__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: .88rem;
+  font-weight: 650;
+  color: var(--game-text);
+}
+
+.game-store__action span {
+  color: var(--game-accent);
+  font-size: 1.15rem;
+}
+
+@media (max-width: 640px) {
+  .game-stores__grid {
+    gap: 14px;
+  }
+
+  .game-store {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+
+  .game-store__link {
+    min-height: 180px;
+    padding: 24px 18px;
+    gap: 16px;
+  }
+
+  .game-store__logo {
+    height: 65px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-store__link {
+    transition: none;
+  }
+
+  .game-store__link:hover {
+    transform: none;
+  }
+}

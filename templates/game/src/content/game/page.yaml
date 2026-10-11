@@ -1,0 +1,65 @@
+title: "Les Ruines d'Aurore"
+description: "Explorez un monde oublié, découvrez ses secrets et retrouvez la lumière dans ce jeu d'aventure indépendant."
+lang: "fr"
+
+theme:
+  bg: "#101722"
+  accent: "#F7C66A"
+  text: "#FFFFFF"
+
+seo:
+  ogImage: "../../assets/images/og.png"
+  ogImageAlt: "Paysage mystérieux des Ruines d'Aurore"
+
+hero:
+  image: "../../assets/images/hero.png"
+  imageAlt: "Paysage du monde des Ruines d'Aurore"
+  logo: "../../assets/images/logo.png"
+  logoAlt: "Les Ruines d'Aurore"
+  tagline: "Un monde oublié attend votre lumière."
+
+features:
+  - title: "Explorez un monde inconnu"
+    body: "Parcourez des régions mystérieuses et découvrez les traces d'une civilisation disparue."
+    image: "../../assets/images/feature.png"
+    imageAlt: "Paysage d'une région mystérieuse"
+    bullets:
+      - "Des environnements variés"
+      - "Des secrets à découvrir"
+      - "Une aventure à votre rythme"
+
+stores:
+  - name: "Boutique du jeu"
+    url: "https://example.com/shop"
+    logo: "../../assets/images/store.png"
+    logoAlt: "Symbole de la boutique du jeu"
+
+packs:
+  - name: "Bande originale"
+    blurb: "Retrouvez les musiques de votre aventure."
+    image: "../../assets/images/pack.png"
+    imageAlt: "Illustration du pack bande originale"
+
+gallery:
+  - image: "../../assets/images/gallery.png"
+    alt: "Aperçu d'un environnement du jeu"
+
+  - image: "../../assets/images/feature.png"
+    alt: "Paysage mystérieux à explorer"
+
+  - image: "../../assets/images/hero.png"
+    alt: "Vue panoramique du monde du jeu"
+
+press:
+  - quote: "Extrait fictif destiné à illustrer le template."
+    source: "Presse de démonstration"
+    score: "9/10"
+
+team:
+  - name: "Studio Exemple"
+    role: "Création et développement"
+    bio: "Une petite équipe indépendante passionnée de jeux vidéo."
+
+socials:
+  - network: "Site officiel"
+    url: "https://example.com"

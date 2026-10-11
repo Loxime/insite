@@ -1,0 +1,151 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getImage } from 'astro:assets';
+import '../styles/global.css';
+
+interface Props {
+  game: CollectionEntry<'game'>['data'];
+}
+
+const { game } = Astro.props;
+
+// URL canonique unique : racine du sous-domaine.
+const canonical = new URL(
+  '/',
+  Astro.site ?? Astro.url,
+).toString();
+
+// Image OG dédiée, optimisée au build.
+// JPEG pour une large compatibilité avec les réseaux sociaux.
+const ogImage = await getImage({
+  src: game.seo.ogImage,
+  width: 1200,
+  height: 630,
+  format: 'jpeg',
+  quality: 82,
+});
+
+const ogUrl = new URL(
+  ogImage.src,
+  Astro.site ?? Astro.url,
+).toString();
+
+const ogLocale = game.lang === 'fr'
+  ? 'fr_FR'
+  : game.lang.replace('-', '_');
+
+// Variables CSS de chaque jeu.
+// Les valeurs hexadécimales sont validées par Zod.
+const themeTokens = [
+  `--game-bg: ${game.theme.bg}`,
+  `--game-accent: ${game.theme.accent}`,
+  `--game-text: ${game.theme.text}`,
+].join('; ');
+
+// Données structurées générées depuis le même YAML.
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoGame',
+  name: game.title,
+  description: game.description,
+  url: canonical,
+  image: ogUrl,
+  inLanguage: game.lang,
+  sameAs: game.socials.map((social) => social.url),
+};
+
+// Évite qu'un contenu YAML puisse fermer la balise script.
+const jsonLd = JSON.stringify(structuredData)
+  .replace(/</g, '\\u003c');
+---
+
+<!doctype html>
+<html lang={game.lang} style={themeTokens}>
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+
+    <meta name="theme-color" content={game.theme.bg} />
+    <meta name="robots" content="index, follow" />
+
+    <!-- SEO principal -->
+    <title>{game.title}</title>
+    <meta name="description" content={game.description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:site_name" content={game.title} />
+    <meta property="og:title" content={game.title} />
+
+    <meta
+      property="og:description"
+      content={game.description}
+    />
+
+    <meta property="og:url" content={canonical} />
+
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:secure_url" content={ogUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+
+    <meta
+      property="og:image:width"
+      content={String(ogImage.attributes.width)}
+    />
+
+    <meta
+      property="og:image:height"
+      content={String(ogImage.attributes.height)}
+    />
+
+    <meta
+      property="og:image:alt"
+      content={game.seo.ogImageAlt}
+    />
+
+    <!-- Twitter / X -->
+    <meta
+      name="twitter:card"
+      content="summary_large_image"
+    />
+
+    <meta name="twitter:title" content={game.title} />
+
+    <meta
+      name="twitter:description"
+      content={game.description}
+    />
+
+    <meta name="twitter:image" content={ogUrl} />
+
+    <meta
+      name="twitter:image:alt"
+      content={game.seo.ogImageAlt}
+    />
+
+    <!-- JSON-LD : données structurées -->
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={jsonLd}
+    ></script>
+  </head>
+
+  <body>
+    <a href="#main-content" class="skip-link">
+      Aller au contenu
+    </a>
+
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+  </body>
+</html>

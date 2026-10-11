@@ -1,0 +1,48 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+import '../../styles/press.css';
+
+interface Props {
+  press: NonNullable<CollectionEntry<'game'>['data']['press']>;
+}
+
+const { press } = Astro.props;
+---
+
+<section
+  id="press"
+  class="game-section game-press"
+  aria-labelledby="press-heading"
+>
+  <div class="content-shell">
+    <header class="game-press__heading">
+      <h2 id="press-heading">Ils parlent du jeu</h2>
+    </header>
+
+    <ul class="game-press__list">
+      {press.map((review) => (
+        <li class="game-press__item">
+          <figure class="game-press__figure">
+            <blockquote class="game-press__quote">
+              <p>{review.quote}</p>
+            </blockquote>
+
+            <figcaption class="game-press__source">
+              <cite>{review.source}</cite>
+
+              {review.score && (
+                <span
+                  class="game-press__score"
+                  aria-label={`Note : ${review.score}`}
+                >
+                  {review.score}
+                </span>
+              )}
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

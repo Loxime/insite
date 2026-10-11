@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+
+import '../../styles/stores.css';
+
+interface Props {
+  stores: CollectionEntry<'game'>['data']['stores'];
+}
+
+const { stores } = Astro.props;
+---
+
+<section
+  id="stores"
+  class="game-section game-stores"
+  aria-labelledby="stores-heading"
+>
+  <div class="content-shell">
+    <header class="game-stores__heading">
+      <h2 id="stores-heading">Disponible sur</h2>
+      <p>
+        Retrouvez le jeu sur les plateformes suivantes.
+      </p>
+    </header>
+
+    <ul class="game-stores__grid">
+      {stores.map((store) => (
+        <li class="game-store">
+          <a
+            href={store.url}
+            class="game-store__link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Ouvrir ${store.name} dans un nouvel onglet`}
+          >
+            <div class="game-store__logo">
+              <Image
+                src={store.logo}
+                format="webp"
+                widths={[96, 160, 240]}
+                sizes="(max-width: 640px) 120px, 160px"
+                alt={store.logoAlt}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+
+            <div class="game-store__information">
+              <strong class="game-store__name">
+                {store.name}
+              </strong>
+
+              <span class="game-store__action">
+                Voir la boutique
+                <span aria-hidden="true">↗</span>
+              </span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
