@@ -4,9 +4,11 @@
     {{ game.title }} — INQUEST
 {% endblock %}
 
-{% block meta_description %}
-    {{ game.summary ?: game.title }}
-{% endblock %}
+{% block meta_description %}{{ ((game.summary ?: (game.description|striptags)) ?: game.title)|replace({"\n": " ", "\r": " ", "\t": " "})|trim|slice(0, 155) }}{% endblock %}
+
+{% block og_image %}{{ game.imageKey ? ('https://inquest.falchero.fr' ~ path('media_show', {key: game.imageKey})) : parent() }}{% endblock %}
+
+{% block og_image_alt %}{{ game.imageKey ? game.title : parent() }}{% endblock %}
 
 {% block page_header %}{% endblock %}
 

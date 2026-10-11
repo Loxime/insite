@@ -11,12 +11,44 @@
 
     <meta
         name="description"
-        content="{% block meta_description %}INQUEST{% endblock %}"
+        content="{% block meta_description %}Découvrez les jeux vidéo, articles, actualités et créations du studio INQUEST.{% endblock %}"
     >
 
     <title>{% block title %}INQUEST{% endblock %}</title>
-    {% block canonical %}{% endblock %}
-    {% block social_meta %}{% endblock %}
+    {% set canonical_url = 'https://inquest.falchero.fr' ~ app.request.pathInfo %}
+
+    {% if app.request.attributes.get('_route') == 'app_frontoffice_home_show'
+        and page is defined
+        and page > 1 %}
+        {% set canonical_url = canonical_url ~ '?page=' ~ page %}
+    {% endif %}
+
+    {# Le changelog principal affiche la dernière version publiée. #}
+    {% if app.request.attributes.get('_route') == 'changelog_index'
+        and entry is defined
+        and entry is not null %}
+        {% set canonical_url = 'https://inquest.falchero.fr' ~ path('changelog_show', {version: entry.version}) %}
+    {% endif %}
+
+    {% block canonical %}
+        <link rel="canonical" href="{{ canonical_url }}">
+    {% endblock %}
+    {% block social_meta %}
+        <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+        <meta property="og:site_name" content="INQUEST">
+        <meta property="og:locale" content="fr_FR">
+        <meta property="og:title" content="{{ block('title')|trim }}">
+        <meta property="og:description" content="{{ block('meta_description')|trim }}">
+        <meta property="og:url" content="{{ canonical_url }}">
+        <meta property="og:image" content="{% block og_image %}{{ 'https://inquest.falchero.fr' ~ asset('images/crown-512.png') }}{% endblock %}">
+        <meta property="og:image:alt" content="{% block og_image_alt %}Logo INQUEST{% endblock %}">
+
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="{{ block('title')|trim }}">
+        <meta name="twitter:description" content="{{ block('meta_description')|trim }}">
+        <meta name="twitter:image" content="{{ block('og_image')|trim }}">
+        <meta name="twitter:image:alt" content="{{ block('og_image_alt')|trim }}">
+    {% endblock %}
 
     {% block stylesheets %}
         {{ reprise_entry_link_tags('app') }}
