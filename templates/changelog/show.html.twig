@@ -37,9 +37,7 @@
                 </div>
             </header>
 
-            <article class="changelog-page__article">
-                {{ entry.text }}
-            </article>
+            <article class="changelog-page__article">{{- entry.text|trim -}}</article>
 
             {% if older or newer %}
                 <nav

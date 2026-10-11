@@ -469,3 +469,33 @@
         margin-top: 64px;
     }
 }
+
+
+/* Bouton de lecture des articles */
+.home-feature__link.home-feature__link--button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 44px;
+    padding: 0.7rem 1.4rem;
+    border: 1px solid #151515;
+    border-radius: 999px;
+    background: #151515;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.home-feature__link.home-feature__link--button:hover {
+    background: #333;
+    border-color: #333;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.home-feature__link.home-feature__link--button:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+}

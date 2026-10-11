@@ -9,7 +9,7 @@ margin-inline: auto;
 
 .changelog-page__header {text-align: center;
     width: 100%;
-    margin-bottom: 3rem;
+    margin-bottom: 1.25rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid currentColor;
 }
@@ -40,7 +40,7 @@ margin-inline: auto;
     width: 100%;
     font-size: clamp(1rem, 1.3vw, 1.15rem);
     line-height: 1.85;
-    white-space: pre-wrap;
+    white-space: pre-line;
     overflow-wrap: anywhere;
 }
 
